@@ -1,0 +1,45 @@
+Project {
+  InfoLevel = 3
+  Electromagnetics {
+    TimeHarmonic {
+      Scattering {
+        FieldComponents = Electric
+        Accuracy {
+          Refinement {
+            MaxNumberSteps = 3
+          }
+	  Precision = 1e-3
+	  PrecisionFarField=1e-4
+        }
+      }
+    }
+  }
+}
+PostProcess {
+  ExportFields {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputQuantity = "ElectricFieldStrength"
+    OutputFileName = "project_results/nearfield.jcm"
+    Cartesian {
+      GridPointsX = [-10e-9 : 2e-9 : 10e-9]
+      GridPointsY = [-2e-9 : 2e-9 : 20e-9]
+      GridPointsZ = 0
+    }
+  }
+}
+PostProcess {  
+  FourierTransform {  
+    FieldBagPath = "project_results/fieldbag.jcm"  
+    OutputFileName = "project_results/fourier_modes_plus_y.jcm" 
+    NormalDirection = Y  
+    NumericalAperture = 1
+  }  
+}
+PostProcess {
+  FourierTransform {
+    FieldBagPath = "project_results/fieldbag.jcm"
+    OutputFileName = "project_results/fourier_modes_minus_y.jcm"
+    NormalDirection = -Y
+    NumericalAperture = 0.999717
+  }
+}

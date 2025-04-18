@@ -1,0 +1,76 @@
+<?
+import sys
+try:
+  sys.path.append("forward_model/modules")
+  import construct_poly
+except:
+  sys.path.append("..")
+  import modules.construct_poly as construct_poly
+  
+
+matp, oxp, cdp = construct_poly.polygons(keys)
+keys["cd_points"] = cdp
+keys["substrate_points"] = matp
+keys["line_points"] = oxp
+
+?>
+
+
+Layout2D {
+  Name = "LineGrating"
+  UnitOfLength = 1e-9
+  MeshOptions {
+    MaximumSideLength = 1
+  }
+  BoundaryConditions {
+    Boundary {
+      Class = Periodic
+      Direction = [X, -X]
+    }
+    Boundary {
+      Class = Transparent
+      Direction = [Y, -Y]
+    }
+  }
+  Objects {
+    Polygon {
+      Name = "ComputationalDomain"
+      Points = [-40 -10, 40 -10, 40 40, -40 40]
+      Priority = ComputationalDomain
+      DomainId = 3
+    }
+    Polygon {
+      Name = "LineDomain"
+      Points = %(line_points)e
+      Priority = 1
+      DomainId = 2
+      CornerRounding {
+        Point = 4
+        Radius = 8.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 5
+        Radius = 8.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 3
+        Radius = 5.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 6
+        Radius = 5.0
+        NPoints = 5
+      }
+      
+    }
+    Polygon {
+      Name = "SubstrateDomain"
+      Points = [-40 -10, 40 -10, 40 0, -40 0]
+      Priority = 2
+      DomainId = 1
+    }
+  }
+}

@@ -1,0 +1,58 @@
+Layout2D {
+  Name = "LineGratingRef"
+  UnitOfLength = 1e-09
+  MeshOptions {
+    MaximumSideLength = 1
+  }
+  BoundaryConditions {
+    Boundary {
+      Class = Periodic
+      Direction = [X, -X]
+    }
+    Boundary {
+      Class = Transparent
+      Direction = [Y, -Y]
+    }
+  }
+  Objects {
+    Polygon {
+      Name = "ComputationalDomain"
+      DomainId = 3
+      Priority = -1
+      Points = [-40 -10, 40 -10, 40 40, -40 40]
+    }
+
+    Polygon {
+      Name = "LineDomain"
+      DomainId = 2
+      Priority = 1
+      Points = [40 -10, 40 0, 20 0, 10 30, -10 30, -20 0, -40 0, -40 -10]
+      CornerRounding {
+        Point = 4
+        Radius = 8.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 5
+        Radius = 8.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 3
+        Radius = 5.0
+        NPoints = 5
+      }
+      CornerRounding {
+        Point = 6
+        Radius = 5.0
+        NPoints = 5
+      }
+    }
+    Polygon {
+      Name = "SubstrateDomain"
+      DomainId = 1
+      Priority = 2
+      Points = [-40 -10, 40 -10, 40 0, -40 0]
+    }   
+  }
+}
