@@ -1,18 +1,17 @@
 <?
 import sys
-try:
-  sys.path.append("forward_model/modules")
-  import construct_poly
-except:
-  sys.path.append("..")
-  import modules.construct_poly as construct_poly
-  
+import os
+
+MODULES_DIR = "/home/sun2024/Gitspace/FEM_Inverse2D/forward_model/modules"
+if MODULES_DIR not in sys.path:
+    sys.path.insert(0, MODULES_DIR)
+
+import construct_poly
 
 matp, oxp, cdp = construct_poly.polygons(keys)
 keys["cd_points"] = cdp
 keys["substrate_points"] = matp
 keys["line_points"] = oxp
-
 ?>
 
 

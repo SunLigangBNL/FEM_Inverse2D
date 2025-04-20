@@ -5,7 +5,10 @@ This file contains all the defined parameters to set up the CDSAXS problem.
 import numpy as np
 
 class ConfigParameter:
-    def __init__(self, pitch, line, height, thickness, rr, epsilonr1, epsilonr2, lambda0, dimqxbranch):
+    def __init__(self, thetaarray, pitch, line, height, thickness, rr, epsilonr1, epsilonr2, lambda0, dimqxbranch):
+        
+        self.thetaarray=thetaarray
+        
         self.pitch=pitch
         self.line=line
         self.height=height

@@ -2,7 +2,7 @@ Log 0:
 
 
 
-*** Solving /tmp/__JCMwave__ioh5hlod/project.jcmp on refinement level 0 ... 
+*** Solving /tmp/__JCMwave__4lj8mxzx/project.jcmp on refinement level 0 ... 
 
 A priori segments/wavelength (quality = 1.00e-04)
   FEM degree  direction X  direction Y
@@ -18,19 +18,19 @@ A priori segments/wavelength (quality = 1.00e-04)
            9         1.03         1.03
           10         0.85         0.85
   minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
+  maximum seg/wavelength in grid : 34.00
 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
@@ -39,42 +39,42 @@ Cell percentage per Finite Element degree
            3              0.5
            4              0.3
            5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
 
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:08.08 (cpu), 00:00:01.61 (total) (matrix entries/row = 35)
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.51 (cpu), 00:00:01.75 (total) (matrix entries/row = 35)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.27GB
+Memory requirement estimated by the linear system solver: 1.28GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:10.60 (cpu), 00:00:02.85 (total), 1.12GB (mem)
+solving discrete problem done: 00:00:07.77 (cpu), 00:00:02.11 (total), 1.13GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0016 (thickness level=0)
-       Compartment "-Y": 0.0045 (thickness level=0)
+       Compartment  "Y": 0.0035 (thickness level=0)
+       Compartment "-Y": 0.0047 (thickness level=0)
 updating inner nodes ...
-updating inner nodes done: 00:00:05.22 (cpu), 00:00:00.88 (total)
+updating inner nodes done: 00:00:05.31 (cpu), 00:00:00.90 (total)
 
 
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:25.79      2.14e-05         1.12GB  00:00:06.18        1.55GB
+      0   1206585  00:00:23.54      1.95e-05         1.13GB  00:00:05.62        1.53GB
 
 
-*** Solving /tmp/__JCMwave__ioh5hlod/project.jcmp on refinement level 1 ... 
+*** Solving /tmp/__JCMwave__4lj8mxzx/project.jcmp on refinement level 1 ... 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
@@ -83,225 +83,22 @@ Cell percentage per Finite Element degree
            4              0.5
            5              0.3
            6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
 
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.73 (cpu), 00:00:02.08 (total) (matrix entries/row = 40)
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:10.97 (cpu), 00:00:02.14 (total) (matrix entries/row = 40)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.63GB
+Memory requirement estimated by the linear system solver: 1.65GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:12.47 (cpu), 00:00:03.37 (total), 1.41GB (mem)
+solving discrete problem done: 00:00:09.53 (cpu), 00:00:02.59 (total), 1.45GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0023 (thickness level=0)
-       Compartment "-Y": 0.0078 (thickness level=0)
+       Compartment  "Y": 0.0055 (thickness level=0)
+       Compartment "-Y": 0.0074 (thickness level=0)
 updating inner nodes ...
-updating inner nodes done: 00:00:07.37 (cpu), 00:00:01.26 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.11 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.79      2.14e-05         1.12GB  00:00:06.18        1.55GB
-      1   1553041  00:00:31.95      2.06e-05         1.41GB  00:00:07.17        1.98GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  8.05488375e-05    -/-
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.34310377e-04    -/-
-
-
-*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
-
-
-refining grid ...  
-refining grid: done 00:00:00.77 (cpu)
-
-
-*** Solving /tmp/__JCMwave__ioh5hlod/project.jcmp on refinement level 2 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           4             0.07
-           5              0.4
-           6              0.3
-           7              0.2
-           8             10.4
-           9             57.9
-          10             30.8
-
-assembling problem (2137565 unknowns) ...  
-assembling problem done: 00:00:16.09 (cpu), 00:00:03.06 (total) (matrix entries/row = 46)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 2.28GB
-estimated remaining time [step]: 00:01:30[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:18.03 (cpu), 00:00:04.96 (total), 1.94GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.004 (thickness level=0)
-       Compartment "-Y": 0.016 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:12.14 (cpu), 00:00:02.02 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.15 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.79      2.14e-05         1.12GB  00:00:06.18        1.55GB
-      1   1553041  00:00:31.95      2.06e-05         1.41GB  00:00:07.17        1.98GB
-      2   2137565  00:00:47.85      2.24e-05         1.94GB  00:00:10.64        2.76GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  8.05488373e-05    -/-
-      2  1.32635818e-05   6.07
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.34310378e-04    -/-
-      2  2.06699051e-05   6.50
-
-
-*** Computation finished successfully *** 
-
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.05 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.24 (cpu), 00:00:00.14 (total)
-post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
-
-****************************************************************************************************
-Log 1:
-
-
-
-*** Solving /tmp/__JCMwave__r343qmdk/project.jcmp on refinement level 0 ... 
-
-A priori segments/wavelength (quality = 1.00e-04)
-  FEM degree  direction X  direction Y
--------------------------------------------------
-           1          inf          inf
-           2          inf          inf
-           3        12.41        12.41
-           4         5.64         5.64
-           5         3.35         3.35
-           6         2.26         2.26
-           7         1.63         1.63
-           8         1.27         1.27
-           9         1.03         1.03
-          10         0.85         0.85
-  minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
-
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           2             0.08
-           3              0.5
-           4              0.3
-           5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
-
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:08.28 (cpu), 00:00:01.64 (total) (matrix entries/row = 35)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.27GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:10.02 (cpu), 00:00:02.69 (total), 1.12GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.00066 (thickness level=0)
-       Compartment "-Y": 0.0049 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:05.47 (cpu), 00:00:00.93 (total)
-
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.65      2.13e-05         1.12GB  00:00:06.11        1.55GB
-
-
-*** Solving /tmp/__JCMwave__r343qmdk/project.jcmp on refinement level 1 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           3             0.08
-           4              0.5
-           5              0.3
-           6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
-
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.98 (cpu), 00:00:02.12 (total) (matrix entries/row = 40)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.63GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:12.72 (cpu), 00:00:03.43 (total), 1.42GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.00098 (thickness level=0)
-       Compartment "-Y": 0.0082 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:07.88 (cpu), 00:00:01.31 (total)
+updating inner nodes done: 00:00:07.71 (cpu), 00:00:01.28 (total)
 
 
 estimating field errors ...  
@@ -310,427 +107,21 @@ estimating field errors: done 00:00:00.12 (cpu)
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:25.65      2.13e-05         1.12GB  00:00:06.11        1.55GB
-      1   1553041     00:00:33      2.12e-05         1.42GB  00:00:07.34        1.98GB
+      0   1206585  00:00:23.54      1.95e-05         1.13GB  00:00:05.62        1.53GB
+      1   1554227  00:00:29.64      1.91e-05         1.45GB  00:00:06.50        1.97GB
 
    rel. error (FarField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  5.54494861e-05    -/-
+      1  8.13161818e-05    -/-
 
 
    rel. error (NearField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  1.56125168e-04    -/-
-
-
-*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
-
-
-refining grid ...  
-refining grid: done 00:00:00.81 (cpu)
-
-
-*** Solving /tmp/__JCMwave__r343qmdk/project.jcmp on refinement level 2 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           4             0.07
-           5              0.4
-           6              0.3
-           7              0.2
-           8             10.4
-           9             57.9
-          10             30.8
-
-assembling problem (2137565 unknowns) ...  
-assembling problem done: 00:00:16.07 (cpu), 00:00:03.07 (total) (matrix entries/row = 46)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 2.28GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:17.62 (cpu), 00:00:04.69 (total), 1.97GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.002 (thickness level=0)
-       Compartment "-Y": 0.011 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:12.35 (cpu), 00:00:02.06 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.14 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.65      2.13e-05         1.12GB  00:00:06.11        1.55GB
-      1   1553041     00:00:33      2.12e-05         1.42GB  00:00:07.34        1.98GB
-      2   2137565  00:00:47.62      2.23e-05         1.97GB  00:00:10.41        2.75GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  5.54494857e-05    -/-
-      2  9.04235167e-06   6.13
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.56125166e-04    -/-
-      2  2.56244401e-05   6.09
-
-
-*** Computation finished successfully *** 
-
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.09 (cpu), 00:00:00.04 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.25 (cpu), 00:00:00.14 (total)
-post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
-
-****************************************************************************************************
-Log 2:
-
-
-
-*** Solving /tmp/__JCMwave__w_du3eiu/project.jcmp on refinement level 0 ... 
-
-A priori segments/wavelength (quality = 1.00e-04)
-  FEM degree  direction X  direction Y
--------------------------------------------------
-           1          inf          inf
-           2          inf          inf
-           3        12.41        12.41
-           4         5.64         5.64
-           5         3.35         3.35
-           6         2.26         2.26
-           7         1.63         1.63
-           8         1.27         1.27
-           9         1.03         1.03
-          10         0.85         0.85
-  minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
-
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           2             0.08
-           3              0.5
-           4              0.3
-           5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
-
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:07.86 (cpu), 00:00:01.56 (total) (matrix entries/row = 35)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 859.01MB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:10.61 (cpu), 00:00:03.72 (total), 837.05MB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.00084 (thickness level=0)
-       Compartment "-Y": 0.0017 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:06.01 (cpu), 00:00:01.01 (total)
-
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:26.32      2.18e-05       837.05MB  00:00:07.12        1.23GB
-
-
-*** Solving /tmp/__JCMwave__w_du3eiu/project.jcmp on refinement level 1 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           3             0.08
-           4              0.5
-           5              0.3
-           6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
-
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.64 (cpu), 00:00:02.07 (total) (matrix entries/row = 40)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.08GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:13.17 (cpu), 00:00:04.70 (total), 1.05GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0012 (thickness level=0)
-       Compartment "-Y": 0.0031 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:08.05 (cpu), 00:00:01.35 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.11 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:26.32      2.18e-05       837.05MB  00:00:07.12        1.23GB
-      1   1553041  00:00:33.22      2.14e-05         1.05GB  00:00:08.57        1.60GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  4.04923477e-05    -/-
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.69931356e-04    -/-
-
-
-*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
-
-
-refining grid ...  
-refining grid: done 00:00:00.76 (cpu)
-
-
-*** Solving /tmp/__JCMwave__w_du3eiu/project.jcmp on refinement level 2 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           4             0.07
-           5              0.4
-           6              0.3
-           7              0.2
-           8             10.4
-           9             57.9
-          10             30.8
-
-assembling problem (2137565 unknowns) ...  
-assembling problem done: 00:00:15.92 (cpu), 00:00:03.04 (total) (matrix entries/row = 46)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.48GB
-estimated remaining time [step]: 00:01:30[25], <1min[50], <1min[76], finished
-solving discrete problem done: 00:00:17.08 (cpu), 00:00:06.18 (total), 1.31GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0027 (thickness level=0)
-       Compartment "-Y": 0.0068 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:11.86 (cpu), 00:00:01.97 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.14 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:26.32      2.18e-05       837.05MB  00:00:07.12        1.23GB
-      1   1553041  00:00:33.22      2.14e-05         1.05GB  00:00:08.57        1.60GB
-      2   2137565  00:00:46.39      2.17e-05         1.31GB  00:00:11.73        2.11GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  4.04923478e-05    -/-
-      2  6.31173768e-06   6.42
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.69931355e-04    -/-
-      2  2.83888538e-05   5.99
-
-
-*** Computation finished successfully *** 
-
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.09 (cpu), 00:00:00.04 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.24 (cpu), 00:00:00.14 (total)
-post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
-
-****************************************************************************************************
-Log 3:
-
-
-
-*** Solving /tmp/__JCMwave__m2k4nggw/project.jcmp on refinement level 0 ... 
-
-A priori segments/wavelength (quality = 1.00e-04)
-  FEM degree  direction X  direction Y
--------------------------------------------------
-           1          inf          inf
-           2          inf          inf
-           3        12.41        12.41
-           4         5.64         5.64
-           5         3.35         3.35
-           6         2.26         2.26
-           7         1.63         1.63
-           8         1.27         1.27
-           9         1.03         1.03
-          10         0.85         0.85
-  minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
-
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           2             0.08
-           3              0.5
-           4              0.3
-           5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
-
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:07.79 (cpu), 00:00:01.56 (total) (matrix entries/row = 35)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.27GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:10.31 (cpu), 00:00:02.80 (total), 1.12GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.00061 (thickness level=0)
-       Compartment "-Y": 0.0048 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:05.22 (cpu), 00:00:00.88 (total)
-
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.22      2.09e-05         1.12GB  00:00:06.09        1.55GB
-
-
-*** Solving /tmp/__JCMwave__m2k4nggw/project.jcmp on refinement level 1 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           3             0.08
-           4              0.5
-           5              0.3
-           6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
-
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.70 (cpu), 00:00:02.08 (total) (matrix entries/row = 40)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.63GB
-estimated remaining time [step]: 00:01:30[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:13.03 (cpu), 00:00:03.49 (total), 1.42GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.00096 (thickness level=0)
-       Compartment "-Y": 0.0082 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:07.60 (cpu), 00:00:01.26 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.11 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.22      2.09e-05         1.12GB  00:00:06.09        1.55GB
-      1   1553041  00:00:32.72      2.11e-05         1.42GB  00:00:07.30        1.99GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  6.18907399e-05    -/-
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.52533620e-04    -/-
+      1  1.14711346e-04    -/-
 
 
 *** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
@@ -740,41 +131,41 @@ refining grid ...
 refining grid: done 00:00:00.78 (cpu)
 
 
-*** Solving /tmp/__JCMwave__m2k4nggw/project.jcmp on refinement level 2 ... 
+*** Solving /tmp/__JCMwave__4lj8mxzx/project.jcmp on refinement level 2 ... 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
 -----------------------------------------
            4             0.07
-           5              0.4
+           5              0.5
            6              0.3
            7              0.2
-           8             10.4
-           9             57.9
-          10             30.8
+           8             10.5
+           9             56.5
+          10             32.0
 
-assembling problem (2137565 unknowns) ...  
-assembling problem done: 00:00:15.51 (cpu), 00:00:02.97 (total) (matrix entries/row = 46)
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:16.29 (cpu), 00:00:03.11 (total) (matrix entries/row = 46)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 2.28GB
+Memory requirement estimated by the linear system solver: 2.24GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:17.93 (cpu), 00:00:04.79 (total), 1.97GB (mem)
+solving discrete problem done: 00:00:17.67 (cpu), 00:00:04.81 (total), 1.93GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.002 (thickness level=0)
-       Compartment "-Y": 0.011 (thickness level=0)
+       Compartment  "Y": 0.005 (thickness level=1)
+       Compartment "-Y": 0.026 (thickness level=0)
 updating inner nodes ...
-updating inner nodes done: 00:00:11.86 (cpu), 00:00:01.97 (total)
+updating inner nodes done: 00:00:11.73 (cpu), 00:00:01.95 (total)
 
 
 estimating field errors ...  
@@ -783,38 +174,38 @@ estimating field errors: done 00:00:00.15 (cpu)
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:25.22      2.09e-05         1.12GB  00:00:06.09        1.55GB
-      1   1553041  00:00:32.72      2.11e-05         1.42GB  00:00:07.30        1.99GB
-      2   2137565  00:00:46.88      2.19e-05         1.97GB  00:00:10.33        2.75GB
+      0   1206585  00:00:23.54      1.95e-05         1.13GB  00:00:05.62        1.53GB
+      1   1554227  00:00:29.64      1.91e-05         1.45GB  00:00:06.50        1.97GB
+      2   2117631  00:00:47.30      2.23e-05         1.93GB  00:00:10.48        2.67GB
 
    rel. error (FarField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  6.18907395e-05    -/-
-      2  1.02109281e-05   6.06
+      1  8.13161822e-05    -/-
+      2  1.34227529e-05   6.06
 
 
    rel. error (NearField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  1.52533618e-04    -/-
-      2  2.52491689e-05   6.04
+      1  1.14711346e-04    -/-
+      2  1.70988079e-05   6.71
 
 
 *** Computation finished successfully *** 
 
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.09 (cpu), 00:00:00.04 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.23 (cpu), 00:00:00.14 (total)
-post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.04 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.25 (cpu), 00:00:00.15 (total)
+post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.14 (total)
 
 ****************************************************************************************************
-Log 4:
+Log 1:
 
 
 
-*** Solving /tmp/__JCMwave__7o2j714x/project.jcmp on refinement level 0 ... 
+*** Solving /tmp/__JCMwave__o97uy4_s/project.jcmp on refinement level 0 ... 
 
 A priori segments/wavelength (quality = 1.00e-04)
   FEM degree  direction X  direction Y
@@ -830,19 +221,19 @@ A priori segments/wavelength (quality = 1.00e-04)
            9         1.03         1.03
           10         0.85         0.85
   minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
+  maximum seg/wavelength in grid : 34.00
 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
@@ -851,42 +242,42 @@ Cell percentage per Finite Element degree
            3              0.5
            4              0.3
            5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
 
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:07.79 (cpu), 00:00:01.54 (total) (matrix entries/row = 35)
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.64 (cpu), 00:00:01.73 (total) (matrix entries/row = 35)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.27GB
+Memory requirement estimated by the linear system solver: 1.28GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:10.32 (cpu), 00:00:02.79 (total), 1.12GB (mem)
+solving discrete problem done: 00:00:10.75 (cpu), 00:00:02.84 (total), 1.13GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0016 (thickness level=0)
-       Compartment "-Y": 0.0045 (thickness level=0)
+       Compartment  "Y": 0.002 (thickness level=0)
+       Compartment "-Y": 0.0021 (thickness level=0)
 updating inner nodes ...
-updating inner nodes done: 00:00:05.35 (cpu), 00:00:00.90 (total)
+updating inner nodes done: 00:00:05.18 (cpu), 00:00:00.86 (total)
 
 
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:25.32      2.10e-05         1.12GB  00:00:06.07        1.55GB
+      0   1206585  00:00:26.49      2.20e-05         1.13GB  00:00:06.29        1.56GB
 
 
-*** Solving /tmp/__JCMwave__7o2j714x/project.jcmp on refinement level 1 ... 
+*** Solving /tmp/__JCMwave__o97uy4_s/project.jcmp on refinement level 1 ... 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
@@ -895,223 +286,20 @@ Cell percentage per Finite Element degree
            4              0.5
            5              0.3
            6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
 
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.88 (cpu), 00:00:02.17 (total) (matrix entries/row = 40)
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:10.67 (cpu), 00:00:02.06 (total) (matrix entries/row = 40)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.63GB
-estimated remaining time [step]: 00:01:30[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:12.43 (cpu), 00:00:03.37 (total), 1.41GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.0023 (thickness level=0)
-       Compartment "-Y": 0.0078 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:07.96 (cpu), 00:00:01.36 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.12 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.32      2.10e-05         1.12GB  00:00:06.07        1.55GB
-      1   1553041  00:00:32.69      2.11e-05         1.41GB  00:00:07.38        1.98GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  8.42088486e-05    -/-
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.31365116e-04    -/-
-
-
-*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
-
-
-refining grid ...  
-refining grid: done 00:00:00.80 (cpu)
-
-
-*** Solving /tmp/__JCMwave__7o2j714x/project.jcmp on refinement level 2 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           4             0.07
-           5              0.4
-           6              0.3
-           7              0.2
-           8             10.4
-           9             57.9
-          10             30.8
-
-assembling problem (2137565 unknowns) ...  
-assembling problem done: 00:00:16.03 (cpu), 00:00:03.10 (total) (matrix entries/row = 46)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 2.28GB
+Memory requirement estimated by the linear system solver: 1.65GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:19.04 (cpu), 00:00:05.04 (total), 1.97GB (mem)
+solving discrete problem done: 00:00:09.59 (cpu), 00:00:02.62 (total), 1.44GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.004 (thickness level=0)
-       Compartment "-Y": 0.016 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:12.77 (cpu), 00:00:02.15 (total)
-
-
-estimating field errors ...  
-estimating field errors: done 00:00:00.14 (cpu)
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:25.32      2.10e-05         1.12GB  00:00:06.07        1.55GB
-      1   1553041  00:00:32.69      2.11e-05         1.41GB  00:00:07.38        1.98GB
-      2   2137565  00:00:49.48      2.32e-05         1.97GB  00:00:10.89        2.74GB
-
-   rel. error (FarField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  8.42088480e-05    -/-
-      2  1.37248947e-05   6.14
-
-
-   rel. error (NearField)  
-  level       est.error  ratio
-------------------------------
-    -/-             -/-    -/-
-      1  1.31365116e-04    -/-
-      2  2.06340997e-05   6.37
-
-
-*** Computation finished successfully *** 
-
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.09 (cpu), 00:00:00.04 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.26 (cpu), 00:00:00.15 (total)
-post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.14 (cpu), 00:00:00.14 (total)
-
-****************************************************************************************************
-Log 5:
-
-
-
-*** Solving /tmp/__JCMwave__biwkk6kg/project.jcmp on refinement level 0 ... 
-
-A priori segments/wavelength (quality = 1.00e-04)
-  FEM degree  direction X  direction Y
--------------------------------------------------
-           1          inf          inf
-           2          inf          inf
-           3        12.41        12.41
-           4         5.64         5.64
-           5         3.35         3.35
-           6         2.26         2.26
-           7         1.63         1.63
-           8         1.27         1.27
-           9         1.03         1.03
-          10         0.85         0.85
-  minimum seg/wavelength in grid : 1.04
-  maximum seg/wavelength in grid : 34.07
-
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0013
-    'one wavelength' wave propagation error: 0.00015 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.0015
-    'one wavelength' wave propagation error: 0.00017 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           2             0.08
-           3              0.5
-           4              0.3
-           5              0.2
-           6             11.0
-           7             60.7
-           8             25.8
-           9              1.5
-
-assembling problem (1205148 unknowns) ...  
-assembling problem done: 00:00:08.12 (cpu), 00:00:01.60 (total) (matrix entries/row = 35)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 866.11MB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[76], finished
-solving discrete problem done: 00:00:10.88 (cpu), 00:00:03.82 (total), 839.52MB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.014 (thickness level=0)
-       Compartment "-Y": 0.014 (thickness level=0)
-updating inner nodes ...
-updating inner nodes done: 00:00:05.21 (cpu), 00:00:00.86 (total)
-
-
-                                computational costs
-  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
---------------------------------------------------------------------------------------
-      0   1205148  00:00:26.10      2.17e-05       839.52MB  00:00:07.11        1.23GB
-
-
-*** Solving /tmp/__JCMwave__biwkk6kg/project.jcmp on refinement level 1 ... 
-  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
-  
-       Compartment "Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00016
-    'one wavelength' wave propagation error: 1.8e-05 
-  
-       Compartment "-Y":
-    computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 0.00019
-    'one wavelength' wave propagation error: 2.1e-05 
-
-Cell percentage per Finite Element degree
-  FEM degree  Cell percentage
------------------------------------------
-           3             0.08
-           4              0.5
-           5              0.3
-           6              0.2
-           7             11.0
-           8             60.7
-           9             25.8
-          10              1.5
-
-assembling problem (1553041 unknowns) ...  
-assembling problem done: 00:00:10.72 (cpu), 00:00:02.07 (total) (matrix entries/row = 40)
-solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.08GB
-estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:14.26 (cpu), 00:00:05.04 (total), 1.05GB (mem)
-  *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.019 (thickness level=0)
-       Compartment "-Y": 0.023 (thickness level=0)
+       Compartment  "Y": 0.0033 (thickness level=0)
+       Compartment "-Y": 0.0032 (thickness level=0)
 updating inner nodes ...
 updating inner nodes done: 00:00:07.76 (cpu), 00:00:01.29 (total)
 
@@ -1122,21 +310,833 @@ estimating field errors: done 00:00:00.12 (cpu)
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:26.10      2.17e-05       839.52MB  00:00:07.11        1.23GB
-      1   1553041  00:00:34.10      2.20e-05         1.05GB  00:00:08.85        1.60GB
+      0   1206585  00:00:26.49      2.20e-05         1.13GB  00:00:06.29        1.56GB
+      1   1554227  00:00:29.38      1.89e-05         1.44GB  00:00:06.45        1.97GB
 
    rel. error (FarField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  9.27267106e-05    -/-
+      1  6.00164214e-05    -/-
 
 
    rel. error (NearField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  1.52615394e-04    -/-
+      1  1.39216278e-04    -/-
+
+
+*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
+
+
+refining grid ...  
+refining grid: done 00:00:00.75 (cpu)
+
+
+*** Solving /tmp/__JCMwave__o97uy4_s/project.jcmp on refinement level 2 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4             0.07
+           5              0.5
+           6              0.3
+           7              0.2
+           8             10.5
+           9             56.5
+          10             32.0
+
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:15.96 (cpu), 00:00:03.06 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 2.24GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:16.66 (cpu), 00:00:04.48 (total), 1.93GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.0032 (thickness level=1)
+       Compartment "-Y": 0.014 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:12.20 (cpu), 00:00:02.03 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.15 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:26.49      2.20e-05         1.13GB  00:00:06.29        1.56GB
+      1   1554227  00:00:29.38      1.89e-05         1.44GB  00:00:06.45        1.97GB
+      2   2117631  00:00:46.42      2.19e-05         1.93GB  00:00:10.16        2.70GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  6.00164208e-05    -/-
+      2  9.77155789e-06   6.14
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.39216276e-04    -/-
+      2  2.23358353e-05   6.23
+
+
+*** Computation finished successfully *** 
+
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.09 (cpu), 00:00:00.04 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.22 (cpu), 00:00:00.13 (total)
+post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
+
+****************************************************************************************************
+Log 2:
+
+
+
+*** Solving /tmp/__JCMwave__adxzf04m/project.jcmp on refinement level 0 ... 
+
+A priori segments/wavelength (quality = 1.00e-04)
+  FEM degree  direction X  direction Y
+-------------------------------------------------
+           1          inf          inf
+           2          inf          inf
+           3        12.41        12.41
+           4         5.64         5.64
+           5         3.35         3.35
+           6         2.26         2.26
+           7         1.63         1.63
+           8         1.27         1.27
+           9         1.03         1.03
+          10         0.85         0.85
+  minimum seg/wavelength in grid : 1.04
+  maximum seg/wavelength in grid : 34.00
+
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           2             0.08
+           3              0.5
+           4              0.3
+           5              0.2
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
+
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.81 (cpu), 00:00:01.74 (total) (matrix entries/row = 35)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 852.58MB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:10.57 (cpu), 00:00:03.70 (total), 829.76MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.00041 (thickness level=0)
+       Compartment "-Y": 0.0014 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:05.87 (cpu), 00:00:00.97 (total)
+
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:27.14      2.25e-05       829.76MB  00:00:07.25        1.22GB
+
+
+*** Solving /tmp/__JCMwave__adxzf04m/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3             0.08
+           4              0.5
+           5              0.3
+           6              0.2
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
+
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:11.72 (cpu), 00:00:02.29 (total) (matrix entries/row = 40)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.09GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:13.47 (cpu), 00:00:04.75 (total), 1.05GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.00063 (thickness level=0)
+       Compartment "-Y": 0.0022 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:07.94 (cpu), 00:00:01.32 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.13 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:27.14      2.25e-05       829.76MB  00:00:07.25        1.22GB
+      1   1554227  00:00:34.55      2.22e-05         1.05GB  00:00:08.84        1.61GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.80731809e-05    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.56821054e-04    -/-
+
+
+*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
+
+
+refining grid ...  
+refining grid: done 00:00:00.85 (cpu)
+
+
+*** Solving /tmp/__JCMwave__adxzf04m/project.jcmp on refinement level 2 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4             0.07
+           5              0.5
+           6              0.3
+           7              0.2
+           8             10.5
+           9             56.5
+          10             32.0
+
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:17.32 (cpu), 00:00:03.35 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.46GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:17.48 (cpu), 00:00:06.38 (total), 1.35GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.00055 (thickness level=1)
+       Compartment "-Y": 0.011 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:12.13 (cpu), 00:00:02.02 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.14 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:27.14      2.25e-05       829.76MB  00:00:07.25        1.22GB
+      1   1554227  00:00:34.55      2.22e-05         1.05GB  00:00:08.84        1.61GB
+      2   2117631  00:00:48.48      2.29e-05         1.35GB  00:00:12.30        2.07GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  4.80731815e-05    -/-
+      2  7.51043384e-06   6.40
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.56821056e-04    -/-
+      2  2.59665133e-05   6.04
+
+
+*** Computation finished successfully *** 
+
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.05 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.23 (cpu), 00:00:00.14 (total)
+post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
+
+****************************************************************************************************
+Log 3:
+
+
+
+*** Solving /tmp/__JCMwave__tmtpb19f/project.jcmp on refinement level 0 ... 
+
+A priori segments/wavelength (quality = 1.00e-04)
+  FEM degree  direction X  direction Y
+-------------------------------------------------
+           1          inf          inf
+           2          inf          inf
+           3        12.41        12.41
+           4         5.64         5.64
+           5         3.35         3.35
+           6         2.26         2.26
+           7         1.63         1.63
+           8         1.27         1.27
+           9         1.03         1.03
+          10         0.85         0.85
+  minimum seg/wavelength in grid : 1.04
+  maximum seg/wavelength in grid : 34.00
+
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           2             0.08
+           3              0.5
+           4              0.3
+           5              0.2
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
+
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.55 (cpu), 00:00:01.78 (total) (matrix entries/row = 35)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.28GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:07.97 (cpu), 00:00:02.17 (total), 1.13GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.002 (thickness level=0)
+       Compartment "-Y": 0.002 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:05.24 (cpu), 00:00:00.87 (total)
+
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.69      1.96e-05         1.13GB  00:00:05.68        1.53GB
+
+
+*** Solving /tmp/__JCMwave__tmtpb19f/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3             0.08
+           4              0.5
+           5              0.3
+           6              0.2
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
+
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:11.52 (cpu), 00:00:02.24 (total) (matrix entries/row = 40)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.65GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:09.85 (cpu), 00:00:02.63 (total), 1.45GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.0033 (thickness level=0)
+       Compartment "-Y": 0.0032 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:07.59 (cpu), 00:00:01.26 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.11 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.69      1.96e-05         1.13GB  00:00:05.68        1.53GB
+      1   1554227  00:00:30.35      1.95e-05         1.45GB  00:00:06.61        1.97GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  6.41826074e-05    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.43667839e-04    -/-
+
+
+*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
+
+
+refining grid ...  
+refining grid: done 00:00:00.76 (cpu)
+
+
+*** Solving /tmp/__JCMwave__tmtpb19f/project.jcmp on refinement level 2 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4             0.07
+           5              0.5
+           6              0.3
+           7              0.2
+           8             10.5
+           9             56.5
+          10             32.0
+
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:16.02 (cpu), 00:00:03.07 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 2.24GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:12.62 (cpu), 00:00:03.49 (total), 1.96GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.0031 (thickness level=1)
+       Compartment "-Y": 0.014 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:12.09 (cpu), 00:00:02.01 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.14 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.69      1.96e-05         1.13GB  00:00:05.68        1.53GB
+      1   1554227  00:00:30.35      1.95e-05         1.45GB  00:00:06.61        1.97GB
+      2   2117631  00:00:42.26      2.00e-05         1.96GB  00:00:09.14        2.66GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  6.41826070e-05    -/-
+      2  1.06355087e-05   6.03
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.43667838e-04    -/-
+      2  2.39737984e-05   5.99
+
+
+*** Computation finished successfully *** 
+
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.05 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.22 (cpu), 00:00:00.13 (total)
+post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.12 (cpu), 00:00:00.12 (total)
+
+****************************************************************************************************
+Log 4:
+
+
+
+*** Solving /tmp/__JCMwave__fqeljdyi/project.jcmp on refinement level 0 ... 
+
+A priori segments/wavelength (quality = 1.00e-04)
+  FEM degree  direction X  direction Y
+-------------------------------------------------
+           1          inf          inf
+           2          inf          inf
+           3        12.41        12.41
+           4         5.64         5.64
+           5         3.35         3.35
+           6         2.26         2.26
+           7         1.63         1.63
+           8         1.27         1.27
+           9         1.03         1.03
+          10         0.85         0.85
+  minimum seg/wavelength in grid : 1.04
+  maximum seg/wavelength in grid : 34.00
+
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           2             0.08
+           3              0.5
+           4              0.3
+           5              0.2
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
+
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.68 (cpu), 00:00:01.75 (total) (matrix entries/row = 35)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.28GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:07.93 (cpu), 00:00:02.15 (total), 1.13GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.0035 (thickness level=0)
+       Compartment "-Y": 0.0046 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:05.20 (cpu), 00:00:00.88 (total)
+
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.76      1.97e-05         1.13GB  00:00:05.64        1.53GB
+
+
+*** Solving /tmp/__JCMwave__fqeljdyi/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3             0.08
+           4              0.5
+           5              0.3
+           6              0.2
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
+
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:10.76 (cpu), 00:00:02.12 (total) (matrix entries/row = 40)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.65GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:09.44 (cpu), 00:00:02.58 (total), 1.45GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.0055 (thickness level=0)
+       Compartment "-Y": 0.0074 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:07.74 (cpu), 00:00:01.29 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.12 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.76      1.97e-05         1.13GB  00:00:05.64        1.53GB
+      1   1554227  00:00:29.33      1.89e-05         1.45GB  00:00:06.47        1.97GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  8.29122135e-05    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.16898815e-04    -/-
+
+
+*** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
+
+
+refining grid ...  
+refining grid: done 00:00:00.78 (cpu)
+
+
+*** Solving /tmp/__JCMwave__fqeljdyi/project.jcmp on refinement level 2 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           4             0.07
+           5              0.5
+           6              0.3
+           7              0.2
+           8             10.5
+           9             56.5
+          10             32.0
+
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:15.89 (cpu), 00:00:03.04 (total) (matrix entries/row = 46)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 2.24GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:17.53 (cpu), 00:00:04.80 (total), 1.93GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.005 (thickness level=1)
+       Compartment "-Y": 0.026 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:12.11 (cpu), 00:00:02.02 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.15 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:23.76      1.97e-05         1.13GB  00:00:05.64        1.53GB
+      1   1554227  00:00:29.33      1.89e-05         1.45GB  00:00:06.47        1.97GB
+      2   2117631  00:00:47.14      2.23e-05         1.93GB  00:00:10.46        2.67GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  8.29122136e-05    -/-
+      2  1.35518972e-05   6.12
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.16898815e-04    -/-
+      2  1.82168118e-05   6.42
+
+
+*** Computation finished successfully *** 
+
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.05 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.26 (cpu), 00:00:00.14 (total)
+post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
+
+****************************************************************************************************
+Log 5:
+
+
+
+*** Solving /tmp/__JCMwave__44d3cjpu/project.jcmp on refinement level 0 ... 
+
+A priori segments/wavelength (quality = 1.00e-04)
+  FEM degree  direction X  direction Y
+-------------------------------------------------
+           1          inf          inf
+           2          inf          inf
+           3        12.41        12.41
+           4         5.64         5.64
+           5         3.35         3.35
+           6         2.26         2.26
+           7         1.63         1.63
+           8         1.27         1.27
+           9         1.03         1.03
+          10         0.85         0.85
+  minimum seg/wavelength in grid : 1.04
+  maximum seg/wavelength in grid : 34.00
+
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.0014
+    'one wavelength' wave propagation error: 0.00016 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           2             0.08
+           3              0.5
+           4              0.3
+           5              0.2
+           6             11.1
+           7             58.9
+           8             27.6
+           9              1.3
+
+assembling problem (1206585 unknowns) ...  
+assembling problem done: 00:00:08.44 (cpu), 00:00:01.64 (total) (matrix entries/row = 35)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 852.58MB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[76], finished
+solving discrete problem done: 00:00:11 (cpu), 00:00:03.87 (total), 829.66MB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.011 (thickness level=0)
+       Compartment "-Y": 0.012 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:05.25 (cpu), 00:00:00.88 (total)
+
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:26.56      2.20e-05       829.66MB  00:00:07.22        1.22GB
+
+
+*** Solving /tmp/__JCMwave__44d3cjpu/project.jcmp on refinement level 1 ... 
+  *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
+  
+       Compartment "Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 2e-05 
+  
+       Compartment "-Y":
+    computational domain size:   50 (wavelengths).
+    computational domain range wave propagation error: 0.00017
+    'one wavelength' wave propagation error: 1.9e-05 
+
+Cell percentage per Finite Element degree
+  FEM degree  Cell percentage
+-----------------------------------------
+           3             0.08
+           4              0.5
+           5              0.3
+           6              0.2
+           7             11.1
+           8             58.9
+           9             27.6
+          10              1.3
+
+assembling problem (1554227 unknowns) ...  
+assembling problem done: 00:00:10.68 (cpu), 00:00:02.06 (total) (matrix entries/row = 40)
+solving discrete problem ... 
+Memory requirement estimated by the linear system solver: 1.09GB
+estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
+solving discrete problem done: 00:00:13.54 (cpu), 00:00:04.76 (total), 1.05GB (mem)
+  *** A posteriori exterior domain quality check:
+       Compartment  "Y": 0.018 (thickness level=0)
+       Compartment "-Y": 0.018 (thickness level=0)
+updating inner nodes ...
+updating inner nodes done: 00:00:07.72 (cpu), 00:00:01.28 (total)
+
+
+estimating field errors ...  
+estimating field errors: done 00:00:00.11 (cpu)
+
+                                computational costs
+  level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
+--------------------------------------------------------------------------------------
+      0   1206585  00:00:26.56      2.20e-05       829.66MB  00:00:07.22        1.22GB
+      1   1554227  00:00:33.30      2.14e-05         1.05GB  00:00:08.55        1.61GB
+
+   rel. error (FarField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  9.01556953e-05    -/-
+
+
+   rel. error (NearField)  
+  level       est.error  ratio
+------------------------------
+    -/-             -/-    -/-
+      1  1.25161993e-04    -/-
 
 
 *** Warning: Maximum FE-Degree reached on some cells. Refining mesh to improve accuracy *** 
@@ -1146,41 +1146,41 @@ refining grid ...
 refining grid: done 00:00:00.77 (cpu)
 
 
-*** Solving /tmp/__JCMwave__biwkk6kg/project.jcmp on refinement level 2 ... 
+*** Solving /tmp/__JCMwave__44d3cjpu/project.jcmp on refinement level 2 ... 
   *** A priori interior domain wave propagation characteristics (vacuum wavelength = 1.000 nm):
   
        Compartment "Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.6e-05
-    'one wavelength' wave propagation error: 1.8e-06 
+    computational domain range wave propagation error: 1.7e-05
+    'one wavelength' wave propagation error: 1.9e-06 
   
        Compartment "-Y":
     computational domain size:   50 (wavelengths).
-    computational domain range wave propagation error: 1.5e-05
-    'one wavelength' wave propagation error: 1.7e-06 
+    computational domain range wave propagation error: 1.9e-05
+    'one wavelength' wave propagation error: 2.1e-06 
 
 Cell percentage per Finite Element degree
   FEM degree  Cell percentage
 -----------------------------------------
            4             0.07
-           5              0.4
+           5              0.5
            6              0.3
            7              0.2
-           8             10.3
-           9             58.0
-          10             30.7
+           8             10.5
+           9             56.5
+          10             32.0
 
-assembling problem (2159236 unknowns) ...  
-assembling problem done: 00:00:16.20 (cpu), 00:00:03.10 (total) (matrix entries/row = 46)
+assembling problem (2117631 unknowns) ...  
+assembling problem done: 00:00:16.11 (cpu), 00:00:03.06 (total) (matrix entries/row = 46)
 solving discrete problem ... 
-Memory requirement estimated by the linear system solver: 1.50GB
+Memory requirement estimated by the linear system solver: 1.46GB
 estimated remaining time [step]: <1min[25], <1min[50], <1min[75], finished
-solving discrete problem done: 00:00:17.87 (cpu), 00:00:06.41 (total), 1.37GB (mem)
+solving discrete problem done: 00:00:17.23 (cpu), 00:00:06.18 (total), 1.34GB (mem)
   *** A posteriori exterior domain quality check:
-       Compartment  "Y": 0.019 (thickness level=1)
-       Compartment "-Y": 0.046 (thickness level=0)
+       Compartment  "Y": 0.018 (thickness level=1)
+       Compartment "-Y": 0.071 (thickness level=0)
 updating inner nodes ...
-updating inner nodes done: 00:00:12.70 (cpu), 00:00:02.11 (total)
+updating inner nodes done: 00:00:12.63 (cpu), 00:00:02.10 (total)
 
 
 estimating field errors ...  
@@ -1189,30 +1189,30 @@ estimating field errors: done 00:00:00.14 (cpu)
                                 computational costs
   level  unknowns     cpu time  cpu/unknowns  system memory   total time  total memory
 --------------------------------------------------------------------------------------
-      0   1205148  00:00:26.10      2.17e-05       839.52MB  00:00:07.11        1.23GB
-      1   1553041  00:00:34.10      2.20e-05         1.05GB  00:00:08.85        1.60GB
-      2   2159236  00:00:48.28      2.24e-05         1.37GB  00:00:12.17        2.12GB
+      0   1206585  00:00:26.56      2.20e-05       829.66MB  00:00:07.22        1.22GB
+      1   1554227  00:00:33.30      2.14e-05         1.05GB  00:00:08.55        1.61GB
+      2   2117631  00:00:47.50      2.24e-05         1.34GB  00:00:11.88        2.09GB
 
    rel. error (FarField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  9.27267097e-05    -/-
-      2  1.45343138e-05   6.38
+      1  9.01556960e-05    -/-
+      2  1.39879145e-05   6.45
 
 
    rel. error (NearField)  
   level       est.error  ratio
 ------------------------------
     -/-             -/-    -/-
-      1  1.52615395e-04    -/-
-      2  2.37606971e-05   6.42
+      1  1.25161995e-04    -/-
+      2  1.83003783e-05   6.84
 
 
 *** Computation finished successfully *** 
 
-post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.04 (total)
-post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.24 (cpu), 00:00:00.14 (total)
+post process Cartesian (output file: 'nearfield.jcm') ... done: 00:00:00.10 (cpu), 00:00:00.05 (total)
+post process FourierTransform (output file: 'fourier_modes_plus_y.jcm') ... done: 00:00:00.24 (cpu), 00:00:00.13 (total)
 post process FourierTransform (output file: 'fourier_modes_minus_y.jcm') ... done: 00:00:00.13 (cpu), 00:00:00.13 (total)
 
 ****************************************************************************************************

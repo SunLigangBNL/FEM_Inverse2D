@@ -10,6 +10,9 @@ import jcmwave
 from forward_model.modules.FEMProcessing import IntensityFEM, IntensityFEM2, GetMatmeta
 from forward_model.modules.keys import keys as default_keys
 
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
+
 class ForwardModel:
     def __init__(self, config, Multiplicity=1, NThreads=1):
         self.config=config
@@ -21,10 +24,10 @@ class ForwardModel:
             Multiplicity = Multiplicity)
 
     # Compute numerical reference.
-    def CompRef(self, thetaarray, config, diroutput):
+    def CompRef(self, config, directory):
         decayswitch=0
-        Qxmat, Qzmat, Intensitymat = IntensityFEM(thetaarray, config, diroutput, decayswitch)
-        matmeta=GetMatmeta(thetaarray, config, Qxmat, Qzmat, Intensitymat)
+        Qxmat, Qzmat, Intensitymat = IntensityFEM(config, directory, decayswitch)
+        matmeta=GetMatmeta(config, Qxmat, Qzmat, Intensitymat)
 
         # select from the first peak.
         index1=config.dimqxbranch+1
@@ -42,8 +45,9 @@ class ForwardModel:
     def ModelEvaluate(self, keys, config, working_dir=None):
 
         # preparation.
-        thetaarray=np.linspace(-20,30,6)
-        dirinput="/home/sun2024/Resource/JCM/Inverse_2D/simulation2a/forward_model/jcm"
+        thetaarray=config.thetaarray
+        directory=BASE_DIR/"jcm"
+        
         phi=0
         job_ids = []
 
@@ -51,7 +55,7 @@ class ForwardModel:
         calc_keys = default_keys.copy()
         calc_keys.update(keys)
 
-        # rotation scan.
+        # main rotation scan.
         for theta in thetaarray:
             if theta%10==0:
                 print("current thata : ",theta)
@@ -64,7 +68,7 @@ class ForwardModel:
             else:
                 wd = None
                 
-            job_id = jcmwave.solve(os.path.join(dirinput, "project.jcmpt"),
+            job_id = jcmwave.solve(os.path.join(directory, "project.jcmpt"),
                                    keys=these_calc_keys,
                                    temporary=(working_dir is None),
                                    working_dir=wd)
@@ -76,7 +80,7 @@ class ForwardModel:
         results, logs = jcmwave.daemon.wait(job_ids=job_ids, verbose=False)
 
         # export the log file.
-        log_filename = os.path.join(dirinput, "logs_all.txt")
+        log_filename = os.path.join(directory, "logs_all.txt")
         with open(log_filename, "w") as log_file:
             sys.stdout = log_file
             for i, log in enumerate(logs):
@@ -88,8 +92,8 @@ class ForwardModel:
 
         # transform to intensity map.
         decayswitch=0
-        Qxmat, Qzmat, Intensitymat = IntensityFEM2(thetaarray, config, results, decayswitch)
-        matmeta=GetMatmeta(thetaarray, config, Qxmat, Qzmat, Intensitymat)
+        Qxmat, Qzmat, Intensitymat = IntensityFEM2(config, results, decayswitch)
+        matmeta=GetMatmeta(config, Qxmat, Qzmat, Intensitymat)
         
         index1=config.dimqxbranch+1
         index2=2*config.dimqxbranch+1

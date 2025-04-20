@@ -10,16 +10,17 @@ from .InterfaceTransform import kvectrans1, kvectrans2, kvectrans3, FresnelFun
 # function1: transform FEM solution to intensity in Q space.
 # input: thetaarray, JCM Output folder, decayswitch, sample detector distance (unit: m).
 # output: Qxmat, Qzmat, Intensitymat. (unit: per angstrom.)
-def IntensityFEM(thetaarray, config, folderoutput, decayswitch):
+def IntensityFEM(config, directory, decayswitch):
     Qxmat=[]
     Qzmat=[]
     Intensitymat=[]
+    thetaarray=config.thetaarray
     for i in range(len(thetaarray)):
         theta=thetaarray[i]
         thetarad=np.radians(theta)
         if i%20==0:
             print("current thata : ",theta)    
-        foldername = os.path.join(folderoutput, f"theta_{theta:.2f}")
+        foldername = os.path.join(directory, f"theta_{theta:.2f}")
         pathkx=os.path.join(foldername, 'kxarray.txt')
         pathky=os.path.join(foldername, 'kyarray.txt')
         #pathkz=os.path.join(foldername, 'kzarray.txt')
@@ -37,7 +38,6 @@ def IntensityFEM(thetaarray, config, folderoutput, decayswitch):
         exspec = np.genfromtxt(pathexspec, dtype=complex)
         eyspec = np.genfromtxt(pathezspec, dtype=complex) # note the changed name.
         ezspec = np.genfromtxt(patheyspec, dtype=complex) # note the changed name.
-    
     
         # apply interface transform functions.
         ninc=config.refindexi
@@ -75,7 +75,7 @@ def IntensityFEM(thetaarray, config, folderoutput, decayswitch):
         
         intarray2=intarray[indexlist1] # now intarray2 has the sorted order.
         anglearray2=anglearray[indexlist1] # now anglearray2 has the sorted order.
-        #print("angle array in FEM",anglearray2)
+        
         if decayswitch==1:
             #print("Decay factor 1/r included.")
             distancearray=config.rr/np.cos(anglearray2)
@@ -103,8 +103,8 @@ def IntensityFEM(thetaarray, config, folderoutput, decayswitch):
 # function2:
 # input: Qxmat, Qzmat, Intensitymat (unit per angstrom).
 # output: matmeta in regular grid (unit per angstrom).
-def GetMatmeta(thetaarray, config, Qxmat, Qzmat, Intensitymat):
-
+def GetMatmeta(config, Qxmat, Qzmat, Intensitymat):
+    thetaarray=config.thetaarray
     periodicityx=config.pitch*10**10 # unit: angstrom.
     deltaqx=2*np.pi/periodicityx # unit: per angstrom.
     dimqx=2*config.dimqxbranch+1 # number of all interested Qx.
@@ -127,10 +127,11 @@ def GetMatmeta(thetaarray, config, Qxmat, Qzmat, Intensitymat):
 # This function will only be used inside ModelEvaluate.
 # input: thetaarray, dameon results, decayswitch.
 # output: Qxmat, Qzmat, Intensitymat. (unit: per angstrom.)
-def IntensityFEM2(thetaarray, config, results, decayswitch):
+def IntensityFEM2(config, results, decayswitch):
     Qxmat=[]
     Qzmat=[]
     Intensitymat=[]
+    thetaarray=config.thetaarray
     for i in range(len(thetaarray)):
         theta=thetaarray[i]
         
@@ -138,7 +139,6 @@ def IntensityFEM2(thetaarray, config, results, decayswitch):
         farresult=result[3] # corresponding to the "fourier_modes_minus_y.jcm" in the project.jcmp file.
         karray=farresult["K"]
         earray=farresult["ElectricFieldStrength"][0]
-
 
         kxarray=np.real(karray[:,0])
         kzarray=np.real(karray[:,1]) # note the changed name.
