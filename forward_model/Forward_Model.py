@@ -1,6 +1,7 @@
 import sys
 import os
 import numpy as np
+from contextlib import redirect_stdout
 
 jcm_root = "/home/sun2024/JCM_2024"
 sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
@@ -34,7 +35,7 @@ class ForwardModel:
         index2=2*config.dimqxbranch+1
         Qzdomain=matmeta[:,index1:index2,1]
         intmean=matmeta[:,index1:index2,2]
-        intuncertainty=intmean*np.random.uniform(0.3,0.6)
+        intuncertainty=intmean*np.random.uniform(0.1,0.4)+0.00001
         print("Numerical reference generated.")
         return Qzdomain, intmean, intuncertainty
 
@@ -79,16 +80,30 @@ class ForwardModel:
         print("All status",job_statuses)
         results, logs = jcmwave.daemon.wait(job_ids=job_ids, verbose=False)
 
+        # # export the log file.
+        # log_filename = os.path.join(directory, "logs_all.txt")
+        # with open(log_filename, "w") as log_file:
+        #     sys.stdout = log_file
+        #     for i, log in enumerate(logs):
+        #         print(f"Log {i}:")
+        #         print(log["Log"]["Out"])
+        #         print("*" * 100)
+        #     sys.stdout = sys.__stdout__
+        # print(f"All logs saved in {log_filename}.")
+
         # export the log file.
+        # instead of manually doing sys.stdout = log_file, use:
         log_filename = os.path.join(directory, "logs_all.txt")
-        with open(log_filename, "w") as log_file:
-            sys.stdout = log_file
+        with open(log_filename, "w") as log_file, redirect_stdout(log_file):
+            # anything printed in here goes to log_file only
             for i, log in enumerate(logs):
                 print(f"Log {i}:")
                 print(log["Log"]["Out"])
                 print("*" * 100)
-            sys.stdout = sys.__stdout__
+
         print(f"All logs saved in {log_filename}.")
+
+        
 
         # transform to intensity map.
         decayswitch=0
