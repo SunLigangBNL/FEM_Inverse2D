@@ -9,7 +9,7 @@ Project {
             MaxNumberSteps = 3
           }
 	  Precision = 1e-3
-	  PrecisionFarField=1e-4
+	  PrecisionFarField=1e-3
         }
       }
     }
@@ -21,8 +21,8 @@ PostProcess {
     OutputQuantity = "ElectricFieldStrength"
     OutputFileName = "project_results/nearfield.jcm"
     Cartesian {
-      GridPointsX = [-10e-9 : 2e-9 : 10e-9]
-      GridPointsY = [-2e-9 : 2e-9 : 20e-9]
+      GridPointsX = [-10e-9 : 4e-9 : 10e-9]
+      GridPointsY = [0e-9 : 2e-9 : 10e-9]
       GridPointsZ = 0
     }
   }
@@ -40,6 +40,7 @@ PostProcess {
     FieldBagPath = "project_results/fieldbag.jcm"
     OutputFileName = "project_results/fourier_modes_minus_y.jcm"
     NormalDirection = -Y
-    NumericalAperture = 0.999717
+    NumericalAperture = %(numerical_aperture)e
+    0.999717526021
   }
 }

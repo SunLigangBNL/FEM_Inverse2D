@@ -8,18 +8,17 @@ if MODULES_DIR not in sys.path:
 
 import construct_poly
 
-matp, oxp, cdp = construct_poly.polygons(keys)
-keys["cd_points"] = cdp
-keys["substrate_points"] = matp
-keys["line_points"] = oxp
+cdp, scatp, subp = construct_poly.polygons(keys)
+keys["compdomain_points"] = cdp
+keys["scatterer_points"] = scatp
+keys["substrate_points"] = subp
 ?>
 
-
 Layout2D {
-  Name = "LineGrating"
+  Name = "RoundedGrating"
   UnitOfLength = 1e-9
   MeshOptions {
-    MaximumSideLength = 1
+    MaximumSideLength = %(msl)e
   }
   BoundaryConditions {
     Boundary {
@@ -34,42 +33,41 @@ Layout2D {
   Objects {
     Polygon {
       Name = "ComputationalDomain"
-      Points = [-40 -10, 40 -10, 40 40, -40 40]
-      Priority = ComputationalDomain
-      DomainId = 3
+      Points = %(compdomain_points)e
+      Priority = -1
+      DomainId = 1
     }
     Polygon {
-      Name = "LineDomain"
-      Points = %(line_points)e
+      Name = "ScattererDomain"
+      Points = %(scatterer_points)e
       Priority = 1
       DomainId = 2
       CornerRounding {
         Point = 4
-        Radius = 8.0
-        NPoints = 5
+        Radius = %(r_bot)e
+        NPoints = %(rad_lower_n)d
       }
       CornerRounding {
         Point = 5
-        Radius = 8.0
-        NPoints = 5
-      }
-      CornerRounding {
-        Point = 3
-        Radius = 5.0
-        NPoints = 5
+        Radius = %(r_top)e
+        NPoints = %(rad_upper_n)d
       }
       CornerRounding {
         Point = 6
-        Radius = 5.0
-        NPoints = 5
+        Radius = %(r_top)e
+        NPoints = %(rad_upper_n)d
       }
-      
+      CornerRounding {
+        Point = 7
+        Radius = %(r_bot)e
+        NPoints = %(rad_lower_n)d
+      }
     }
     Polygon {
       Name = "SubstrateDomain"
-      Points = [-40 -10, 40 -10, 40 0, -40 0]
+      Points = %(substrate_points)e
       Priority = 2
-      DomainId = 1
+      DomainId = 3
     }
   }
 }
