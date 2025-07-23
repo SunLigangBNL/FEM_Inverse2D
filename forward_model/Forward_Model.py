@@ -8,8 +8,9 @@ sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
 import jcmwave
 #jcmwave.info()
 
-from forward_model.modules.FEMProcessing import IntensityFEM, IntensityFEM2, GetMatmeta
+from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
 from forward_model.modules.keys import keys as default_keys
+
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
