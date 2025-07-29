@@ -41,6 +41,5 @@ PostProcess {
     OutputFileName = "project_results/fourier_modes_minus_y.jcm"
     NormalDirection = -Y
     NumericalAperture = %(numerical_aperture)e
-    0.999717526021
   }
 }

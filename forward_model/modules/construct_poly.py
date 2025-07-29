@@ -35,7 +35,7 @@ def polygons(keys):
     y_ox_0 = 0
     y_ox_h = h    
     
-    dx=0.5*h*tan(np.deg2rad(90-swa)) # always positive.
+    dx=0.5*h*np.tan(np.deg2rad(90-swa)) # always positive.
     x1 = -0.5*keys["pitch"]
     x2 = -0.5*cd-dx
     x3 = -0.5*cd+dx
