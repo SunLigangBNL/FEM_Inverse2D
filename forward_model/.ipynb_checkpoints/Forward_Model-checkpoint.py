@@ -11,7 +11,8 @@ import jcmwave
 #jcmwave.info()
 
 from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
-from forward_model.modules.utils import selectsortfun
+from forward_model.modules.utils import selectsortfun2
+from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
 from forward_model.modules.keys import keys as default_keys
 
 from pathlib import Path
@@ -47,10 +48,12 @@ class ForwardModel:
 
         calc_keys = default_keys.copy()
         calc_keys.update(keys)
+        print("current key under calculation:",calc_keys)
+        
         phi=0
 
-        jcmwave.daemon.shutdown()
-        jcmwave.daemon.add_workstation(Hostname ='localhost', Multiplicity = 1, NThreads = 32)
+        # jcmwave.daemon.shutdown()
+        # jcmwave.daemon.add_workstation(Hostname ='localhost', Multiplicity = 1, NThreads = 32)
         
         job_ids = []
 
@@ -60,8 +63,6 @@ class ForwardModel:
         project_pt = os.path.join(currentdir, "jcm", "project.jcmpt")
         
         for theta in thetaarray:
-            if theta%10==0:
-                print("current thata : ",theta)
             these_calc_keys = calc_keys.copy()
             these_calc_keys["theta"] = theta
             these_calc_keys["phi"] = phi
@@ -116,6 +117,10 @@ class ForwardModel:
 
         print("Solution files exported.")
 
+        # # checking area:
+        # print("Current cd:", calc_keys["cd"])
+        # print("Current h:", calc_keys["h"])
+
         totaltime2=time.time()
         totaltime = totaltime2 - totaltime1
         print("*****************************************************************************")
@@ -127,91 +132,154 @@ class ForwardModel:
     # Output: intmean, intuncertainty.
     def CompReference2(self, config, directory, qxpeakarray):
         folderoutput=directory
-        qxindexarray=config.centerindex+qxpeakarray
         
         Qxmat, Qzmat, Intensitymat, Psiradmat = IntensityFEM(config, folderoutput)
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
-        Qzlist=[]
-        intmeanlist=[]
-        intunctylist=[]
+        qxindexarray=config.centerindex+qxpeakarray
+        Qzmat=matmeta[:,qxindexarray,1]
+        intmeanmat=matmeta[:,qxindexarray,2]
+        #intunctymat=intmeanmat*np.random.uniform(1,3)*0.0001+0.000001
+        randmat=np.random.uniform(0.05, 0.2, size=intmeanmat.shape)
+        intunctymat=intmeanmat*randmat+1e-12 # this is sigma!
+        print("Numerical reference generated.")
         
-        for index in qxindexarray:
-            matslice = matmeta[:, index, :]
-            Qzarray3, IntFEMarray, thetaarray3, psiradarray3 = selectsortfun(matslice)
-            intunctyarray=IntFEMarray*np.random.uniform(0.1,0.4)+0.00001
-            Qzlist.append(Qzarray3)
-            intmeanlist.append(IntFEMarray)
-            intunctylist.append(intunctyarray)
-
-        return Qzlist, intmeanlist, intunctylist
-
-
-    # # Main forward model.
-    # # Input: single key (fixed problem setup).
-    # # Process: rotation scan of multiple simulations.
-    # # Output: corresponding intensity map.
-    # def ModelEvaluate(self, keys, config, working_dir=None):
-
-    #     # preparation.
-    #     thetaarray=config.source.thetaarray
-    #     directory=BASE_DIR/"jcm"
-        
-    #     phi=0
-    #     job_ids = []
-
-    #     # fix the keys.
-    #     calc_keys = default_keys.copy()
-    #     calc_keys.update(keys)
-
-    #     # main rotation scan.
-    #     for theta in thetaarray:
-    #         if theta%10==0:
-    #             print("current thata : ",theta)
-    #         these_calc_keys = calc_keys.copy()
-    #         these_calc_keys["theta"] = theta
-    #         these_calc_keys["phi"] = phi
-
-    #         if working_dir is not None:
-    #             wd = os.path.join(working_dir,'phi{}_theta{}'.format(phi,theta))
-    #         else:
-    #             wd = None
-                
-    #         job_id = jcmwave.solve(os.path.join(directory, "project.jcmpt"),
-    #                                keys=these_calc_keys,
-    #                                temporary=(working_dir is None),
-    #                                working_dir=wd)
-    #         job_ids.append(job_id)
-
-    #     # wait for the calculations.
-    #     job_statuses = jcmwave.daemon.status(job_ids)
-    #     print("All status",job_statuses)
-    #     results, logs = jcmwave.daemon.wait(job_ids=job_ids, verbose=False)
-
-    #     # export log files.
-    #     log_filename = os.path.join(directory, "logs_all.txt")
-    #     with open(log_filename, "w") as log_file, redirect_stdout(log_file):
-    #         # anything printed in here goes to log_file only
-    #         for i, log in enumerate(logs):
-    #             print(f"Log {i}:")
-    #             print(log["Log"]["Out"])
-    #             print("*" * 100)
-
-    #     print(f"All logs saved in {log_filename}.")
-
+        return Qzmat, intmeanmat, intunctymat
         
 
-    #     # transform to intensity map.
-    #     decayswitch=0
-    #     Qxmat, Qzmat, Intensitymat = IntensityFEM2(config, results, decayswitch)
-    #     matmeta=GetMatmeta(config, Qxmat, Qzmat, Intensitymat)
+
+    # Main forward model.
+    # Input: single key (fixed problem setup).
+    # Output: Qzlist, intmeanlist, intunctylist
+    def ModelEvaluate(self, keys, config, directory, qxpeakarray):
+        os.makedirs(directory, exist_ok=True)
+
+        folderworkdir=os.path.join(directory, "workdir_temp")
+        os.makedirs(folderworkdir, exist_ok=True)
+
+        # preparation.
+        thetaarray=config.source.thetaarray
+        dir_jcm=BASE_DIR/"jcm"
+
+        calc_keys = default_keys.copy()
+        calc_keys.update(keys)
+
+        print("current key under calculation:",calc_keys)
+        phi=0
+
+        # jcmwave.daemon.shutdown()
+        # jcmwave.daemon.add_workstation(Hostname ='localhost', Multiplicity = 1, NThreads = 32)
         
-    #     index1=config.dimqxbranch+1
-    #     index2=2*config.dimqxbranch+1
-    #     #Qzdomain=matmeta[:,index1:index2,1]
-    #     intmodel=matmeta[:,index1:index2,2]
-    #     print("Forward model evaluated.")
-    #     return intmodel
+        job_ids = []
+
+        tempdir = Path(__file__).resolve()
+        currentdir = tempdir.parent
+        project_pt = os.path.join(currentdir, "jcm", "project.jcmpt")
+        
+        for theta in thetaarray:
+            these_calc_keys = calc_keys.copy()
+            these_calc_keys["theta"] = theta
+            these_calc_keys["phi"] = phi
+            work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
+            os.makedirs(work_dir, exist_ok=True)
+            job_id=jcmwave.solve(project_pt, keys=these_calc_keys, temporary=False, working_dir=work_dir)
+            job_ids.append(job_id)
+        
+        job_statuses = jcmwave.daemon.status(job_ids)
+        print("All status",job_statuses)
+
+        results, logs = jcmwave.daemon.wait(job_ids = job_ids)
+        
+        print("Forward model evaluated.")
+
+        Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
+        matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
+
+        qxindexarray=config.centerindex+qxpeakarray
+        intmeanmat=matmeta[:,qxindexarray,2]
+            
+        return intmeanmat
+
+    # Function from JCM results into matmeta directly, without exporting.
+    # This function will only be called with ModelEvaluate function.
+
+    def IntensityFEM2(self, config, results):
+        Qxmat=[]
+        Qzmat=[]
+        Intensitymat=[]
+        Psiradmat=[]
+        thetaarray=config.source.thetaarray
+        for i in range(len(thetaarray)):
+            theta=thetaarray[i]
+            thetarad=np.radians(theta)
+            # fill in karray and earray from results directly.
+            farresult=results[i][3] #************************** careful!!
+            karray=farresult["K"]
+            earray=farresult["ElectricFieldStrength"][0]
+    
+            kxarray=np.real(karray[:,0])
+            kyarray=np.real(karray[:,2])
+            kzarray=np.real(karray[:,1]) #******
+    
+            exspec=earray[:,0]
+            eyspec=earray[:,2]
+            ezspec=earray[:,1] #******
+    
+            # The rest part is copied from the main IntensityFEM function.
+            
+            # Release diffracted waves from substrate into free space.
+            # layerrefindexarray[-1] is always air.
+            refindexlastlayer=np.real(config.material.layerrefindexarray[-2]) # Must take the real part to coinside with the JCM setting.
+            refindexair=1.0
+            kxarray3, kzarray3, diffradarray = karraytrans(kxarrayin=kxarray, kzarrayin=kzarray, refindexin=refindexlastlayer,
+                                                           refindexout=refindexair, knormout=config.source.k0) 
+    
+            # transform diffradarray to psiarray. (psiarray is the angle respecting to the transmitted kivec!!)
+            diffangrad0=-thetarad # diffraction angle of the fundamental order wave kivec (with a negative sign to the JCM [theta, phi] definition).
+            kivecx0=config.source.k0*np.sin(diffangrad0) # JCM 3D frame
+            kivecz0=-config.source.k0*np.cos(diffangrad0) # JCM 3D frame
+            psiradarray=diffradarray-diffangrad0 # psi=2theta. sample frame.
+            
+            FresnelR, FresnelT=FresnelFun(kxarrayin=kxarray,kzarrayin=kzarray,refindexin=refindexlastlayer, refindexout=refindexair)
+            
+            # modify the amplitudes of the transmitted plane waves.       
+            exspec2=FresnelT*exspec
+            eyspec2=FresnelT*eyspec
+            ezspec2=FresnelT*ezspec
+            
+            # compute intensity array based on diffraction efficiency and conservation of energy.
+            temparray1=np.real(exspec2*np.conjugate(exspec2)+eyspec2*np.conjugate(eyspec2)+ezspec2*np.conjugate(ezspec2))
+            temparray2=np.abs(kzarray3) # here we should use free-space wave vector.
+            intarray=temparray1*temparray2/(config.source.E0**2*config.source.k0*np.abs(np.cos(thetarad)))
+    
+            # coordinate transformation: from JCM 3D frame to CDSAXS sample frame.
+            kxarray4=kxarray3
+            kzarray4=-kzarray3
+            kivecx4=kivecx0
+            kivecz4=-kivecz0
+            
+            Qxarray=kxarray4-kivecx4
+            Qzarray=kzarray4-kivecz4
+            
+            # sort the datasets based on increasing Qxvalue.
+            indexlist1=np.argsort(Qxarray)
+            Qxarray2=Qxarray[indexlist1]
+            Qzarray2=Qzarray[indexlist1]
+            intarray2=intarray[indexlist1]
+            psiradarray2=psiradarray[indexlist1]
+            
+            Qxmat.append(Qxarray2)
+            Qzmat.append(Qzarray2)
+            Intensitymat.append(intarray2)
+            Psiradmat.append(psiradarray2)
+        
+        Qxmat=np.array(Qxmat, dtype=object)
+        Qzmat=np.array(Qzmat, dtype=object)
+        Intensitymat=np.array(Intensitymat, dtype=object)
+        Psiradmat=np.array(Psiradmat, dtype=object)
+    
+        return Qxmat, Qzmat, Intensitymat, Psiradmat
+
 
 
 

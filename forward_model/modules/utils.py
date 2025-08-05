@@ -51,4 +51,26 @@ def selectsortfun(matslice: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndar
 
     return Qzarray3, intarray3, thetaarray3, psiarray3
 
+# A better version.
+def selectsortfun2(matslice: np.ndarray):
+
+    Qzarray = matslice[:, 1]
+    intarray = matslice[:, 2]
+    thetaarray = matslice[:, 3]
+    psiarray = matslice[:, 4]
+
+    order = np.argsort(Qzarray)
+    Qzarray2=Qzarray[order]
+    intarray2=intarray[order]
+    thetaarray2=thetaarray[order]
+    psiarray2=psiarray[order]
+
+    # mask = ~((Qzarray2 == 0) & (intarray2 == 0))
+    # Qzarray3 = Qzarray2[mask]
+    # intarray3 = intarray2[mask]
+    # thetaarray3 = thetaarray2[mask]
+    # psiarray3 = psiarray2[mask]
+
+    return Qzarray2, intarray2, thetaarray2, psiarray2
+
 
