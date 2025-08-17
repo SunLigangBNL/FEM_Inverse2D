@@ -28,55 +28,44 @@ class ForwardModel:
             NThreads = NThreads,
             Multiplicity = Multiplicity)
         
+        # set up directories.
+        BASE_DIR = Path(__file__).resolve().parent
+        self.dir_jcm=BASE_DIR/"jcm"
+
+    
     # Compute reference: Part 1.
     # Input: keys, config, export directory.
     # Output: Output_all folder.
     def CompReference(self, keys, config, directory):
-        
-        totaltime1=time.time()
-        os.makedirs(directory, exist_ok=True)
-        
+
+        # set up directories.
         folderoutput = os.path.join(directory, "Output_all")
         os.makedirs(folderoutput, exist_ok=True)
-
         folderworkdir=os.path.join(directory, "workdir_temp")
         os.makedirs(folderworkdir, exist_ok=True)
 
         # preparation.
-        thetaarray=config.source.thetaarray
-        dir_jcm=BASE_DIR/"jcm"
-
-        calc_keys = default_keys.copy()
+        calc_keys=default_keys.copy()
         calc_keys.update(keys)
         print("current key under calculation:",calc_keys)
         
-        phi=0
-
-        # jcmwave.daemon.shutdown()
-        # jcmwave.daemon.add_workstation(Hostname ='localhost', Multiplicity = 1, NThreads = 32)
-        
-        job_ids = []
-
-        #currentdir = os.getcwd()
-        tempdir = Path(__file__).resolve()
-        currentdir = tempdir.parent
-        project_pt = os.path.join(currentdir, "jcm", "project.jcmpt")
+        job_ids=[]
+        thetaarray=config.source.thetaarray
+        dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
         
         for theta in thetaarray:
-            these_calc_keys = calc_keys.copy()
-            these_calc_keys["theta"] = theta
-            these_calc_keys["phi"] = phi
+            these_calc_keys=calc_keys.copy()
+            these_calc_keys["theta"]=theta
+            #work_dir = os.path.join(self.scratch_base1, f"theta_{theta:.2f}")
             work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
-            job_id=jcmwave.solve(project_pt, keys=these_calc_keys, temporary=False, working_dir=work_dir)
+            job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             job_ids.append(job_id)
         
         job_statuses = jcmwave.daemon.status(job_ids)
         print("All status",job_statuses)
 
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
-
-        print("Main computation done.")
         
         log_filename = os.path.join(folderoutput, "logs_all.txt")
         with open(log_filename, "w") as log_file, redirect_stdout(log_file):
@@ -84,7 +73,6 @@ class ForwardModel:
                 print(f"Log {i}:")
                 print(log["Log"]["Out"])
                 print("*" * 100)
-
         print(f"All logs saved in {log_filename}.")
 
         # export solution results.
@@ -115,94 +103,122 @@ class ForwardModel:
             np.savetxt(os.path.join(foldername, 'eyspec.txt'), eyspec, delimiter='\t', fmt='%.18e')
             np.savetxt(os.path.join(foldername, 'ezspec.txt'), ezspec, delimiter='\t', fmt='%.18e')
 
-        print("Solution files exported.")
-
-        # # checking area:
-        # print("Current cd:", calc_keys["cd"])
-        # print("Current h:", calc_keys["h"])
-
-        totaltime2=time.time()
-        totaltime = totaltime2 - totaltime1
-        print("*****************************************************************************")
-        print(f"Total computation time: {totaltime:.2f} seconds")
+        print("*********************************** FEM Computing of Refernece Done ******************************************")
 
 
     # Compute reference: Part 2.
     # Input: Output_all folder.
-    # Output: intmean, intuncertainty.
+    # Output: Qzmat, intrefmat, measurementmat, uncertaintymat.
+    # Remark: the most interesting part of this function is how to generate the uncertainty of numerical reference.
     def CompReference2(self, config, directory, qxpeakarray):
-        folderoutput=directory
-        
+        folderoutput=os.path.join(directory, "Output_all")
         Qxmat, Qzmat, Intensitymat, Psiradmat = IntensityFEM(config, folderoutput)
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
-
         qxindexarray=config.centerindex+qxpeakarray
         Qzmat=matmeta[:,qxindexarray,1]
-        intmeanmat=matmeta[:,qxindexarray,2]
-        #intunctymat=intmeanmat*np.random.uniform(1,3)*0.0001+0.000001
-        randmat=np.random.uniform(0.05, 0.2, size=intmeanmat.shape)
-        intunctymat=intmeanmat*randmat+1e-12 # this is sigma!
-        print("Numerical reference generated.")
+        intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
+
+        # Version 3: truncated Gaussian distribution.
+        mumat=np.zeros_like(intrefmat)
+
+        sigmafloor=(1e-6*np.max(intrefmat))**2   # manually introduce a floor for sigma: 1e-6 of max intensity.
+        afac=0.01 # more or less 1% of the reference data.
+        bfac=1e-16 # little positive background noise.
+        sigmamat=(afac*intrefmat)**2+bfac**2
+        sigmamat=np.maximum(sigmamat, sigmafloor)
+
+        muarray=mumat.ravel(order='C')
+        sigmaarray=sigmamat.ravel(order='C')
+
+        covmat=np.diag(sigmaarray)
+
+        noisearray=np.random.multivariate_normal(muarray, covmat)
+        noisemat=noisearray.reshape(mumat.shape,order='C')
+
+        measurementmat=intrefmat+noisemat # generate the measurement data containing noise.
+        measurementmat = np.maximum(measurementmat, 0.0) # to avoid negative values.
+        uncertaintymat=np.sqrt(sigmamat) # associated uncertainties.
+
+        # Version 4: Poisson distribution.
+
+        return Qzmat, intrefmat, measurementmat, uncertaintymat
         
-        return Qzmat, intmeanmat, intunctymat
+        # Version 1: uniform distribution.
+        # #intunctymat=intmeanmat*np.random.uniform(1,3)*0.0001+0.000001
+        # randmat=np.random.uniform(0.05, 0.2, size=intmeanmat.shape)
+        # intunctymat1=intmeanmat*randmat+1e-12 # this is sigma!
+        
+        # Version 2: Matern's kernel.
+        # lenscalfac = 1e9 #***********
+        # print("length scale fac = ",lenscalfac)
+        # intunctymat2=np.zeros_like(intmeanmat)
+        # for i in range(len(qxindexarray)):
+        #     qxindex=qxindexarray[i]
+        #     #print("qxindex = ",qxindex)
+        #     Qzarray=matmeta[:,qxindex,1]
+        #     muarray=matmeta[:,qxindex,2]
+        #     #sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.01 #***********
+        #     #sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.0001 #*********** this parameter is crucial!!
+        #     sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.001
+        #     #print("sigma0 = ",sigma0)
+        #     dist=np.array([[np.abs(x-y)/lenscalfac for x in Qzarray] for y in Qzarray])
+        #     Sigmamat=sigma0**2*(1+np.sqrt(5)*dist+5/3*dist**2)*np.exp(-np.sqrt(5)*dist)
+        #     randomvec=np.random.multivariate_normal(muarray, Sigmamat)
+        #     rltverr=np.linalg.norm(randomvec-muarray)/np.linalg.norm(muarray)
+        #     print("relative error of random vector = ", rltverr)
+        #     sigmaarray=np.sqrt(np.diag(Sigmamat))
+        #     intunctymat2[:,i]=sigmaarray+1e-18
+        
+        # print("Numerical reference generated.")
+        
+        
         
 
 
     # Main forward model.
-    # Input: single key (fixed problem setup).
-    # Output: Qzlist, intmeanlist, intunctylist
+    # Input: single key, config, dir, qxpeakarray.
+    # Output: intmeanmat
     def ModelEvaluate(self, keys, config, directory, qxpeakarray):
-        os.makedirs(directory, exist_ok=True)
 
+        # set up directories.
         folderworkdir=os.path.join(directory, "workdir_temp")
+        
         os.makedirs(folderworkdir, exist_ok=True)
 
         # preparation.
-        thetaarray=config.source.thetaarray
-        dir_jcm=BASE_DIR/"jcm"
-
-        calc_keys = default_keys.copy()
+        calc_keys=default_keys.copy()
         calc_keys.update(keys)
-
         print("current key under calculation:",calc_keys)
-        phi=0
-
-        # jcmwave.daemon.shutdown()
-        # jcmwave.daemon.add_workstation(Hostname ='localhost', Multiplicity = 1, NThreads = 32)
         
-        job_ids = []
+        job_ids=[]
+        thetaarray=config.source.thetaarray
+        dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
 
-        tempdir = Path(__file__).resolve()
-        currentdir = tempdir.parent
-        project_pt = os.path.join(currentdir, "jcm", "project.jcmpt")
-        
         for theta in thetaarray:
-            these_calc_keys = calc_keys.copy()
-            these_calc_keys["theta"] = theta
-            these_calc_keys["phi"] = phi
+            these_calc_keys=calc_keys.copy()
+            these_calc_keys["theta"]=theta
             work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
-            job_id=jcmwave.solve(project_pt, keys=these_calc_keys, temporary=False, working_dir=work_dir)
+            job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             job_ids.append(job_id)
         
         job_statuses = jcmwave.daemon.status(job_ids)
-        print("All status",job_statuses)
-
-        results, logs = jcmwave.daemon.wait(job_ids = job_ids)
+        #print("All status",job_statuses)
         
-        print("Forward model evaluated.")
+        results, logs = jcmwave.daemon.wait(job_ids = job_ids)
 
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
         qxindexarray=config.centerindex+qxpeakarray
         intmeanmat=matmeta[:,qxindexarray,2]
-            
+
+        print("*********************************** Forward Model Evaluated ******************************************")
+        
         return intmeanmat
 
     # Function from JCM results into matmeta directly, without exporting.
     # This function will only be called with ModelEvaluate function.
-
     def IntensityFEM2(self, config, results):
         Qxmat=[]
         Qzmat=[]

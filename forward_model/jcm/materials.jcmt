@@ -7,7 +7,7 @@ Material{
 Material {
   Name = "Scatterer"
   DomainId = 2
-  RelPermittivity = %(epsilonr_scat)e
+  RelPermittivity = (%(epsilonr_scat_re)e, %(epsilonr_scat_im)e)
   RelPermeability = 1
 }
 Material{

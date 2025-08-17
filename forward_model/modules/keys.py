@@ -25,8 +25,9 @@ sources_keys = {
 }
 
 materials_keys = {
-    "epsilonr_sub": 0.999435,   # epsr for substrate.
-    "epsilonr_scat": 9.99435131564694e-1+3.278431066866658e-5*1j  # epsr for scatterer. Note the Python format here!!
+    "epsilonr_sub": 9.99435131564694e-1,   # epsr for substrate.
+    "epsilonr_scat_re": 9.99435131564694e-1,  # real part of epsr for scatterer.
+    "epsilonr_scat_im": 3.278431066866658e-5  # real part of epsr for scatterer.
 }
 
 project_keys = {
