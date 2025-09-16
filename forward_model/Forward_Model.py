@@ -2,13 +2,14 @@ import sys
 import os
 import numpy as np
 from contextlib import redirect_stdout
+import shutil
 import time
 
-#jcm_root = "/sdcc/u/lsun1/JCM_2025"
-jcm_root = "/home/sun2024/JCM_2024"
+jcm_root = "/sdcc/u/lsun1/JCM_2025"
+#jcm_root = "/home/sun2024/JCM_2024"
 sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
 import jcmwave
-#jcmwave.info()
+jcmwave.info()
 
 from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
 from forward_model.modules.utils import selectsortfun2
@@ -19,18 +20,32 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 class ForwardModel:
-    def __init__(self, config, Multiplicity=1, NThreads=1):
+    #def __init__(self, config, Multiplicity=1, NThreads=1):
+    def __init__(self, config, queue_opts):
         self.config=config
+        
         # Start daemon at local machine
+        self.queue_opts=queue_opts
         jcmwave.daemon.shutdown()
         jcmwave.daemon.add_workstation(
             Hostname = "localhost",
-            NThreads = NThreads,
-            Multiplicity = Multiplicity)
+            NThreads = queue_opts["NThreads"],
+            Multiplicity = queue_opts["Multiplicity"])
+
+        # # Start daemon on cluster.
+        # self.queue_opts=queue_opts
+        # jcmwave.daemon.shutdown()
+        # queue_id = jcmwave.daemon.add_queue(**queue_opts)
+        # print("Daemon Information after Add Queue:")
+        # jcmwave.daemon.resource_info()
         
         # set up directories.
         BASE_DIR = Path(__file__).resolve().parent
         self.dir_jcm=BASE_DIR/"jcm"
+        #self.scratch_base="/hpcgpfs01/scratch/lsun1/temp102"
+
+        # self.local_base = os.environ.get('SLURM_TMPDIR', '/tmp')   # use node-local temp if provided
+        # print(self.local_base)
 
     
     # Compute reference: Part 1.
@@ -38,12 +53,17 @@ class ForwardModel:
     # Output: Output_all folder.
     def CompReference(self, keys, config, directory):
 
+        totaltime1=time.time()
+
         # set up directories.
         folderoutput = os.path.join(directory, "Output_all")
         os.makedirs(folderoutput, exist_ok=True)
+        
         folderworkdir=os.path.join(directory, "workdir_temp")
         os.makedirs(folderworkdir, exist_ok=True)
 
+        #folderworkdir=os.path.join(self.local_base, "workdir_temp")
+        
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
@@ -52,20 +72,34 @@ class ForwardModel:
         job_ids=[]
         thetaarray=config.source.thetaarray
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
+
+        # print("Daemon information before the loop:")
+        # jcmwave.daemon.resource_info()
         
         for theta in thetaarray:
             these_calc_keys=calc_keys.copy()
             these_calc_keys["theta"]=theta
-            #work_dir = os.path.join(self.scratch_base1, f"theta_{theta:.2f}")
+
+            #work_dir = os.path.join(self.scratch_base, f"theta_{theta:.2f}")
             work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
+
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
+            #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=True) # error.
+            #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=folderworkdir) # locked error.
             job_ids.append(job_id)
+
+            # print("Current daemon information: ")
+            # jcmwave.daemon.resource_info()
         
         job_statuses = jcmwave.daemon.status(job_ids)
         print("All status",job_statuses)
 
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
+
+        totaltime2=time.time()
+        totaltime = totaltime2-totaltime1
+        print(f"Time of computing: {totaltime:.1f} seconds.")
         
         log_filename = os.path.join(folderoutput, "logs_all.txt")
         with open(log_filename, "w") as log_file, redirect_stdout(log_file):
@@ -104,6 +138,7 @@ class ForwardModel:
             np.savetxt(os.path.join(foldername, 'ezspec.txt'), ezspec, delimiter='\t', fmt='%.18e')
 
         print("*********************************** FEM Computing of Refernece Done ******************************************")
+        #shutil.rmtree(folderworkdir, ignore_errors=True)
 
 
     # Compute reference: Part 2.
@@ -118,62 +153,31 @@ class ForwardModel:
         Qzmat=matmeta[:,qxindexarray,1]
         intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
 
-        # Version 3: truncated Gaussian distribution.
-        mumat=np.zeros_like(intrefmat)
-
-        sigmafloor=(1e-6*np.max(intrefmat))**2   # manually introduce a floor for sigma: 1e-6 of max intensity.
-        afac=0.01 # more or less 1% of the reference data.
-        bfac=1e-16 # little positive background noise.
-        sigmamat=(afac*intrefmat)**2+bfac**2
-        sigmamat=np.maximum(sigmamat, sigmafloor)
-
-        muarray=mumat.ravel(order='C')
-        sigmaarray=sigmamat.ravel(order='C')
-
-        covmat=np.diag(sigmaarray)
-
-        noisearray=np.random.multivariate_normal(muarray, covmat)
-        noisemat=noisearray.reshape(mumat.shape,order='C')
-
-        measurementmat=intrefmat+noisemat # generate the measurement data containing noise.
-        measurementmat = np.maximum(measurementmat, 0.0) # to avoid negative values.
-        uncertaintymat=np.sqrt(sigmamat) # associated uncertainties.
+        # # Version 3: truncated Gaussian distribution.
+        # mumat=np.zeros_like(intrefmat)
+        # sigmafloor=(1e-6*np.max(intrefmat))**2   # manually introduce a floor for sigma: 1e-6 of max intensity.
+        # afac=0.02 # more or less 1% of the reference data.
+        # bfac=1e-16 # little positive background noise.
+        # sigmamat=(afac*intrefmat)**2+bfac**2
+        # sigmamat=np.maximum(sigmamat, sigmafloor)
+        # muarray=mumat.ravel(order='C')
+        # sigmaarray=sigmamat.ravel(order='C')
+        # covmat=np.diag(sigmaarray)
+        # noisearray=np.random.multivariate_normal(muarray, covmat)
+        # noisemat=noisearray.reshape(mumat.shape,order='C')
+        # measurementmat=intrefmat+noisemat # generate the measurement data containing noise.
+        # measurementmat=np.maximum(measurementmat, 0.0) # to avoid negative values.
+        # uncertaintymat=np.sqrt(sigmamat) # associated uncertainties.
+        # return Qzmat, intrefmat, measurementmat, uncertaintymat
 
         # Version 4: Poisson distribution.
-
-        return Qzmat, intrefmat, measurementmat, uncertaintymat
-        
-        # Version 1: uniform distribution.
-        # #intunctymat=intmeanmat*np.random.uniform(1,3)*0.0001+0.000001
-        # randmat=np.random.uniform(0.05, 0.2, size=intmeanmat.shape)
-        # intunctymat1=intmeanmat*randmat+1e-12 # this is sigma!
-        
-        # Version 2: Matern's kernel.
-        # lenscalfac = 1e9 #***********
-        # print("length scale fac = ",lenscalfac)
-        # intunctymat2=np.zeros_like(intmeanmat)
-        # for i in range(len(qxindexarray)):
-        #     qxindex=qxindexarray[i]
-        #     #print("qxindex = ",qxindex)
-        #     Qzarray=matmeta[:,qxindex,1]
-        #     muarray=matmeta[:,qxindex,2]
-        #     #sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.01 #***********
-        #     #sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.0001 #*********** this parameter is crucial!!
-        #     sigma0=np.linalg.norm(muarray)/np.sqrt(len(muarray))*0.001
-        #     #print("sigma0 = ",sigma0)
-        #     dist=np.array([[np.abs(x-y)/lenscalfac for x in Qzarray] for y in Qzarray])
-        #     Sigmamat=sigma0**2*(1+np.sqrt(5)*dist+5/3*dist**2)*np.exp(-np.sqrt(5)*dist)
-        #     randomvec=np.random.multivariate_normal(muarray, Sigmamat)
-        #     rltverr=np.linalg.norm(randomvec-muarray)/np.linalg.norm(muarray)
-        #     print("relative error of random vector = ", rltverr)
-        #     sigmaarray=np.sqrt(np.diag(Sigmamat))
-        #     intunctymat2[:,i]=sigmaarray+1e-18
-        
-        # print("Numerical reference generated.")
-        
-        
-        
-
+        gfac=1e7
+        bgcounts=1e1
+        lambdamat=gfac*intrefmat+bgcounts
+        photoncounts=np.random.poisson(lambdamat)
+        measurementmat=(photoncounts-bgcounts)/gfac
+        uncertaintymat=np.sqrt(lambdamat)/gfac
+        return Qzmat, intrefmat, measurementmat, uncertaintymat        
 
     # Main forward model.
     # Input: single key, config, dir, qxpeakarray.

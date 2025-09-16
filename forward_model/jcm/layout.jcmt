@@ -1,8 +1,8 @@
 <?
 import sys
 import os
-
-MODULES_DIR = "/home/sun2024/Gitspace/FEM_Inverse2D/forward_model/modules"
+#MODULES_DIR = "/home/sun2024/Gitspace/FEM_Inverse2D/forward_model/modules"
+MODULES_DIR = "/sdcc/u/lsun1/Gitspace/FEM_Inverse2D/forward_model/modules"
 if MODULES_DIR not in sys.path:
     sys.path.insert(0, MODULES_DIR)
 
