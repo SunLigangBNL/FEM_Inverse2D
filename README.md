@@ -1,1 +1,37 @@
-Continued progress in the semiconductor industry requires progressively more advanced metrology. Critical dimension small-angle X-ray scattering (CD-SAXS) has proven to be a powerful tool in X-ray metrology owing to its non-destructive characterization of lithography nanostructures. Parameter reconstruction in CD-SAXS is an inverse problem, requiring iterative computation of a selected forward model and comparison to experimental X-ray grating diffraction data. High-fidelity forward models incur a high computational cost, making this iterative fitting prohibitive. Here, we present a scheme to solve this inverse problem efficiently based on Bayesian optimization, even when using a forward model which rigorously solves Maxwell's equations. In a line grating example, we show how to find the optimized geometry parameters with reasonable computational cost, and analyze the correlations of these parameters using Markov chain Monte Carlo algorithm. This work demonstrates the computational viability of parameter reconstruction with rigorous numerical methods in CD-SAXS for future metrology of lithographic patterns.
+# Parameter Reconstruction in CD-SAXS with Full-Wave Maxwell Solver and Bayesian Optimization
+
+## Author: Ligang Sun
+
+---
+
+## Overview
+
+We couple a rigorous full-wave finite-element Maxwell forward solver with Bayesian optimization algorithms to efficiently reconstruct grating geometry from critical dimension small-angle X-ray scattering (CD-SAXS), then quantify parameter uncertainties with Markov chain Monte Carlo (MCMC) algorithms. The approach makes high-fidelity inversion computationally viable by using Gaussian-process surrogates, so only a few dozen expensive forward solves are required.
+
+---
+
+## What’s included
+- a forward model based on JCMsuite to compute intensity in the reciprocal space.
+- scripts to run Bayesian optimization (BO) on a full-wave forward model and to run MCMC on the trained surrogate.
+- example that reconstructs 5 grating parameters (CD, height, SWA, r_top, r_bot) for a tungsten grating.
+- short notebook / plotting utilities to visualize convergence and posterior samples.
+
+---
+
+## Requirements
+- JCMsuite — commercial FEM Maxwell solver (required). Download and documentation: https://jcmwave.com/  
+- JCMoptimizer — optimization modules (required) for Bayesian optimization and MCMC analysis: https://optimizer.jcmwave.com/ 
+- Python 3.8+
+
+---
+
+
+# Remarks
+
+Please acknowledge this work by citing the following article:
+
+*Sun, L., Masafumi, F., Yager, K. G., 2025, September. Parameter Reconstruction in CD-SAXS with Full-Wave Maxwell Solver and Bayesian Optimization.
+In Photomask Technology + Extreme Ultraviolet Lithography, SPIE.*
+
+Comments and questions: lsun1@bnl.gov
+
