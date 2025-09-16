@@ -117,31 +117,42 @@ class ForwardModel:
         qxindexarray=config.centerindex+qxpeakarray
         Qzmat=matmeta[:,qxindexarray,1]
         intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
-
+        
         # Version 3: truncated Gaussian distribution.
         mumat=np.zeros_like(intrefmat)
-
         sigmafloor=(1e-6*np.max(intrefmat))**2   # manually introduce a floor for sigma: 1e-6 of max intensity.
         afac=0.01 # more or less 1% of the reference data.
         bfac=1e-16 # little positive background noise.
         sigmamat=(afac*intrefmat)**2+bfac**2
         sigmamat=np.maximum(sigmamat, sigmafloor)
-
         muarray=mumat.ravel(order='C')
         sigmaarray=sigmamat.ravel(order='C')
-
         covmat=np.diag(sigmaarray)
-
         noisearray=np.random.multivariate_normal(muarray, covmat)
         noisemat=noisearray.reshape(mumat.shape,order='C')
-
         measurementmat=intrefmat+noisemat # generate the measurement data containing noise.
-        measurementmat = np.maximum(measurementmat, 0.0) # to avoid negative values.
+        measurementmat=np.maximum(measurementmat, 0.0) # to avoid negative values.
         uncertaintymat=np.sqrt(sigmamat) # associated uncertainties.
-
-        # Version 4: Poisson distribution.
-
         return Qzmat, intrefmat, measurementmat, uncertaintymat
+
+        # # Version 4: new noise model after Masa's comment.
+        # mumat=np.zeros_like(intrefmat)
+        # sigma2floor=1e-14*np.max(intrefmat)   # manually introduce a floor for sigma2.
+        # afac=1e-7
+        # bfac=1e-16
+        # sigma2mat=afac*intrefmat+bfac
+        # sigma2mat=np.maximum(sigma2mat, sigma2floor)
+        # muarray=mumat.ravel(order='C')
+        # sigmaarray=sigma2mat.ravel(order='C')
+        # covmat=np.diag(sigmaarray)
+        # noisearray=np.random.multivariate_normal(muarray, covmat)
+        # noisemat=noisearray.reshape(mumat.shape,order='C')
+        # measurementmat=intrefmat+noisemat # generate the measurement data containing noise.
+        # # Options to avoid negative values.
+        # #measurementmat=np.abs(measurementmat)
+        # measurementmat=np.maximum(measurementmat, 0.0)
+        # uncertaintymat=np.sqrt(sigma2mat) # associated uncertainties.
+        # return Qzmat, intrefmat, measurementmat, uncertaintymat
         
         # Version 1: uniform distribution.
         # #intunctymat=intmeanmat*np.random.uniform(1,3)*0.0001+0.000001
@@ -168,11 +179,7 @@ class ForwardModel:
         #     print("relative error of random vector = ", rltverr)
         #     sigmaarray=np.sqrt(np.diag(Sigmamat))
         #     intunctymat2[:,i]=sigmaarray+1e-18
-        
-        # print("Numerical reference generated.")
-        
-        
-        
+           
 
 
     # Main forward model.
@@ -213,7 +220,7 @@ class ForwardModel:
         qxindexarray=config.centerindex+qxpeakarray
         intmeanmat=matmeta[:,qxindexarray,2]
 
-        print("*********************************** Forward Model Evaluated ******************************************")
+        print("********************** Forward Model Evaluated ****************************")
         
         return intmeanmat
 
