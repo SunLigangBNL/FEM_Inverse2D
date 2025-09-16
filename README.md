@@ -26,11 +26,11 @@ We couple a rigorous full-wave finite-element Maxwell forward solver with Bayesi
 ---
 
 
-# Remarks
+## Remarks
 
 Please acknowledge this work by citing the following article:
 
-*Sun, L., Masafumi, F., Yager, K. G., 2025, September. Parameter Reconstruction in CD-SAXS with Full-Wave Maxwell Solver and Bayesian Optimization.
+*Sun, L., Fukuto, M., Yager, K. G., 2025, September. Parameter Reconstruction in CD-SAXS with Full-Wave Maxwell Solver and Bayesian Optimization.
 In Photomask Technology + Extreme Ultraviolet Lithography, SPIE.*
 
 Comments and questions: lsun1@bnl.gov
