@@ -1,20 +1,16 @@
-#import sys
 import os
 import numpy as np
 from contextlib import redirect_stdout
-#import shutil
 import time
 
 import jcmwave
 jcmwave.info()
 
 from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
-#from forward_model.modules.utils import selectsortfun2
 from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
 from forward_model.modules.keys import keys as default_keys
 
 from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent
 
 class ForwardModel:
     def __init__(self, config, compenv, tempworkdir):
@@ -39,7 +35,7 @@ class ForwardModel:
         BASE_DIR = Path(__file__).resolve().parent
         self.dir_jcm=BASE_DIR/"jcm"
         self.tempworkdir=tempworkdir
-
+        os.environ['MODULES_DIR'] = str(BASE_DIR/"modules")
     
     # Compute reference: Part 1.
     # Input: keys, config, export directory.
