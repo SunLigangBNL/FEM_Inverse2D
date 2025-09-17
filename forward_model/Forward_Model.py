@@ -1,18 +1,15 @@
-import sys
+#import sys
 import os
 import numpy as np
 from contextlib import redirect_stdout
-import shutil
+#import shutil
 import time
 
-jcm_root = "/sdcc/u/lsun1/JCM_2025"
-#jcm_root = "/home/sun2024/JCM_2024"
-sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
 import jcmwave
 jcmwave.info()
 
 from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
-from forward_model.modules.utils import selectsortfun2
+#from forward_model.modules.utils import selectsortfun2
 from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
 from forward_model.modules.keys import keys as default_keys
 
@@ -20,32 +17,28 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
 class ForwardModel:
-    #def __init__(self, config, Multiplicity=1, NThreads=1):
-    def __init__(self, config, queue_opts):
+    def __init__(self, config, compenv, tempworkdir):
         self.config=config
         
         # Start daemon at local machine
-        self.queue_opts=queue_opts
+        self.compenv=compenv
         jcmwave.daemon.shutdown()
         jcmwave.daemon.add_workstation(
             Hostname = "localhost",
-            NThreads = queue_opts["NThreads"],
-            Multiplicity = queue_opts["Multiplicity"])
+            NThreads = compenv["NThreads"],
+            Multiplicity = compenv["Multiplicity"])
 
         # # Start daemon on cluster.
-        # self.queue_opts=queue_opts
+        # self.compenv=compenv
         # jcmwave.daemon.shutdown()
-        # queue_id = jcmwave.daemon.add_queue(**queue_opts)
+        # queue_id = jcmwave.daemon.add_queue(**compenv)
         # print("Daemon Information after Add Queue:")
         # jcmwave.daemon.resource_info()
         
         # set up directories.
         BASE_DIR = Path(__file__).resolve().parent
         self.dir_jcm=BASE_DIR/"jcm"
-        #self.scratch_base="/hpcgpfs01/scratch/lsun1/temp102"
-
-        # self.local_base = os.environ.get('SLURM_TMPDIR', '/tmp')   # use node-local temp if provided
-        # print(self.local_base)
+        self.tempworkdir=tempworkdir
 
     
     # Compute reference: Part 1.
@@ -59,11 +52,6 @@ class ForwardModel:
         folderoutput = os.path.join(directory, "Output_all")
         os.makedirs(folderoutput, exist_ok=True)
         
-        folderworkdir=os.path.join(directory, "workdir_temp")
-        os.makedirs(folderworkdir, exist_ok=True)
-
-        #folderworkdir=os.path.join(self.local_base, "workdir_temp")
-        
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
@@ -72,25 +60,19 @@ class ForwardModel:
         job_ids=[]
         thetaarray=config.source.thetaarray
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
-
-        # print("Daemon information before the loop:")
-        # jcmwave.daemon.resource_info()
         
         for theta in thetaarray:
             these_calc_keys=calc_keys.copy()
             these_calc_keys["theta"]=theta
 
-            #work_dir = os.path.join(self.scratch_base, f"theta_{theta:.2f}")
-            work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
+            work_dir = os.path.join(self.tempworkdir, f"theta_{theta:.2f}")
+            #work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
 
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=True) # error.
             #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=folderworkdir) # locked error.
             job_ids.append(job_id)
-
-            # print("Current daemon information: ")
-            # jcmwave.daemon.resource_info()
         
         job_statuses = jcmwave.daemon.status(job_ids)
         print("All status",job_statuses)
@@ -138,7 +120,6 @@ class ForwardModel:
             np.savetxt(os.path.join(foldername, 'ezspec.txt'), ezspec, delimiter='\t', fmt='%.18e')
 
         print("*********************************** FEM Computing of Refernece Done ******************************************")
-        #shutil.rmtree(folderworkdir, ignore_errors=True)
 
 
     # Compute reference: Part 2.
@@ -184,11 +165,6 @@ class ForwardModel:
     # Output: intmeanmat
     def ModelEvaluate(self, keys, config, directory, qxpeakarray):
 
-        # set up directories.
-        folderworkdir=os.path.join(directory, "workdir_temp")
-        
-        os.makedirs(folderworkdir, exist_ok=True)
-
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
@@ -201,13 +177,13 @@ class ForwardModel:
         for theta in thetaarray:
             these_calc_keys=calc_keys.copy()
             these_calc_keys["theta"]=theta
-            work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
+            work_dir = os.path.join(self.tempworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             job_ids.append(job_id)
         
         job_statuses = jcmwave.daemon.status(job_ids)
-        #print("All status",job_statuses)
+        print("All status",job_statuses)
         
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
 
@@ -299,8 +275,3 @@ class ForwardModel:
         Psiradmat=np.array(Psiradmat, dtype=object)
     
         return Qxmat, Qzmat, Intensitymat, Psiradmat
-
-
-
-
-

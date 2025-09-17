@@ -21,8 +21,8 @@ def IntensityFEM(config, directory):
     for i in range(len(thetaarray)):
         theta=thetaarray[i]
         thetarad=np.radians(theta)
-        if i%20==0:
-            print("current thata : ",theta)    
+        # if i%20==0:
+        #     print("current thata : ",theta)    
         foldername = os.path.join(directory, f"theta_{theta:.2f}")
         pathkx=os.path.join(foldername, 'kxarray.txt')
         pathky=os.path.join(foldername, 'kyarray.txt')
