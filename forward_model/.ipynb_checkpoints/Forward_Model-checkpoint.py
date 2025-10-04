@@ -159,7 +159,7 @@ class ForwardModel:
     # Main forward model.
     # Input: single key, config, dir, qxpeakarray.
     # Output: intmeanmat
-    def ModelEvaluate(self, keys, config, directory, qxpeakarray):
+    def ModelEvaluate(self, keys, config, qxpeakarray):
 
         # preparation.
         calc_keys=default_keys.copy()
@@ -191,7 +191,7 @@ class ForwardModel:
 
         print("*********************************** Forward Model Evaluated ******************************************")
         
-        return intmeanmat
+        return intmeanmat, logs
 
     # Function from JCM results into matmeta directly, without exporting.
     # This function will only be called with ModelEvaluate function.
