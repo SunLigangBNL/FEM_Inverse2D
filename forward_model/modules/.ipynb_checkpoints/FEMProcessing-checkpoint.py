@@ -105,7 +105,7 @@ def GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat):
     deltaqx=config.deltaqx
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
     
-    matmeta=np.zeros((len(thetaarray),2*config.dimqxbranch+1,5)) # per angle, per Qx location, store (Qx, Qz, Intensity, theta, psi) values.
+    matmeta=np.zeros((len(thetaarray),2*config.dimqxbranch+1,6)) # per angle, per Qx location, store (Qx, Qz, Intensity, theta, psi, flag) values.
     for i in range(len(thetaarray)):
         qxarray=np.array(Qxmat[i])
         for j,qxvalue in enumerate(qxrefarray):
@@ -116,5 +116,10 @@ def GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat):
                 matmeta[i,j,2]=Intensitymat[i][index1]
                 matmeta[i,j,3]=thetaarray[i]
                 matmeta[i,j,4]=Psiradmat[i][index1]
+                if Qzmat[i][index1]==0 and Intensitymat[i][index1]==0 and thetaarray[i]==0 and Psiradmat[i][index1]==0:
+                    matmeta[i,j,5]=0
+                else:
+                    matmeta[i,j,5]=1
+                
     print("matmeta generated.")
     return matmeta

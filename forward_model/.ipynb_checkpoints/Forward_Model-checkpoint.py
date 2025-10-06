@@ -7,6 +7,7 @@ import jcmwave
 jcmwave.info()
 
 from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
+from forward_model.modules.BAProcessing import IntensityBA
 from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
 from forward_model.modules.keys import keys as default_keys
 
@@ -126,9 +127,18 @@ class ForwardModel:
         folderoutput=os.path.join(directory, "Output_all")
         Qxmat, Qzmat, Intensitymat, Psiradmat = IntensityFEM(config, folderoutput)
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
+
+        # export for BA.
+
+        np.save(directory/"Qxmat.npy", Qxmat)
+        np.save(directory/"Qzmat.npy", Qzmat)
+        #np.save(directory/"Psiradmat.npy", Psiradmat)
+        np.save(directory/"matmeta.npy", matmeta)
+        
         qxindexarray=config.centerindex+qxpeakarray
-        Qzmat=matmeta[:,qxindexarray,1]
+        Qzmat2=matmeta[:,qxindexarray,1] # Processed Qz dataset.
         intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
+
 
         # # Version 3: truncated Gaussian distribution.
         # mumat=np.zeros_like(intrefmat)
@@ -154,12 +164,12 @@ class ForwardModel:
         photoncounts=np.random.poisson(lambdamat)
         measurementmat=(photoncounts-bgcounts)/gfac
         uncertaintymat=np.sqrt(lambdamat)/gfac
-        return Qzmat, intrefmat, measurementmat, uncertaintymat        
+        return Qzmat2, intrefmat, measurementmat, uncertaintymat        
 
-    # Main forward model.
-    # Input: single key, config, dir, qxpeakarray.
-    # Output: intmeanmat
-    def ModelEvaluate(self, keys, config, qxpeakarray):
+    # Main forward model of FEM.
+    # Input: single key, config, qxpeakarray.
+    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
+    def ModelEvaluateFEM(self, keys, config, qxpeakarray):
 
         # preparation.
         calc_keys=default_keys.copy()
@@ -184,17 +194,37 @@ class ForwardModel:
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
 
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
+        
+        print("size of Qxmat before GetMatmeta:", Qxmat.shape)
+        print("size of Qzmat before GetMatmeta:", Qzmat.shape)
+        print("size of Intensitymat before GetMatmeta:", Intensitymat.shape)
+        print("size of Psiradmat before GetMatmeta:", Psiradmat.shape)
+        
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
-        qxindexarray=config.centerindex+qxpeakarray
-        intmeanmat=matmeta[:,qxindexarray,2]
+        # extra processing to match BA format and FEM format.
 
-        print("*********************************** Forward Model Evaluated ******************************************")
+        qxindexarray=config.centerindex+qxpeakarray
+        intmatFEM=matmeta[:,qxindexarray,2]
+
+        print("*********************************** Forward Model FEM Evaluated ******************************************")
         
-        return intmeanmat, logs
+        return intmatFEM, logs
+
+    # Main forward model of BA.
+    # Input: single key, config, (matmeta from FEM).
+    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
+    def ModelEvaluateBA(self, keys, config, directory, qxpeakarray):
+
+        matmeta=np.load(directory/"matmeta.npy", allow_pickle=True)
+        intmatBA=IntensityBA(config, keys, matmeta, qxpeakarray)
+        
+        print("*********************************** Forward Model BA Evaluated ******************************************")
+        return intmatBA
+        
 
     # Function from JCM results into matmeta directly, without exporting.
-    # This function will only be called with ModelEvaluate function.
+    # This function will only be called within ModelEvaluate function.
     def IntensityFEM2(self, config, results):
         Qxmat=[]
         Qzmat=[]
