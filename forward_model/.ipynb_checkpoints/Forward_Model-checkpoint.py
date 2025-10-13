@@ -129,7 +129,6 @@ class ForwardModel:
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
         # export for BA.
-
         np.save(directory/"Qxmat.npy", Qxmat)
         np.save(directory/"Qzmat.npy", Qzmat)
         #np.save(directory/"Psiradmat.npy", Psiradmat)
@@ -138,7 +137,6 @@ class ForwardModel:
         qxindexarray=config.centerindex+qxpeakarray
         Qzmat2=matmeta[:,qxindexarray,1] # Processed Qz dataset.
         intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
-
 
         # # Version 3: truncated Gaussian distribution.
         # mumat=np.zeros_like(intrefmat)
@@ -164,6 +162,7 @@ class ForwardModel:
         photoncounts=np.random.poisson(lambdamat)
         measurementmat=(photoncounts-bgcounts)/gfac
         uncertaintymat=np.sqrt(lambdamat)/gfac
+        
         return Qzmat2, intrefmat, measurementmat, uncertaintymat        
 
     # Main forward model of FEM.
@@ -195,15 +194,7 @@ class ForwardModel:
 
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
         
-        print("size of Qxmat before GetMatmeta:", Qxmat.shape)
-        print("size of Qzmat before GetMatmeta:", Qzmat.shape)
-        print("size of Intensitymat before GetMatmeta:", Intensitymat.shape)
-        print("size of Psiradmat before GetMatmeta:", Psiradmat.shape)
-        
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
-
-        # extra processing to match BA format and FEM format.
-
         qxindexarray=config.centerindex+qxpeakarray
         intmatFEM=matmeta[:,qxindexarray,2]
 
