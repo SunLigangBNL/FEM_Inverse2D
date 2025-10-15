@@ -8,6 +8,10 @@
 
 We couple a rigorous full-wave finite-element Maxwell forward solver with Bayesian optimization algorithms to efficiently reconstruct grating geometry from critical dimension small-angle X-ray scattering (CD-SAXS), then quantify parameter uncertainties with Markov chain Monte Carlo (MCMC) algorithms. The approach makes high-fidelity inversion computationally viable by using Gaussian-process surrogates, so only a few dozen expensive forward solves are required.
 
+Below is a flowchart to reconstruct the parameters of interest with a Maxwell forward model.
+
+![Result Figure](./images/Inverse_Map_v3.svg)
+
 ---
 
 ## What’s included
