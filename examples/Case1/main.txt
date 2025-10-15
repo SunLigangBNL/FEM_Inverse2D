@@ -1,0 +1,254 @@
+
+Copyright (c) 2001-2023 JCMwave GmbH, Berlin. All Rights Reserved
+
+
+
+             JCMROOT : /home/sun2024/JCM_2024
+    JCMsuite version : 6.4.8
+            Buildtag : linux64-2024.12.04.11.46
+         Number CPUs : 64
+      Number threads : default
+        License file : File "/home/sun2024/JCM_2024/license/license.ljcm
+      License period : 2024-12-26 -> 2025-12-26
+
+
+
+thetaarray: [-60. -59. -58. -57. -56. -55. -54. -53. -52. -51. -50. -49. -48. -47.
+ -46. -45. -44. -43. -42. -41. -40. -39. -38. -37. -36. -35. -34. -33.
+ -32. -31. -30. -29. -28. -27. -26. -25. -24. -23. -22. -21. -20. -19.
+ -18. -17. -16. -15. -14. -13. -12. -11. -10.  -9.  -8.  -7.  -6.  -5.
+  -4.  -3.  -2.  -1.   0.   1.   2.   3.   4.   5.   6.   7.   8.   9.
+  10.  11.  12.  13.  14.  15.  16.  17.  18.  19.  20.  21.  22.  23.
+  24.  25.  26.  27.  28.  29.  30.  31.  32.  33.  34.  35.  36.  37.
+  38.  39.  40.  41.  42.  43.  44.  45.  46.  47.  48.  49.  50.]
+{'IP': '0.0.0.0',
+ 'Jobs': {'Finished': [1134864376],
+          'Pending': [],
+          'ReceivingData': [],
+          'Running': [1670775936],
+          'SendingData': [],
+          'Waiting': [1568275519,
+                      156928557,
+                      1366449485,
+                      1951225635,
+                      1868958669,
+                      404046608,
+                      1838559320,
+                      445861180,
+                      702022925,
+                      660815719,
+                      1657403298,
+                      2037900804,
+                      100203818,
+                      1888571588,
+                      1979996037,
+                      475686930,
+                      1447673708,
+                      1200715840,
+                      550317067,
+                      705431562,
+                      2052157157,
+                      1232192220,
+                      2067125601,
+                      323761290,
+                      1877356943,
+                      1657710165,
+                      1951864152,
+                      1032286033,
+                      99600294,
+                      1783539189,
+                      760634915,
+                      2091595238,
+                      1724929844,
+                      332758295,
+                      2059143033,
+                      819256770,
+                      1417613023,
+                      1247600850,
+                      2064516572,
+                      572583768,
+                      1156997343,
+                      374069182,
+                      1424535239,
+                      2070915851,
+                      925818267,
+                      1903629507,
+                      387327838,
+                      928456506,
+                      608662003,
+                      1477914506,
+                      1209341854,
+                      1449828114,
+                      1726483946,
+                      607145418,
+                      1712913669,
+                      1779355494,
+                      1098902413,
+                      952374201,
+                      544306789,
+                      105484855,
+                      1824947841,
+                      399363449,
+                      176342047,
+                      124134169,
+                      1470919349,
+                      1683316496,
+                      1382432489,
+                      573582403,
+                      1416066037,
+                      791238019,
+                      1787393251,
+                      444471401,
+                      1904367710,
+                      182838152,
+                      1995779719,
+                      166998357,
+                      751549211,
+                      1167005852,
+                      303820886,
+                      735145851,
+                      1239001989,
+                      103690695,
+                      360265430,
+                      1216942289,
+                      670896967,
+                      1044624791,
+                      1795549592,
+                      224229759,
+                      1551994202,
+                      1353401557,
+                      436062898,
+                      49433640,
+                      1154103371,
+                      2009818883,
+                      653807639,
+                      21622812,
+                      1332449951,
+                      367568414,
+                      1402013117,
+                      1947699416,
+                      740643804,
+                      253277977,
+                      888036080,
+                      487467171,
+                      572221842,
+                      2021503322,
+                      61526822,
+                      837267394,
+                      1711371470]},
+ 'Port': 42729}
+All status {'IP': '0.0.0.0', 'Port': 42729, 'Jobs': {'Finished': [1134864376], 'Pending': [], 'ReceivingData': [], 'Running': [1670775936], 'SendingData': [], 'Waiting': [1568275519, 156928557, 1366449485, 1951225635, 1868958669, 404046608, 1838559320, 445861180, 702022925, 660815719, 1657403298, 2037900804, 100203818, 1888571588, 1979996037, 475686930, 1447673708, 1200715840, 550317067, 705431562, 2052157157, 1232192220, 2067125601, 323761290, 1877356943, 1657710165, 1951864152, 1032286033, 99600294, 1783539189, 760634915, 2091595238, 1724929844, 332758295, 2059143033, 819256770, 1417613023, 1247600850, 2064516572, 572583768, 1156997343, 374069182, 1424535239, 2070915851, 925818267, 1903629507, 387327838, 928456506, 608662003, 1477914506, 1209341854, 1449828114, 1726483946, 607145418, 1712913669, 1779355494, 1098902413, 952374201, 544306789, 105484855, 1824947841, 399363449, 176342047, 124134169, 1470919349, 1683316496, 1382432489, 573582403, 1416066037, 791238019, 1787393251, 444471401, 1904367710, 182838152, 1995779719, 166998357, 751549211, 1167005852, 303820886, 735145851, 1239001989, 103690695, 360265430, 1216942289, 670896967, 1044624791, 1795549592, 224229759, 1551994202, 1353401557, 436062898, 49433640, 1154103371, 2009818883, 653807639, 21622812, 1332449951, 367568414, 1402013117, 1947699416, 740643804, 253277977, 888036080, 487467171, 572221842, 2021503322, 61526822, 837267394, 1711371470]}}
+Finished: /tmp/__JCMwave__h8lw5l1v/project.jcmp
+Finished: /tmp/__JCMwave__kssho44c/project.jcmp
+Finished: /tmp/__JCMwave__e1il2upy/project.jcmp
+Finished: /tmp/__JCMwave__r414qinw/project.jcmp
+Finished: /tmp/__JCMwave__w5sczqwq/project.jcmp
+Finished: /tmp/__JCMwave__sq7qxi17/project.jcmp
+Finished: /tmp/__JCMwave__hb5_sarf/project.jcmp
+Finished: /tmp/__JCMwave__ruvuy51d/project.jcmp
+Finished: /tmp/__JCMwave__l84hoc4v/project.jcmp
+Finished: /tmp/__JCMwave__qrku18wk/project.jcmp
+Finished: /tmp/__JCMwave__36swxuu3/project.jcmp
+Finished: /tmp/__JCMwave__xrnkkgmw/project.jcmp
+Finished: /tmp/__JCMwave__6x0nr4q0/project.jcmp
+Finished: /tmp/__JCMwave__x2pu9d25/project.jcmp
+Finished: /tmp/__JCMwave__i04usk6j/project.jcmp
+Finished: /tmp/__JCMwave__fv1kiw8h/project.jcmp
+Finished: /tmp/__JCMwave__dgygjzk1/project.jcmp
+Finished: /tmp/__JCMwave__2kr309ct/project.jcmp
+Finished: /tmp/__JCMwave__b2oc5r9e/project.jcmp
+Finished: /tmp/__JCMwave__q9947t6h/project.jcmp
+Finished: /tmp/__JCMwave__ip_vcecs/project.jcmp
+Finished: /tmp/__JCMwave__l3ess2st/project.jcmp
+Finished: /tmp/__JCMwave__yh_gs5cq/project.jcmp
+Finished: /tmp/__JCMwave__29933x54/project.jcmp
+Finished: /tmp/__JCMwave__p624yzbq/project.jcmp
+Finished: /tmp/__JCMwave__4oan6h_6/project.jcmp
+Finished: /tmp/__JCMwave__97l805ho/project.jcmp
+Finished: /tmp/__JCMwave__5b36b1ad/project.jcmp
+Finished: /tmp/__JCMwave__2jluq2qr/project.jcmp
+Finished: /tmp/__JCMwave__v4o3_wm0/project.jcmp
+Finished: /tmp/__JCMwave__sozb0a5a/project.jcmp
+Finished: /tmp/__JCMwave__by6k1hxf/project.jcmp
+Finished: /tmp/__JCMwave__vkcazn06/project.jcmp
+Finished: /tmp/__JCMwave__v41yt5gq/project.jcmp
+Finished: /tmp/__JCMwave__fugt5qvj/project.jcmp
+Finished: /tmp/__JCMwave__quipuo2w/project.jcmp
+Finished: /tmp/__JCMwave__5hsxne5h/project.jcmp
+Finished: /tmp/__JCMwave__c7qfq6j7/project.jcmp
+Finished: /tmp/__JCMwave__vz1jokmi/project.jcmp
+Finished: /tmp/__JCMwave__v7wlzezv/project.jcmp
+Finished: /tmp/__JCMwave__kq6cvo_k/project.jcmp
+Finished: /tmp/__JCMwave__u4aw467d/project.jcmp
+Finished: /tmp/__JCMwave__tpg97kqw/project.jcmp
+Finished: /tmp/__JCMwave__86msv25e/project.jcmp
+Finished: /tmp/__JCMwave__4_mzj0ny/project.jcmp
+Finished: /tmp/__JCMwave__25uqyh_d/project.jcmp
+Finished: /tmp/__JCMwave___ltfw5zq/project.jcmp
+Finished: /tmp/__JCMwave__uyswsy_d/project.jcmp
+Finished: /tmp/__JCMwave__m5bosof_/project.jcmp
+Finished: /tmp/__JCMwave__to87se7g/project.jcmp
+Finished: /tmp/__JCMwave__636h66q0/project.jcmp
+Finished: /tmp/__JCMwave__n7pwzb05/project.jcmp
+Finished: /tmp/__JCMwave__0_gzll7m/project.jcmp
+Finished: /tmp/__JCMwave__6pr6_po3/project.jcmp
+Finished: /tmp/__JCMwave__tnarttpx/project.jcmp
+Finished: /tmp/__JCMwave__zetm2h8h/project.jcmp
+Finished: /tmp/__JCMwave__m9hl0zqp/project.jcmp
+Finished: /tmp/__JCMwave__0trsr94r/project.jcmp
+Finished: /tmp/__JCMwave__q_2n80ef/project.jcmp
+Finished: /tmp/__JCMwave__gbl_1kqm/project.jcmp
+Finished: /tmp/__JCMwave__5o38haq3/project.jcmp
+Finished: /tmp/__JCMwave__xdytkiyc/project.jcmp
+Finished: /tmp/__JCMwave__edx4gx3d/project.jcmp
+Finished: /tmp/__JCMwave__jbemjb4l/project.jcmp
+Finished: /tmp/__JCMwave__kd3_fmhp/project.jcmp
+Finished: /tmp/__JCMwave__2clltz41/project.jcmp
+Finished: /tmp/__JCMwave__7oonksja/project.jcmp
+Finished: /tmp/__JCMwave__tej2f08l/project.jcmp
+Finished: /tmp/__JCMwave__0hsiif02/project.jcmp
+Finished: /tmp/__JCMwave__am26d943/project.jcmp
+Finished: /tmp/__JCMwave__io9h5wt3/project.jcmp
+Finished: /tmp/__JCMwave__i2lign2w/project.jcmp
+Finished: /tmp/__JCMwave__dtc_v3nn/project.jcmp
+Finished: /tmp/__JCMwave___4m_cojh/project.jcmp
+Finished: /tmp/__JCMwave__uhm3o210/project.jcmp
+Finished: /tmp/__JCMwave__vp38utmb/project.jcmp
+Finished: /tmp/__JCMwave__v98xhdkh/project.jcmp
+Finished: /tmp/__JCMwave__29u_5uc5/project.jcmp
+Finished: /tmp/__JCMwave__yoafjy8j/project.jcmp
+Finished: /tmp/__JCMwave__x7bksyrv/project.jcmp
+Finished: /tmp/__JCMwave__xuq96_xy/project.jcmp
+Finished: /tmp/__JCMwave__kd6wcqhr/project.jcmp
+Finished: /tmp/__JCMwave__kub1vlnf/project.jcmp
+Finished: /tmp/__JCMwave__mtvyer43/project.jcmp
+Finished: /tmp/__JCMwave__5he0w7m4/project.jcmp
+Finished: /tmp/__JCMwave__38j902wy/project.jcmp
+Finished: /tmp/__JCMwave__li__oak3/project.jcmp
+Finished: /tmp/__JCMwave__2g4q830f/project.jcmp
+Finished: /tmp/__JCMwave__73uwyeoc/project.jcmp
+Finished: /tmp/__JCMwave__s_g_36ce/project.jcmp
+Finished: /tmp/__JCMwave__m0nqxkoj/project.jcmp
+Finished: /tmp/__JCMwave__anolad0d/project.jcmp
+Finished: /tmp/__JCMwave__khgv1v8p/project.jcmp
+Finished: /tmp/__JCMwave__n4fv2ti4/project.jcmp
+Finished: /tmp/__JCMwave__prxb2uch/project.jcmp
+Finished: /tmp/__JCMwave__n7tf3l5r/project.jcmp
+Finished: /tmp/__JCMwave__mne_j_ew/project.jcmp
+Finished: /tmp/__JCMwave__csiec0j1/project.jcmp
+Finished: /tmp/__JCMwave___bw2ppai/project.jcmp
+Finished: /tmp/__JCMwave__d6o_tthp/project.jcmp
+Finished: /tmp/__JCMwave__bcnoto5v/project.jcmp
+Finished: /tmp/__JCMwave___d1lhevh/project.jcmp
+Finished: /tmp/__JCMwave__uio_f32k/project.jcmp
+Finished: /tmp/__JCMwave__xwml5z2o/project.jcmp
+Finished: /tmp/__JCMwave__msgje3ey/project.jcmp
+Finished: /tmp/__JCMwave__akmy7shy/project.jcmp
+Finished: /tmp/__JCMwave__vcq3163j/project.jcmp
+Finished: /tmp/__JCMwave__wvppnxtf/project.jcmp
+Finished: /tmp/__JCMwave__ac8ie1b1/project.jcmp
+Finished: /tmp/__JCMwave__rs755by6/project.jcmp
+Finished: /tmp/__JCMwave__8juyh52l/project.jcmp
+All logs saved in Output_all/logs_all.txt.
+*****************************************************************************
+Total computation time: 1070.26 seconds

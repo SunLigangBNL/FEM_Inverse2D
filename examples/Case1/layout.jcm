@@ -1,0 +1,36 @@
+Layout2D {
+  Name = "LineGrating"
+  UnitOfLength = 1e-09
+  MeshOptions {
+    MaximumSideLength = 1
+  }
+  Objects {
+    Polygon {
+      Name = "ComputationalDomain_Air"
+      DomainId = 1
+      Priority = -1
+      Points = [-40 -1, 40 -1, 40 31, -40 31]
+      Boundary {
+        Number = [1 3]
+        Class = Transparent
+      }
+      Boundary {
+        Number = [2 4]
+        Class = Periodic
+      }
+    }
+    
+    Polygon {
+      Name = "Line"
+      DomainId = 2
+      Priority = 1
+      Points = [-20 0, 20 0, 15 30, -15 30]
+    }
+    Polygon {
+      Name = "Substrate"
+      DomainId = 3
+      Priority = 2
+      Points = [-40 -1, 40 -1, 40 0, -40 0]
+    }   
+  }
+}

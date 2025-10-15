@@ -1,0 +1,20 @@
+Material {  
+  Name = "Air" 
+  DomainId = 1 
+  RelPermittivity = 1 
+  RelPermeability = 1.0 
+} 
+ 
+Material {  
+  Name = "Line" 
+  DomainId = 2 
+  RelPermittivity = (9.97360870441372e-1, 7.893104295072442e-4)
+  RelPermeability = 1.0
+} 
+
+Material {  
+  Name = "Substrate" 
+  DomainId = 3 
+  RelPermittivity = 9.99435131564694e-1
+  RelPermeability = 1.0
+}
