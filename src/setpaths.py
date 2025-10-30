@@ -8,7 +8,7 @@ def set_paths(workenv: int):
         sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
         jcm_optimizer_path = "/sdcc/u/lsun1/JCMoptimizer2"
     else:              # local
-        jcm_root = "/home/sun2024/JCM_2024"
+        jcm_root = "/home/sun2024/JCM_2025"
         sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
         jcm_optimizer_path = "/home/sun2024/JCMoptimizer2"
     return jcm_root, jcm_optimizer_path

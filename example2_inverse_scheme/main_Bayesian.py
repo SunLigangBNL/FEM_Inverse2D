@@ -16,13 +16,15 @@ jcm_root = "/sdcc/u/lsun1/JCM_2025" #************* update.
 jcm_optimizer_path = "/sdcc/u/lsun1/JCMoptimizer2" #*************
 source_path="/sdcc/u/lsun1/Gitspace/FEM_Inverse2D" #*************
 
+sys.path.append(os.path.join(jcm_root, 'ThirdPartySupport', 'Python'))
+
 sys.path.insert(0, os.path.join(jcm_optimizer_path, "interface", "python"))
 from jcmoptimizer import Server, Client, Study, Observation
 
 sys.path.append(source_path)
-from forward_model import ForwardModel
-from forward_model.modules import SourceConfig, GeometryConfig, Scatterer, MaterialConfig, CDSAXSConfig
-from forward_model.modules import IntensityFEM, GetMatmeta, selectsortfun, coordinate_transform
+from src.Forward_Model import ForwardModel
+from src.modules import SourceConfig, GeometryConfig, Scatterer, MaterialConfig, CDSAXSConfig
+from src.modules import IntensityFEM, GetMatmeta, selectsortfun, coordinate_transform
 
 # Static library:
 # rotation arrays:

@@ -6,9 +6,9 @@ import time
 import jcmwave
 jcmwave.info()
 
-from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
-from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
-from forward_model.modules.keys import keys as default_keys
+from src.modules.FEMProcessing import IntensityFEM, GetMatmeta
+from src.modules.InterfaceTransform import karraytrans, FresnelFun
+from src.modules.keys import keys as default_keys
 
 from pathlib import Path
 
