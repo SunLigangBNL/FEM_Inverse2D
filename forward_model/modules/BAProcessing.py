@@ -180,11 +180,11 @@ def IntBornPolygon(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
     return intensity
 
 # Complete the full loop of BA. This is a counterpart of IntensityFEM.
-# Input: different keys, config, matmeta from FEM, qxpeakarray.
+# Input: different keys, config, matmeta from FEM.
 # Output: Intensitymat, which will be processed again by GetMeta. No!
-def IntensityBA(config, keys, matmeta, qxpeakarray):
+def IntensityBA(config, keys, matmeta):
     
-    Intensitymatnew=np.zeros((len(config.source.thetaarray),len(qxpeakarray)))
+    Intensitymatnew=np.zeros((len(config.source.thetaarray),len(config.qxpeakarray)))
 
     # generate confignew based on keys.
     coordmat, centermat, coordmat2=grating_profile(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], 
@@ -200,7 +200,7 @@ def IntensityBA(config, keys, matmeta, qxpeakarray):
                             geometry=geometrynew, material=config.material)
 
     
-    qxindexarray=config.centerindex+qxpeakarray
+    qxindexarray=config.centerindex+config.qxpeakarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
     for i in qxindexarray:
         qxvalue = qxrefarray[i]

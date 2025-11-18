@@ -19,6 +19,7 @@ class CDSAXSConfig:
     # only the two extra CDSAXS‑specific params for now:
     pitch: float # unit: m.
     dimqxbranch: int
+    qxpeakarray: np.ndarray
 
     @property
     def deltaqx(self) -> float:

@@ -63,16 +63,13 @@ class ForwardModel:
             these_calc_keys["theta"]=theta
 
             work_dir = os.path.join(self.tempworkdir, f"theta_{theta:.2f}")
-            #work_dir = os.path.join(folderworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
 
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
-            #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=True) # error.
-            #job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=folderworkdir) # locked error.
             job_ids.append(job_id)
         
         job_statuses = jcmwave.daemon.status(job_ids)
-        print("All status",job_statuses)
+        #print("All status",job_statuses)
 
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
 
@@ -116,14 +113,14 @@ class ForwardModel:
             np.savetxt(os.path.join(foldername, 'eyspec.txt'), eyspec, delimiter='\t', fmt='%.18e')
             np.savetxt(os.path.join(foldername, 'ezspec.txt'), ezspec, delimiter='\t', fmt='%.18e')
 
-        print("*********************************** FEM Computing of Refernece Done ******************************************")
+        #print("*********************************** FEM Computing of Refernece Done ******************************************")
 
 
     # Compute reference: Part 2.
     # Input: Output_all folder.
     # Output: Qzmat, intrefmat, measurementmat, uncertaintymat.
     # Remark: the most interesting part of this function is how to generate the uncertainty of numerical reference.
-    def CompReference2(self, config, directory, qxpeakarray):
+    def CompReference2(self, config, directory):
         folderoutput=os.path.join(directory, "Output_all")
         Qxmat, Qzmat, Intensitymat, Psiradmat = IntensityFEM(config, folderoutput)
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
@@ -134,7 +131,7 @@ class ForwardModel:
         #np.save(directory/"Psiradmat.npy", Psiradmat)
         np.save(directory/"matmeta.npy", matmeta)
         
-        qxindexarray=config.centerindex+qxpeakarray
+        qxindexarray=config.centerindex+config.qxpeakarray
         Qzmat2=matmeta[:,qxindexarray,1] # Processed Qz dataset.
         intrefmat=matmeta[:,qxindexarray,2] # True intensity without any noise. We will use it to generate the measurement data.
 
@@ -168,7 +165,7 @@ class ForwardModel:
     # Main forward model of FEM.
     # Input: single key, config, qxpeakarray.
     # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    def ModelEvaluateFEM(self, keys, config, qxpeakarray):
+    def ModelEvaluateFEM(self, keys, config):
 
         # preparation.
         calc_keys=default_keys.copy()
@@ -195,7 +192,7 @@ class ForwardModel:
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
         
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
-        qxindexarray=config.centerindex+qxpeakarray
+        qxindexarray=config.centerindex+config.qxpeakarray
         intmatFEM=matmeta[:,qxindexarray,2]
 
         print("*********************************** Forward Model FEM Evaluated ******************************************")
@@ -205,10 +202,10 @@ class ForwardModel:
     # Main forward model of BA.
     # Input: single key, config, (matmeta from FEM).
     # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    def ModelEvaluateBA(self, keys, config, directory, qxpeakarray):
+    def ModelEvaluateBA(self, keys, config, directory):
 
         matmeta=np.load(directory/"matmeta.npy", allow_pickle=True)
-        intmatBA=IntensityBA(config, keys, matmeta, qxpeakarray)
+        intmatBA=IntensityBA(config, keys, matmeta)
         
         print("*********************************** Forward Model BA Evaluated ******************************************")
         return intmatBA
