@@ -196,9 +196,8 @@ def IntensityBA(config, keys, matmeta):
     scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     geometrynew=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
                                scatterlayer=config.geometry.scatterlayer)
-    confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, source=config.source, 
+    confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray, source=config.source, 
                             geometry=geometrynew, material=config.material)
-
     
     qxindexarray=config.centerindex+config.qxpeakarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
