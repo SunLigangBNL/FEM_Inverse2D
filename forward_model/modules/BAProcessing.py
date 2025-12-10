@@ -118,7 +118,7 @@ input: qxvalue, qzarray (SI unit).
 input: phiradarray, psiradarray. Both are under the sample frame. Both are exactly the variables in Masa's report.
 output: I(qx,qz)/I0 array.
 """
-def IntBornPolygon(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
+def IntBornPolygon(config, qxvaluein, qzarrayin):
     
     pitch=config.pitch
     E0=config.source.E0
@@ -130,10 +130,21 @@ def IntBornPolygon(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
     mu2=0
     
     # Angle-dependent factor based on Masa's report:
-    thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note. Check again on 07/20.
+    # thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note. Check again on 07/20.
     # psi=2theta: Masa's Fig 2 is EXACTLY same with our own angle definition (negative sign to JCM [theta, phi]).
-    anglefac=np.cos(psiradarray)*np.cos(psiradarray)/(np.cos(thetaradarray)*np.cos(psiradarray-thetaradarray))
-    c0=anglefac*k0**2/(4*pitch**2)
+    #anglefac=np.cos(psiradarray)*np.cos(psiradarray)/(np.cos(thetaradarray)*np.cos(psiradarray-thetaradarray))
+
+    # # alternative method: compute anglefac by using Qx, Qz directly.
+    # Qlength=2*k0*np.sin(np.abs(psiradarray/2))
+    # tempfac1=(Qlength/(2*k0))**2
+    # anglefac2=(1-2*tempfac1)**2/((qxvaluein/Qlength)**2-tempfac1)
+
+    # alternative method: compute anglefac by using Qx, Qz directly.
+    Qlength=np.sqrt(qxvaluein**2+qzarrayin**2)
+    tempfac1=(Qlength/(2*k0))**2
+    anglefac2=(1-2*tempfac1)**2/((qxvaluein/Qlength)**2-tempfac1)
+    
+    c0=anglefac2*k0**2/(4*pitch**2)
 
     inttotal=0    
     scatterlayer=config.geometry.scatterlayer # indices of layers containing scatterers. e.g., [1, 5].
@@ -158,6 +169,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
                              config.geometry.layerzarray[scatterlayer[m1]],config.geometry.layerzarray[scatterlayer[m1]]])
             coeff2=epsrb-1
             intpart2=coeff2*FormFacPolygon(qxvaluein, qzarrayin, xarray, zarray)
+        
         inttotal=inttotal+intpart1+intpart2
 
     # integral based on the other layers (to exclude: the top air layer, the bottom air layer, the scatter layers).
@@ -176,13 +188,14 @@ def IntBornPolygon(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
         intpart3=intpart3+intformarray
 
     inttotal=inttotal+intpart3
+    
     intensity=c0*np.abs(inttotal)**2
     return intensity
 
 # Complete the full loop of BA. This is a counterpart of IntensityFEM.
-# Input: different keys, config, matmeta from FEM.
-# Output: Intensitymat, which will be processed again by GetMeta. No!
-def IntensityBA(config, keys, matmeta):
+# Input: different keys, config, externally computed Qzmat.
+# Output: Intensitymat.
+def IntensityBA(config, keys, Qzgrid):
     
     Intensitymatnew=np.zeros((len(config.source.thetaarray),len(config.qxpeakarray)))
 
@@ -201,25 +214,27 @@ def IntensityBA(config, keys, matmeta):
     
     qxindexarray=config.centerindex+config.qxpeakarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
+    
+    
     for i in qxindexarray:
+        
         qxvalue = qxrefarray[i]
-        matslice = matmeta[:, i, :]
+        Qzarray=Qzgrid[:,i]
+        
+        # matslice = matmeta[:, i, :]
+        # Qzarray = matslice[:, 1]
 
-        Qzarray = matslice[:, 1]
-        #intarray = matslice[:, 2]
-        thetaarray = matslice[:, 3]
-        psiarray = matslice[:, 4]
-        flagarray = matslice[:, 5]
+        # thetaarray = matslice[:, 3]
+        # psiarray = matslice[:, 4]
+        # flagarray = matslice[:, 5]
 
-        IntBAarray2a=np.zeros(len(Qzarray))
-
-        Qzarray2=Qzarray[flagarray==1]
-        #intarray2=intarray[flagarray==1]
-        thetaarray2=thetaarray[flagarray==1]
-        psiarray2=psiarray[flagarray==1]
-
-        # Now, IntBAarray is corresponding to Qzarray2 format.
-        IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray2, thetaarray2, psiarray2) # Note new geometry info is used here.
+        # IntBAarray2a=np.zeros(len(Qzarray))
+        # Qzarray2=Qzarray[flagarray==1]
+        # thetaarray2=thetaarray[flagarray==1]
+        # psiarray2=psiarray[flagarray==1]
+        
+        # Now, IntBAarray is corresponding to Qzarray format.
+        IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray) # Note new geometry info is used here.
 
         IntBAarray2a[flagarray==1]=IntBAarray2 # now it has the same length and structure as Qzarray.
         Intensitymatnew[:,i-config.centerindex-1]=IntBAarray2a

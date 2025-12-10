@@ -199,17 +199,27 @@ class ForwardModel:
         
         return intmatFEM, logs
 
-    # Main forward model of BA.
-    # Input: single key, config, (matmeta from FEM).
-    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    def ModelEvaluateBA(self, keys, config, directory):
+    # # Main forward model of BA.
+    # # Input: single key, config, (matmeta from FEM).
+    # # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
+    # def ModelEvaluateBA(self, keys, config, directory):
 
-        matmeta=np.load(directory/"matmeta.npy", allow_pickle=True)
-        intmatBA=IntensityBA(config, keys, matmeta)
+    #     matmeta=np.load(directory/"matmeta.npy", allow_pickle=True)
+    #     intmatBA=IntensityBA(config, keys, matmeta)
+        
+    #     print("*********************************** Forward Model BA Evaluated ******************************************")
+    #     return intmatBA
+
+    # Main forward model of BA.
+    # Input: single key, config, externally computed Qzmat (independent from FEM solver).
+    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
+    def ModelEvaluateBA2(self, keys, config, Qzgrid):
+        
+        intmatBA=IntensityBA(config, keys, Qzgrid)
         
         print("*********************************** Forward Model BA Evaluated ******************************************")
         return intmatBA
-        
+
 
     # Function from JCM results into matmeta directly, without exporting.
     # This function will only be called within ModelEvaluate function.
