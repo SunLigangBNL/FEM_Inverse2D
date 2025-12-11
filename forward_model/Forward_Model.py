@@ -193,7 +193,7 @@ class ForwardModel:
         
         matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
         qxindexarray=config.centerindex+config.qxpeakarray
-        intmatFEM=matmeta[:,qxindexarray,2]
+        intmatFEM=matmeta[:,qxindexarray,2] #*************************** attention: Qz is not sorted here!!!!!!!!!!!!!!!!!!!!!!!!
 
         print("*********************************** Forward Model FEM Evaluated ******************************************")
         
@@ -212,10 +212,11 @@ class ForwardModel:
 
     # Main forward model of BA.
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
-    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    def ModelEvaluateBA2(self, keys, config, Qzgrid):
+    # Output: intensity intmatBA. size: same as Qzmat, i.e., (len(thetaarray), len(qxrefarray)) including zeros.
+    # example to use: intmodmat=fm.ModelEvaluateBA2(kwargs, config=config, Qzgrid=Qzgridmat)
+    def ModelEvaluateBA2(self, keys, config, Qzgridmat):
         
-        intmatBA=IntensityBA(config, keys, Qzgrid)
+        intmatBA=IntensityBA(keys, config, Qzgridmat)
         
         print("*********************************** Forward Model BA Evaluated ******************************************")
         return intmatBA

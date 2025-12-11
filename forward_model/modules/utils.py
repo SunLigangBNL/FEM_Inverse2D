@@ -21,7 +21,8 @@ def coordinate_transform(vertexmatlist1):
         vertexmat1b=np.array([vertexmat1a[(tempindex2-i)% Nr] for i in range(Nr)])
         vertexmatlist2.append(vertexmat1b)
     return vertexmatlist2
-    
+
+
 """
 Given mat_slice of shape (N, 5) for a fixed qx:
   mat_slice[:,1] = Qz
@@ -51,8 +52,8 @@ def selectsortfun(matslice: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndar
 
     return Qzarray3, intarray3, thetaarray3, psiarray3
 
-# A better version.
-def selectsortfun2(matslice: np.ndarray):
+# Sort function for matmetaFEM, keep the zeros.
+def sortfunFEM(matslice: np.ndarray):
 
     Qzarray = matslice[:, 1]
     intarray = matslice[:, 2]
@@ -65,12 +66,11 @@ def selectsortfun2(matslice: np.ndarray):
     thetaarray2=thetaarray[order]
     psiarray2=psiarray[order]
 
-    # mask = ~((Qzarray2 == 0) & (intarray2 == 0))
-    # Qzarray3 = Qzarray2[mask]
-    # intarray3 = intarray2[mask]
-    # thetaarray3 = thetaarray2[mask]
-    # psiarray3 = psiarray2[mask]
-
     return Qzarray2, intarray2, thetaarray2, psiarray2
 
-
+# Sort function for matmetaBA, keep the zeros.
+def sortfunBA(matslice: np.ndarray):
+    Qzarray = matslice[:, 1]
+    order=np.argsort(Qzarray)
+    Qzarray2=Qzarray[order]
+    return Qzarray2

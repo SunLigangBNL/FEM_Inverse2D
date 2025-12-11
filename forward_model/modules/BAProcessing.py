@@ -3,7 +3,7 @@ This file contains all functions related to the direct FT method and Born approx
 """
 
 import numpy as np
-from .utils import coordinate_transform, selectsortfun
+from .utils import coordinate_transform, selectsortfun, sortfunBA
 #from .source_config import SourceConfig
 from .geometry_config import GeometryConfig, Scatterer
 #from .material_config import MaterialConfig
@@ -195,14 +195,17 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
 # Complete the full loop of BA. This is a counterpart of IntensityFEM.
 # Input: different keys, config, externally computed Qzmat.
 # Output: Intensitymat.
-def IntensityBA(config, keys, Qzgrid):
-    
-    Intensitymatnew=np.zeros((len(config.source.thetaarray),len(config.qxpeakarray)))
+
+def IntensityBA(keys, config, Qzgridmat):
+
+    thetaarray=config.source.thetaarray
+    qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
+    Intensitymatnew=np.zeros((len(thetaarray),len(qxrefarray)))
 
     # generate confignew based on keys.
     coordmat, centermat, coordmat2=grating_profile(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], 
                                                    swa=keys['swa'], rtop=keys['r_top'], rbot=keys['r_bot'], nrsamp=5)
-
+    
     scattercoordmatnew=[]
     vertexmat1 = coordmat2*1e-9
     vertexmatlist=[vertexmat1] # JCM frame.
@@ -212,34 +215,105 @@ def IntensityBA(config, keys, Qzgrid):
     confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray, source=config.source, 
                             geometry=geometrynew, material=config.material)
     
-    qxindexarray=config.centerindex+config.qxpeakarray
-    qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
-    
-    
-    for i in qxindexarray:
-        
+    for i in range(len(qxrefarray)):
         qxvalue = qxrefarray[i]
-        Qzarray=Qzgrid[:,i]
-        
-        # matslice = matmeta[:, i, :]
-        # Qzarray = matslice[:, 1]
+        Qzarray=Qzgridmat[:,i]
 
-        # thetaarray = matslice[:, 3]
-        # psiarray = matslice[:, 4]
-        # flagarray = matslice[:, 5]
-
-        # IntBAarray2a=np.zeros(len(Qzarray))
-        # Qzarray2=Qzarray[flagarray==1]
-        # thetaarray2=thetaarray[flagarray==1]
-        # psiarray2=psiarray[flagarray==1]
-        
-        # Now, IntBAarray is corresponding to Qzarray format.
-        IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray) # Note new geometry info is used here.
-
-        IntBAarray2a[flagarray==1]=IntBAarray2 # now it has the same length and structure as Qzarray.
-        Intensitymatnew[:,i-config.centerindex-1]=IntBAarray2a
+        mask = Qzarray != 0 # I should only pass non-zero elements to the IntBornPolygon function.
+        Qzarray2=Qzarray[mask]
+        IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray2)
+        Intensitymatnew[mask, i]=IntBAarray2
 
     return Intensitymatnew
+
+    # # old version before Qzgrid.
+    # for i in qxindexarray:
+        
+    #     qxvalue = qxrefarray[i]
+    #     Qzarray=Qzgrid[:,i]
+        
+    #     matslice = matmeta[:, i, :]
+    #     Qzarray = matslice[:, 1]
+
+    #     thetaarray = matslice[:, 3]
+    #     psiarray = matslice[:, 4]
+    #     flagarray = matslice[:, 5]
+
+    #     IntBAarray2a=np.zeros(len(Qzarray))
+    #     Qzarray2=Qzarray[flagarray==1]
+    #     thetaarray2=thetaarray[flagarray==1]
+    #     psiarray2=psiarray[flagarray==1]
+        
+    #     # Now, IntBAarray is corresponding to Qzarray format.
+    #     IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray) # Note new geometry info is used here.
+
+    #     IntBAarray2a[flagarray==1]=IntBAarray2 # now it has the same length and structure as Qzarray.
+    #     Intensitymatnew[:,i-config.centerindex-1]=IntBAarray2a # **************************************** need to check the index here.
+
+
+def GetQzgrid(config):
+    thetaarray=config.source.thetaarray
+    qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
+    Qzgridmat=np.zeros((len(thetaarray),len(qxrefarray)))
+    
+    tempfac1=config.source.lambda0/config.pitch
+    
+    QxmatBA=[]
+    QzmatBA=[]
+    for i in range(len(thetaarray)):
+        theta=thetaarray[i]
+        thetarad=np.radians(theta)
+        diffangrad0=-thetarad # under sample frame.
+        kivecx4=config.source.k0*np.sin(diffangrad0) # under sample frame.
+        kivecz4=config.source.k0*np.cos(diffangrad0) # under sample frame.
+    
+        # compute diffradarray based on diffraction equation.
+        tempfac2=np.sin(diffangrad0)
+        m1=(1-tempfac2)/tempfac1
+        m2=(-1-tempfac2)/tempfac1
+        M1=np.ceil(min(m1,m2))
+        M2=np.floor(max(m1,m2))
+    
+        indexarray=np.arange(M1,M2+1)
+        sindiffradarray=tempfac2+indexarray*tempfac1
+        cosdiffradarray=np.abs(np.sqrt(1-sindiffradarray**2))
+    
+        kxarray4=config.source.k0*sindiffradarray
+        kzarray4=config.source.k0*cosdiffradarray
+        Qxarray=kxarray4-kivecx4
+        Qzarray=kzarray4-kivecz4
+    
+        indexlist1=np.argsort(Qxarray)
+        Qxarray2=Qxarray[indexlist1]
+        Qzarray2=Qzarray[indexlist1]
+    
+        QxmatBA.append(Qxarray2)
+        QzmatBA.append(Qzarray2)
+        
+    QxmatBA=np.array(QxmatBA, dtype=object)
+    QzmatBA=np.array(QzmatBA, dtype=object)
+
+    matmetaBA=np.zeros((len(thetaarray),2*config.dimqxbranch+1,4)) # per angle, per Qx location, store (Qx, Qz, theta, flag) values.
+    for i in range(len(thetaarray)):
+        qxarray=np.array(QxmatBA[i])
+        for j,qxvalue in enumerate(qxrefarray):
+            index1 = np.argmin(np.abs(qxarray-qxvalue))
+            if np.abs(qxarray[index1]-qxvalue)<0.5*config.deltaqx: # the 0.5 here is good for both periodic grating and finite grating.
+                matmetaBA[i,j,0]=QxmatBA[i][index1]
+                matmetaBA[i,j,1]=QzmatBA[i][index1]
+                matmetaBA[i,j,2]=thetaarray[i]
+                if QzmatBA[i][index1]==0 and thetaarray[i]==0:
+                    matmetaBA[i,j,3]=0
+                else:
+                    matmetaBA[i,j,3]=1
+    
+    for i in range(len(qxrefarray)):
+        matsliceBA=matmetaBA[:, i, :]
+        QzarrayBA=sortfunBA(matsliceBA)
+        Qzgridmat[:,i]=QzarrayBA
+    
+    return Qzgridmat
+
 
 def grating_profile(pitch, cd, h, swa, rtop, rbot, nrsamp):
     
