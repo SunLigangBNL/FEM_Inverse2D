@@ -167,13 +167,17 @@ class ForwardModel:
     # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
     def ModelEvaluateFEM(self, keys, config):
 
+        thetaarray=config.source.thetaarray
+        qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
+        intmatFEM=np.zeros((len(thetaarray),len(qxrefarray)))
+        Qzgridmat=np.zeros((len(thetaarray),len(qxrefarray)))
+
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
         print("current key under calculation:",calc_keys)
         
         job_ids=[]
-        thetaarray=config.source.thetaarray
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
 
         for theta in thetaarray:
@@ -190,36 +194,47 @@ class ForwardModel:
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
 
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results) #**************
-        
-        matmeta = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
-        qxindexarray=config.centerindex+config.qxpeakarray
-        intmatFEM=matmeta[:,qxindexarray,2] #*************************** attention: Qz is not sorted here!!!!!!!!!!!!!!!!!!!!!!!!
+        matmetaFEM = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
-        print("*********************************** Forward Model FEM Evaluated ******************************************")
-        
-        return intmatFEM, logs
+        for i in range(len(qxrefarray)):
+            matslice=matmetaFEM[:, i, :]
+            Qzarray2, intarray2, thetaarray2, psiarray2=sortfunFEM(matslice)
+            Qzgridmat[:,i]=Qzarray2
+            intmatFEM[:,i]=intarray2
 
-    # # Main forward model of BA.
-    # # Input: single key, config, (matmeta from FEM).
-    # # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    # def ModelEvaluateBA(self, keys, config, directory):
+        # normalization.
+        Qzarraytemp=Qzgridmat[:,config.dimqxbranch+1]
+        Intarraytemp=intmatFEM[:,config.dimqxbranch+1]
+        mask2=~(Qzarraytemp==0)
+        QzBAarray=Qzarraytemp[mask2]
+        IntBAarray=Intarraytemp[mask2]
+        normfacFEM=np.interp(0.0, Qzarray, Intarray)
+        intmatFEM2=intmatFEM/normfacFEM
 
-    #     matmeta=np.load(directory/"matmeta.npy", allow_pickle=True)
-    #     intmatBA=IntensityBA(config, keys, matmeta)
+        print("************************** Forward Model FEM Evaluated and Normalized *******************************")
         
-    #     print("*********************************** Forward Model BA Evaluated ******************************************")
-    #     return intmatBA
+        return intmatFEM2
 
     # Main forward model of BA.
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
     # Output: intensity intmatBA. size: same as Qzmat, i.e., (len(thetaarray), len(qxrefarray)) including zeros.
     # example to use: intmodmat=fm.ModelEvaluateBA2(kwargs, config=config, Qzgrid=Qzgridmat)
-    def ModelEvaluateBA2(self, keys, config, Qzgridmat):
+    def ModelEvaluateBA(self, keys, config, Qzgridmat):
         
         intmatBA=IntensityBA(keys, config, Qzgridmat)
+
+        # normalization.
+        Qzarraytemp=Qzgridmat[:,config.dimqxbranch+1]
+        Intarraytemp=intmatBA[:,config.dimqxbranch+1]
+        mask2=~(Qzarraytemp==0)
+        QzBAarray=Qzarraytemp[mask2]
+        IntBAarray=Intarraytemp[mask2]
+        normfacBA=np.interp(0.0, QzBAarray, IntBAarray)
+        #print("normfacBA=", normfacBA)
+        intmatBA2=intmatBA/normfacBA
         
-        print("*********************************** Forward Model BA Evaluated ******************************************")
-        return intmatBA
+        print("*************************** Forward Model BA Evaluated and Normalized **********************************")
+        return intmatBA2
 
 
     # Function from JCM results into matmeta directly, without exporting.

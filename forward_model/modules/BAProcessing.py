@@ -195,6 +195,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
 # Complete the full loop of BA. This is a counterpart of IntensityFEM.
 # Input: different keys, config, externally computed Qzmat.
 # Output: Intensitymat.
+# Remark: the Qzgridmat is computed independently without using FEM matmeta.
 
 def IntensityBA(keys, config, Qzgridmat):
 
@@ -225,30 +226,6 @@ def IntensityBA(keys, config, Qzgridmat):
         Intensitymatnew[mask, i]=IntBAarray2
 
     return Intensitymatnew
-
-    # # old version before Qzgrid.
-    # for i in qxindexarray:
-        
-    #     qxvalue = qxrefarray[i]
-    #     Qzarray=Qzgrid[:,i]
-        
-    #     matslice = matmeta[:, i, :]
-    #     Qzarray = matslice[:, 1]
-
-    #     thetaarray = matslice[:, 3]
-    #     psiarray = matslice[:, 4]
-    #     flagarray = matslice[:, 5]
-
-    #     IntBAarray2a=np.zeros(len(Qzarray))
-    #     Qzarray2=Qzarray[flagarray==1]
-    #     thetaarray2=thetaarray[flagarray==1]
-    #     psiarray2=psiarray[flagarray==1]
-        
-    #     # Now, IntBAarray is corresponding to Qzarray format.
-    #     IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray) # Note new geometry info is used here.
-
-    #     IntBAarray2a[flagarray==1]=IntBAarray2 # now it has the same length and structure as Qzarray.
-    #     Intensitymatnew[:,i-config.centerindex-1]=IntBAarray2a # **************************************** need to check the index here.
 
 
 def GetQzgrid(config):
