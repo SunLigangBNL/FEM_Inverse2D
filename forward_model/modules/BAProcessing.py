@@ -196,6 +196,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
 # Input: different keys, config, externally computed Qzmat.
 # Output: Intensitymat.
 # Remark: the Qzgridmat is computed independently without using FEM matmeta.
+# Remark2: geometry flipped for NIST case.
 
 def IntensityBA(keys, config, Qzgridmat):
 
@@ -203,12 +204,21 @@ def IntensityBA(keys, config, Qzgridmat):
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
     Intensitymatnew=np.zeros((len(thetaarray),len(qxrefarray)))
 
-    # generate confignew based on keys.
-    coordmat, centermat, coordmat2=grating_profile(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], 
-                                                   swa=keys['swa'], rtop=keys['r_top'], rbot=keys['r_bot'], nrsamp=5)
-    
+    # # generate confignew based on keys: symmetric profile.
+    # coordmat, centermat, surfmat=grating_profile(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], 
+    #                                                swa=keys['swa'], rtop=keys['r_top'], rbot=keys['r_bot'], nrsamp=10)
+
+    # generate confignew based on keys: asymmetric profile.
+    orgmat, centermat, surfmat=grating_profile3(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], swaleft=keys['swaleft'],
+                                            swaright=keys['swaright'], rtopleft=keys['r_topleft'], rtopright=keys['r_topright'], 
+                                            rbotleft=keys['r_botleft'], rbotright=keys['r_botright'], nrsamp=10)
+
+    # flip geometry.
+    surfmat1=surfmat.copy()
+    surfmat1[:, 1]=-surfmat[:,1]
+    surfmat2=surfmat1[1:-1]
     scattercoordmatnew=[]
-    vertexmat1 = coordmat2*1e-9
+    vertexmat1=surfmat2*1e-9    
     vertexmatlist=[vertexmat1] # JCM frame.
     scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     geometrynew=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
@@ -217,7 +227,7 @@ def IntensityBA(keys, config, Qzgridmat):
                             geometry=geometrynew, material=config.material)
     
     for i in range(len(qxrefarray)):
-        qxvalue = qxrefarray[i]
+        qxvalue=qxrefarray[i]
         Qzarray=Qzgridmat[:,i]
 
         mask = Qzarray != 0 # I should only pass non-zero elements to the IntBornPolygon function.
