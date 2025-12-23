@@ -218,11 +218,25 @@ class ForwardModel:
     # Main forward model of BA.
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
     # Output: intensity intmatBA. size: same as Qzmat, i.e., (len(thetaarray), len(qxrefarray)) including zeros.
-    # example to use: intmodmat=fm.ModelEvaluateBA2(kwargs, config=config, Qzgrid=Qzgridmat)
+    # Remark: dwfacx2 and dwfacz2 should work with Qx, Qz in unit of per angstrom. 
     def ModelEvaluateBA(self, keys, config, Qzgridmat):
         
         intmatBA=IntensityBA(keys, config, Qzgridmat)
 
+        # DW decay modification and scaling modification.
+        ##qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
+        dwfacx2=keys['dwfacx']
+        dwfacz2=keys['dwfacz']
+
+        for i in range(10):
+            Qxvalue=(i+1)*config.deltaqx
+            Qzarray=Qzgridmat[:,config.dimqxbranch+1+i]
+            DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+            DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+            if np.min(DWfacarray) < 1e-300:
+                print("min of DWfacarray (clipped):", np.min(DWfacarray))
+            intmatBA[:,config.dimqxbranch+1+i]=DWfacarray*intmatBA[:,config.dimqxbranch+1+i]
+        
         # normalization.
         Qzarraytemp=Qzgridmat[:,config.dimqxbranch+1]
         Intarraytemp=intmatBA[:,config.dimqxbranch+1]
@@ -230,7 +244,6 @@ class ForwardModel:
         QzBAarray=Qzarraytemp[mask2]
         IntBAarray=Intarraytemp[mask2]
         normfacBA=np.interp(0.0, QzBAarray, IntBAarray)
-        #print("normfacBA=", normfacBA)
         intmatBA2=intmatBA/normfacBA
         
         print("*************************** Forward Model BA Evaluated and Normalized **********************************")

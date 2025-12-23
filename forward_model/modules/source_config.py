@@ -10,7 +10,7 @@ import numpy as np
 class SourceConfig:
     thetaarray: list[float]
     lambda0: float
-    E0: float # This is amplitude. For P-polarized planewave, incident electric field Ei=E0*(1,0,0).
+    #E0: float # This is amplitude. For P-polarized planewave, incident electric field Ei=E0*(1,0,0).
 
     @property
     def k0(self) -> float:

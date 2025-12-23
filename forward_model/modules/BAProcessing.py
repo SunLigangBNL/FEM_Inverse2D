@@ -121,13 +121,12 @@ output: I(qx,qz)/I0 array.
 def IntBornPolygon(config, qxvaluein, qzarrayin):
     
     pitch=config.pitch
-    E0=config.source.E0
     k0=config.source.k0
 
-    deltaqx=np.pi/pitch # per m.
-    sigma=0.033*deltaqx # 3*sigma=0.1*deltaqx.
-    mu1=round(qxvaluein/deltaqx)*deltaqx
-    mu2=0
+    # deltaqx=np.pi/pitch # per m.
+    # sigma=0.033*deltaqx # 3*sigma=0.1*deltaqx.
+    # mu1=round(qxvaluein/deltaqx)*deltaqx
+    # mu2=0
     
     # Angle-dependent factor based on Masa's report:
     # thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note. Check again on 07/20.
@@ -211,7 +210,7 @@ def IntensityBA(keys, config, Qzgridmat):
     # generate confignew based on keys: asymmetric profile.
     orgmat, centermat, surfmat=grating_profile3(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], swaleft=keys['swaleft'],
                                             swaright=keys['swaright'], rtopleft=keys['r_topleft'], rtopright=keys['r_topright'], 
-                                            rbotleft=keys['r_botleft'], rbotright=keys['r_botright'], nrsamp=10)
+                                            rbotleft=keys['r_botleft'], rbotright=keys['r_botright'], nrsamp=20)
 
     # flip geometry.
     surfmat1=surfmat.copy()
