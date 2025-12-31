@@ -8,15 +8,19 @@ def polygons(keys):
     """
     Construct the material scatterers and the computational domain.
     """
+    pitch=keys["pitch"]
     cd = keys["cd"]
     h = keys["h"]
-    swa = keys["swa"]
-    r_top = keys["r_top"]
-    r_bot = keys["r_bot"]
+    swaleft = keys["swaleft"]
+    swaright = keys["swaright"]
+    r_topleft = keys["r_topleft"]
+    r_topright = keys["r_topright"]
+    r_botleft = keys["r_botleft"]
+    r_botright = keys["r_botright"]
 
     # offsets
-    o1 = keys["height_offset_substrate"]
-    o2 = keys["height_offset_air"]
+    o1 = keys["height_offset_bot"]
+    o2 = keys["height_offset_top"]
 
     y1=(-1)*o1
     y2=0
@@ -25,23 +29,26 @@ def polygons(keys):
 
     # computational domain
     comp_domain = [
-        -0.5*keys["pitch"], y1,
-        0.5*keys["pitch"], y1,
-        0.5*keys["pitch"], y4,
-        -0.5*keys["pitch"], y4,
+        -0.5*pitch, y1,
+        0.5*pitch, y1,
+        0.5*pitch, y4,
+        -0.5*pitch, y4,
     ]
 
     # scatterer domain.
     y_ox_0 = 0
-    y_ox_h = h    
-    
-    dx=0.5*h*np.tan(np.deg2rad(90-swa)) # always positive.
-    x1 = -0.5*keys["pitch"]
-    x2 = -0.5*cd-dx
-    x3 = -0.5*cd+dx
-    x4 = 0.5*cd-dx
-    x5 = 0.5*cd+dx
-    x6 = 0.5*keys["pitch"]
+    y_ox_h = h
+
+    # coordinates of the primary trapezoid.
+    shift1=h/(2*np.tan(np.radians(swaleft)))
+    shift2=h/(2*np.tan(np.radians(swaright)))
+
+    x1=-pitch/2   
+    x2=-cd/2-shift1
+    x3=-cd/2+shift1
+    x4=cd/2-shift2
+    x5=cd/2+shift2
+    x6=pitch/2
 
     scatter_poly = [
     	x1, y1,

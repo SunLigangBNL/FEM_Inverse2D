@@ -20,6 +20,7 @@ class CDSAXSConfig:
     pitch: float # unit: m.
     dimqxbranch: int
     qxpeakarray: np.ndarray
+    obindexmask: np.ndarray # indeices of those peaks (which will be included in the output intmat) in the default qxrefarray.
 
     @property
     def deltaqx(self) -> float:

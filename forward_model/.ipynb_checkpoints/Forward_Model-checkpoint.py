@@ -163,19 +163,19 @@ class ForwardModel:
         return Qzmat2, intrefmat, measurementmat, uncertaintymat        
 
     # Main forward model of FEM.
-    # Input: single key, config, qxpeakarray.
-    # Output: intensity as a matrix, only the right branch of the I(Qx,Qz).
-    def ModelEvaluateFEM(self, keys, config):
+    # Input: single key, config, Qzgridmat.
+    # Output: intensity matrix with standard dimension, after single point normalization.
+    # Remark: DW decay was only applied to the observation peaks.
+    def ModelEvaluateFEM(self, keys, config, Qzgridmat):
 
         thetaarray=config.source.thetaarray
         qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         intmatFEM=np.zeros((len(thetaarray),len(qxrefarray)))
-        Qzgridmat=np.zeros((len(thetaarray),len(qxrefarray)))
 
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
-        print("current key under calculation:",calc_keys)
+        #print("current key under calculation:",calc_keys)
         
         job_ids=[]
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
@@ -202,9 +202,33 @@ class ForwardModel:
             Qzgridmat[:,i]=Qzarray2
             intmatFEM[:,i]=intarray2
 
+
+        # DW decay modification and scaling modification.
+        dwfacx2=keys['dwfacx']
+        dwfacz2=keys['dwfacz']
+        
+        for index in config.obindexmask:
+            Qxvalue=qxrefarray[index]
+            Qzarray=Qzgridmat[:,index]
+            DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+            DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+            if np.min(DWfacarray) < 1e-300:
+                print("min of DWfacarray (clipped):", np.min(DWfacarray))
+            intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
+        
+        # for i in range(10):
+        #     index=config.dimqxbranch+1+i
+        #     Qxvalue=qxrefarray[index]
+        #     Qzarray=Qzgridmat[:,index]
+        #     DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+        #     DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+        #     if np.min(DWfacarray) < 1e-300:
+        #         print("min of DWfacarray (clipped):", np.min(DWfacarray))
+        #     intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
+            
         # normalization.
-        Qzarraytemp=Qzgridmat[:,config.dimqxbranch+1]
-        Intarraytemp=intmatFEM[:,config.dimqxbranch+1]
+        Qzarraytemp=Qzgridmat[:,config.centerindex+1]
+        Intarraytemp=intmatFEM[:,config.centerindex+1]
         mask2=~(Qzarraytemp==0)
         QzBAarray=Qzarraytemp[mask2]
         IntBAarray=Intarraytemp[mask2]
@@ -217,29 +241,40 @@ class ForwardModel:
 
     # Main forward model of BA.
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
-    # Output: intensity intmatBA. size: same as Qzmat, i.e., (len(thetaarray), len(qxrefarray)) including zeros.
-    # Remark: dwfacx2 and dwfacz2 should work with Qx, Qz in unit of per angstrom. 
+    # Output: intensity matrix with standard dimension, after single point normalization.
+    # Remark: DW decay was only applied to the observation peaks.
     def ModelEvaluateBA(self, keys, config, Qzgridmat):
         
+        #thetaarray=config.source.thetaarray
+        qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         intmatBA=IntensityBA(keys, config, Qzgridmat)
 
         # DW decay modification and scaling modification.
-        ##qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         dwfacx2=keys['dwfacx']
         dwfacz2=keys['dwfacz']
 
-        for i in range(10):
-            Qxvalue=(i+1)*config.deltaqx
-            Qzarray=Qzgridmat[:,config.dimqxbranch+1+i]
+        for index in config.obindexmask:
+            Qxvalue=qxrefarray[index]
+            Qzarray=Qzgridmat[:,index]
             DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
             DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
             if np.min(DWfacarray) < 1e-300:
                 print("min of DWfacarray (clipped):", np.min(DWfacarray))
-            intmatBA[:,config.dimqxbranch+1+i]=DWfacarray*intmatBA[:,config.dimqxbranch+1+i]
+            intmatBA[:,index]=DWfacarray*intmatBA[:,index]
+        
+        # for i in range(10):
+        #     index=config.dimqxbranch+1+i
+        #     Qxvalue=(i+1)*config.deltaqx
+        #     Qzarray=Qzgridmat[:,index]
+        #     DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+        #     DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+        #     if np.min(DWfacarray) < 1e-300:
+        #         print("min of DWfacarray (clipped):", np.min(DWfacarray))
+        #     intmatBA[:,index]=DWfacarray*intmatBA[:,index]
         
         # normalization.
-        Qzarraytemp=Qzgridmat[:,config.dimqxbranch+1]
-        Intarraytemp=intmatBA[:,config.dimqxbranch+1]
+        Qzarraytemp=Qzgridmat[:,config.centerindex+1]
+        Intarraytemp=intmatBA[:,config.centerindex+1]
         mask2=~(Qzarraytemp==0)
         QzBAarray=Qzarraytemp[mask2]
         IntBAarray=Intarraytemp[mask2]

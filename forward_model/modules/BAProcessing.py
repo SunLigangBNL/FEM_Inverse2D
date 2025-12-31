@@ -42,13 +42,13 @@ def FormFacPolygon(qxvalue, qzarray, xarray, yarray):
     intformarray=np.zeros(len(qzarray), dtype=complex)
 
     if qxvalue==0:
-        print("Singularity case for Qx=0 and Qz=0. Shoelace algorithm applied.")
+        #print("Singularity case for Qx=0 and Qz=0. Shoelace algorithm applied.")
         polyarea=polygon_area(xarray,yarray)
         intformarray=np.ones(len(qzarray))*polyarea
-        print("polygon area:",polyarea)
+        #print("polygon area:",polyarea)
         #print("current intformarray:",intformarray)
     elif np.any(qzarray==0):
-        print("Singularity case: Qx nonzero but Qz=0 occurs.")
+        #print("Singularity case: Qx nonzero but Qz=0 occurs.")
     
         # split qzarray into nonzero piece and zero piece.
         zero_idx=np.where(qzarray==0)[0]
@@ -122,11 +122,6 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
     
     pitch=config.pitch
     k0=config.source.k0
-
-    # deltaqx=np.pi/pitch # per m.
-    # sigma=0.033*deltaqx # 3*sigma=0.1*deltaqx.
-    # mu1=round(qxvaluein/deltaqx)*deltaqx
-    # mu2=0
     
     # Angle-dependent factor based on Masa's report:
     # thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note. Check again on 07/20.
@@ -228,10 +223,9 @@ def IntensityBA(keys, config, Qzgridmat):
     for i in range(len(qxrefarray)):
         qxvalue=qxrefarray[i]
         Qzarray=Qzgridmat[:,i]
-
-        mask = Qzarray != 0 # I should only pass non-zero elements to the IntBornPolygon function.
+        mask = Qzarray != 0 # only pass non-zero elements to the IntBornPolygon function.
         Qzarray2=Qzarray[mask]
-        IntBAarray2=IntBornPolygon(confignew, qxvalue, Qzarray2)
+        IntBAarray2=IntBornPolygon(confignew, Qxvalue, Qzarray2)
         Intensitymatnew[mask, i]=IntBAarray2
 
     return Intensitymatnew
@@ -389,7 +383,7 @@ def grating_profile(pitch, cd, h, swa, rtop, rbot, nrsamp):
     return coordmat, centermat, coordmat2
 
 
-# Version 3: introduce non-symmetry for both rtop/rbot and SWA.
+# Version 3: introduce asymmetry for both rtop/rbot and SWA.
 def grating_profile3(pitch, cd, h, swaleft, swaright, rtopleft, rtopright, rbotleft, rbotright, nrsamp):
     
     x1=-pitch/2

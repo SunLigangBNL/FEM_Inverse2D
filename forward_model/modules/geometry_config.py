@@ -28,18 +28,4 @@ class GeometryConfig:
     def layerindexarray(self) -> list[int]:
         return list(range(len(self.layerzarray)+1))
 
-    # @property
-    # def numlayers(self) -> int:
-    #     return len(self.layerindexarray)
-
-    # @property
-    # def numscatmat(self) -> int:
-    #     return len(self.scattercoordmat) #*******************
-
-    # @property
-    # def thicknessarray(self) -> list[float]:
-    #     return [
-    #         self.layerzarray[i + 1] - self.layerzarray[i]
-    #         for i in range(len(self.layerzarray)-1)
-    #     ]
         
