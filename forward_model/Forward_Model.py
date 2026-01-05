@@ -215,16 +215,6 @@ class ForwardModel:
             if np.min(DWfacarray) < 1e-300:
                 print("min of DWfacarray (clipped):", np.min(DWfacarray))
             intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
-        
-        # for i in range(10):
-        #     index=config.dimqxbranch+1+i
-        #     Qxvalue=qxrefarray[index]
-        #     Qzarray=Qzgridmat[:,index]
-        #     DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
-        #     DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
-        #     if np.min(DWfacarray) < 1e-300:
-        #         print("min of DWfacarray (clipped):", np.min(DWfacarray))
-        #     intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
             
         # normalization.
         Qzarraytemp=Qzgridmat[:,config.centerindex+1]
@@ -261,16 +251,6 @@ class ForwardModel:
             if np.min(DWfacarray) < 1e-300:
                 print("min of DWfacarray (clipped):", np.min(DWfacarray))
             intmatBA[:,index]=DWfacarray*intmatBA[:,index]
-        
-        # for i in range(10):
-        #     index=config.dimqxbranch+1+i
-        #     Qxvalue=(i+1)*config.deltaqx
-        #     Qzarray=Qzgridmat[:,index]
-        #     DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
-        #     DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
-        #     if np.min(DWfacarray) < 1e-300:
-        #         print("min of DWfacarray (clipped):", np.min(DWfacarray))
-        #     intmatBA[:,index]=DWfacarray*intmatBA[:,index]
         
         # normalization.
         Qzarraytemp=Qzgridmat[:,config.centerindex+1]

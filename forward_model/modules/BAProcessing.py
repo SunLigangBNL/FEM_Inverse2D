@@ -45,11 +45,8 @@ def FormFacPolygon(qxvalue, qzarray, xarray, yarray):
         #print("Singularity case for Qx=0 and Qz=0. Shoelace algorithm applied.")
         polyarea=polygon_area(xarray,yarray)
         intformarray=np.ones(len(qzarray))*polyarea
-        #print("polygon area:",polyarea)
-        #print("current intformarray:",intformarray)
     elif np.any(qzarray==0):
         #print("Singularity case: Qx nonzero but Qz=0 occurs.")
-    
         # split qzarray into nonzero piece and zero piece.
         zero_idx=np.where(qzarray==0)[0]
         nonzero_mask=(qzarray!=0)
@@ -193,35 +190,58 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
 # Remark2: geometry flipped for NIST case.
 
 def IntensityBA(keys, config, Qzgridmat):
-
     thetaarray=config.source.thetaarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
     Intensitymatnew=np.zeros((len(thetaarray),len(qxrefarray)))
 
-    # # generate confignew based on keys: symmetric profile.
-    # coordmat, centermat, surfmat=grating_profile(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], 
-    #                                                swa=keys['swa'], rtop=keys['r_top'], rbot=keys['r_bot'], nrsamp=10)
-
-    # generate confignew based on keys: asymmetric profile.
-    orgmat, centermat, surfmat=grating_profile3(pitch=keys['pitch'], cd=keys['cd'], h=keys['h'], swaleft=keys['swaleft'],
-                                            swaright=keys['swaright'], rtopleft=keys['r_topleft'], rtopright=keys['r_topright'], 
-                                            rbotleft=keys['r_botleft'], rbotright=keys['r_botright'], nrsamp=20)
-
-    # flip geometry.
-    surfmat1=surfmat.copy()
-    surfmat1[:, 1]=-surfmat[:,1]
-    surfmat2=surfmat1[1:-1]
+    # compute profile coordinates for different models.
+    if config.geometrymode==1:
+        orgmat, centermat, surfmat=SurfaceCoordinates1(keys)
+        if config.flipswitch==1:
+            surfmat2=surfmat.copy()
+            surfmat2[:, 1]=-surfmat[:,1]
+            surfmatsorted=surfmat2[1:-1]
+        else:
+            surfmat2=surfmat[::-1,:]
+            surfmat3=surfmat2[1:-1]
+            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+            
+    elif config.geometrymode==2:
+        orgmat, centermat, surfmat=SurfaceCoordinates2(keys)
+        if config.flipswitch==1:
+            surfmat2=surfmat.copy()
+            surfmat2[:, 1]=-surfmat[:,1]
+            surfmatsorted=surfmat2[1:-1]
+        else:
+            surfmat2=surfmat[::-1,:]
+            surfmat3=surfmat2[1:-1]
+            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+        
+    elif config.geometrymode==3:
+        orgmat, centermat, surfmat=SurfaceCoordinates3(keys)
+        if config.flipswitch==1:
+            surfmat2=surfmat.copy()
+            surfmat2[:, 1]=-surfmat[:,1]
+            surfmatsorted=surfmat2[1:-1]
+        else:
+            surfmat2=surfmat[::-1,:]
+            surfmat3=surfmat2[1:-1]
+            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])        
+    else:
+        raise ValueError("Parameter config.geometrymode is NOT set correctly.")
+    
     scattercoordmatnew=[]
-    vertexmat1=surfmat2*1e-9    
+    vertexmat1=surfmatsorted*1e-9    
     vertexmatlist=[vertexmat1] # JCM frame.
     scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     geometrynew=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
                                scatterlayer=config.geometry.scatterlayer)
-    confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray, source=config.source, 
-                            geometry=geometrynew, material=config.material)
-    
-    for i in range(len(qxrefarray)):
-        qxvalue=qxrefarray[i]
+    confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
+                           obindexmask=config.obindexmask, flipswitch=config.flipswitch, geometrymode=config.geometrymode,
+                           source=config.source, geometry=geometrynew, material=config.material)
+
+    for i in range(len(qxrefarray)): # for all standard dimensions.
+        Qxvalue=qxrefarray[i]
         Qzarray=Qzgridmat[:,i]
         mask = Qzarray != 0 # only pass non-zero elements to the IntBornPolygon function.
         Qzarray2=Qzarray[mask]
@@ -294,18 +314,25 @@ def GetQzgrid(config):
     
     return Qzgridmat
 
-
-def grating_profile(pitch, cd, h, swa, rtop, rbot, nrsamp):
+# Compute coordinates of the surface for Model1 (symmetric single trapezoid with rounded corners).
+# Input: keys.
+# Output: trapezoid coordinates, centers of all circle of curvature, curved surface coordinates.
+def SurfaceCoordinates1(keys):
+    pitch=keys['pitch']
+    cd=keys['cd']
+    h=keys['h']
+    swa=keys['swa']
+    rtop=keys['rtop']
+    rbot=keys['rbot']
+    nrsamp=keys['nrsamp']
     
     x1=-pitch/2
-    
     shift1=h/(2*np.tan(np.radians(swa)))
     shift2=h/(2*np.tan(np.radians(swa)))
     x2=-cd/2-shift1
     x3=-cd/2+shift1
     x4=cd/2-shift2
     x5=cd/2+shift2
-
     x6=pitch/2
 
     # original coordinates of the trapezoid.
@@ -328,48 +355,42 @@ def grating_profile(pitch, cd, h, swa, rtop, rbot, nrsamp):
     centermat=np.zeros((4,2))
     
     for i in range(1,5): # always generate 4 circles.
-        #print("i=",i)
         # compute arc angle.
         dotproduct=np.dot(uvecmat[i-1,:], uvecmat[i,:])
         arcangle=np.arccos(dotproduct) # always positive.
-        #print("arc angle in degree (always less than 180) : ", np.degrees(arcangle))
 
         if i == 1:
-            r=rbot #****************
-            theta1=-np.pi/2 #****************
-            theta2=-np.pi/2+arcangle #****************
+            r=rbot
+            theta1=-np.pi/2 
+            theta2=-np.pi/2+arcangle 
         elif i==2:
-            r=rtop #****************
-            theta1=np.pi/2+arcangle #****************
-            theta2=np.pi/2 #****************
+            r=rtop 
+            theta1=np.pi/2+arcangle 
+            theta2=np.pi/2 
         elif i==3:
-            r=rtop #****************
-            theta1=np.pi/2 #****************
-            theta2=np.pi/2-arcangle #****************
+            r=rtop 
+            theta1=np.pi/2 
+            theta2=np.pi/2-arcangle 
         else:
-            r=rbot #****************
-            theta1=-np.pi/2-arcangle #****************
-            theta2=-np.pi/2 #****************  
-        
-        #print("current radius : ",r)
+            r=rbot 
+            theta1=-np.pi/2-arcangle 
+            theta2=-np.pi/2 
+
         anglearray=np.linspace(theta1,theta2,nrsamp)
 
         # compute center of the incircle or excircle.
         normvec=uvecmat[i,:]-uvecmat[i-1,:] # center of the incircle or excircle is located on this line. Attention: NOT a unit vector here!
         tempangle=np.arccos(np.dot(normvec,uvecmat[i,:])/(np.linalg.norm(normvec))) # corrected version.
-        #print("tempangle in degree (always less than 90) : ",np.degrees(tempangle))
         deltax=r/np.tan(tempangle) # x-coordinate of center shifted a bit. always positive.
-        #print("deltax : ",deltax)
 
         if i==1:
-            center=np.array([coordmat[i,0]-deltax,0+r]) #*******************
+            center=np.array([coordmat[i,0]-deltax,0+r])
         elif i==2:
-            center=np.array([coordmat[i,0]+deltax,h-r]) #*******************
+            center=np.array([coordmat[i,0]+deltax,h-r]) 
         elif i==3:
-            center=np.array([coordmat[i,0]-deltax,h-r]) #*******************
+            center=np.array([coordmat[i,0]-deltax,h-r])
         else:
-            center=np.array([coordmat[i,0]+deltax,0+r]) #*******************
-        #print("center :",center)
+            center=np.array([coordmat[i,0]+deltax,0+r])
         centermat[i-1,:]=center
 
         # coordinates of the sampling points on the arc.
@@ -382,19 +403,28 @@ def grating_profile(pitch, cd, h, swa, rtop, rbot, nrsamp):
         coordmat2[index1:index2,1] = yarray
     return coordmat, centermat, coordmat2
 
-
-# Version 3: introduce asymmetry for both rtop/rbot and SWA.
-def grating_profile3(pitch, cd, h, swaleft, swaright, rtopleft, rtopright, rbotleft, rbotright, nrsamp):
+# Compute coordinates of the surface for Model2 (Asymmetric single trapezoid with rounded corners).
+# Input: keys.
+# Output: trapezoid coordinates, centers of all circle of curvature, curved surface coordinates.
+def SurfaceCoordinates2(keys):
+    pitch=keys['pitch']
+    cd=keys['cd']
+    h=keys['h']
+    swaleft=keys['swaleft']
+    swaright=keys['swaright']
+    rtopleft=keys['rtopleft']
+    rtopright=keys['rtopright']
+    rbotleft=keys['rbotleft']
+    rbotright=keys['rbotright']
+    nrsamp=keys['nrsamp']
     
     x1=-pitch/2
-    
     shift1=h/(2*np.tan(np.radians(swaleft)))
     shift2=h/(2*np.tan(np.radians(swaright)))
     x2=-cd/2-shift1
     x3=-cd/2+shift1
     x4=cd/2-shift2
     x5=cd/2+shift2
-
     x6=pitch/2
 
     # original coordinates of the trapezoid.
@@ -413,32 +443,30 @@ def grating_profile3(pitch, cd, h, swaleft, swaright, rtopleft, rtopright, rbotl
     coordmat2=np.zeros((nrsamp*4+2,2))
     coordmat2[0,:]=coordmat[0,:]
     coordmat2[-1,:]=coordmat[-1,:]
-
     centermat=np.zeros((4,2))
     
-    for i in range(1,5): # always generate 4 circles.
+    for i in range(1,5):
         # compute arc angle.
         dotproduct=np.dot(uvecmat[i-1,:], uvecmat[i,:])
         arcangle=np.arccos(dotproduct) # always positive.
 
         if i == 1:
-            r=rbotleft #****************
-            theta1=-np.pi/2 #****************
-            theta2=-np.pi/2+arcangle #****************
+            r=rbotleft 
+            theta1=-np.pi/2 
+            theta2=-np.pi/2+arcangle 
         elif i==2:
-            r=rtopleft #****************
-            theta1=np.pi/2+arcangle #****************
-            theta2=np.pi/2 #****************
+            r=rtopleft 
+            theta1=np.pi/2+arcangle 
+            theta2=np.pi/2 
         elif i==3:
-            r=rtopright #****************
-            theta1=np.pi/2 #****************
-            theta2=np.pi/2-arcangle #****************
+            r=rtopright
+            theta1=np.pi/2
+            theta2=np.pi/2-arcangle
         else:
-            r=rbotright #****************
-            theta1=-np.pi/2-arcangle #****************
-            theta2=-np.pi/2 #****************  
+            r=rbotright
+            theta1=-np.pi/2-arcangle
+            theta2=-np.pi/2
         
-        #print("current radius : ",r)
         anglearray=np.linspace(theta1,theta2,nrsamp)
 
         # compute center of the incircle or excircle.
@@ -447,13 +475,13 @@ def grating_profile3(pitch, cd, h, swaleft, swaright, rtopleft, rtopright, rbotl
         deltax=r/np.tan(tempangle) # x-coordinate of center shifted a bit. always positive.
 
         if i==1:
-            center=np.array([coordmat[i,0]-deltax,0+r]) #*******************
+            center=np.array([coordmat[i,0]-deltax,0+r])
         elif i==2:
-            center=np.array([coordmat[i,0]+deltax,h-r]) #*******************
+            center=np.array([coordmat[i,0]+deltax,h-r])
         elif i==3:
-            center=np.array([coordmat[i,0]-deltax,h-r]) #*******************
+            center=np.array([coordmat[i,0]-deltax,h-r])
         else:
-            center=np.array([coordmat[i,0]+deltax,0+r]) #*******************
+            center=np.array([coordmat[i,0]+deltax,0+r])
         centermat[i-1,:]=center
 
         # coordinates of the sampling points on the arc.
@@ -465,52 +493,123 @@ def grating_profile3(pitch, cd, h, swaleft, swaright, rtopleft, rtopright, rbotl
         coordmat2[index1:index2,0] = xarray
         coordmat2[index1:index2,1] = yarray
     return coordmat, centermat, coordmat2
+
+# Compute coordinates of the surface for Model3 (Asymmetric stacked trapezoids with rounded corners).
+# Input: keys.
+# Output: trapezoid coordinates, centers of all circle of curvature, curved surface coordinates.
+# example keys:
+# keys={'h': 100, 'hratio': 0.6, 'Ntr': 3, 'basecd': 40, 'swabl': 88, 'swabr': 88, 'swatl': 88, 'swatr': 88, 'rbl': 5.0, 'rbr': 5.0, 'rtl': 5.0, 'rtr': 5.0, 'Narcsamp': 5, 'pitch': 100, 'epsilonr_scat_re': 0.999975466265392, 'epsilonr_scat_im': 2.596920443337538e-06, 'dwfacx': 30, 'dwfacz': 30, 'xl1': -20.0, 'xr1': 20.0, 'xl2': -20.0, 'xr2': 20.0, 'xl3': -20.0, 'xr3': 20.0}
+
+def SurfaceCoordinates3(keys):
+    pitch=keys['pitch']
+    Narcsamp=int(round(keys['Narcsamp']))
+    Ntr=int(round(keys['Ntr']))
+    h=keys['h']
+    basecd=keys['basecd']
+    hratio=keys['hratio']
+    swabl=keys['swabl']
+    swatl=keys['swatl']
+    swabr=keys['swabr']
+    swatr=keys['swatr']
+    rbl=keys['rbl']
+    rtl=keys['rtl']
+    rbr=keys['rbr']
+    rtr=keys['rtr']
+
+    Ntemp=Ntr+4 # number of total vertices without rounding. 
+    Ntotal=2*(Ntr+1)+4*Narcsamp+2 # number of total vertices with rounding.
     
+    coordmat=np.zeros((2*Ntemp,2))
+    centermat=np.zeros((4,2))
+    coordmat2=np.zeros((Ntotal,2))
     
-# # Far field intensity based on BA: only valid for rectangular geometry.
-# # input: qxvalue, qzarray. (unit in per angstrom).
-# # output: I(qx,qz) array.
-# # Remark: this is the correct version based on Masa's note.
-# def IntBornRec(config, qxvaluein, qzarrayin, thetaarray, psiradarray):
-
-#     # unit transformation.
-#     qxvalue=qxvaluein*10**10 # now unit is per m.
-#     qzarray=qzarrayin*10**10 # now unit is per m.
+    harray=np.zeros(Ntr+4)
+    heightb=h*(1-hratio)/2
+    heightt=h*(1-hratio)/2
     
-#     pitch=config.pitch
-#     line=config.line
-#     height=config.height
-#     H=config.thickness
-#     E0=config.E0
-#     k0=config.k0
-#     rr=config.sdd
-#     epsilonr1=config.epsilonr1
-#     epsilonr2=config.epsilonr2
+    harray[2]=heightb
+    harray[Ntr+3]=h
+    harray[2:Ntr+3]=np.linspace(heightb, h-heightt, Ntr+1)
+    
+    xarrayl=np.zeros(Ntr+4)
+    xarrayr=np.zeros(Ntr+4)
+    
+    xarrayl[0]=-pitch/2
+    xarrayl[2]=-0.5*basecd
+    shiftbl=heightb/(np.tan(np.radians(swabl)))
+    xarrayl[1]=xarrayl[2]-shiftbl
+    
+    xarrayr[0]=pitch/2
+    xarrayr[2]=0.5*basecd
+    shiftbr=heightb/(np.tan(np.radians(swabr)))
+    xarrayr[1]=xarrayr[2]+shiftbr
+    
+    for i in range(1, Ntr+1):
+        xarrayl[i+2]=keys[f'xl{i}']
+        xarrayr[i+2]=keys[f'xr{i}']
+    
+    shifttl=heightt/(np.tan(np.radians(swatl)))
+    xarrayl[-1]=xarrayl[-2]+shifttl
+    
+    shifttr=heightt/(np.tan(np.radians(swatr)))
+    xarrayr[-1]=xarrayr[-2]-shifttr
+    
+    coordmat[:,0]=np.concatenate((xarrayl, xarrayr[::-1]))
+    coordmat[:,1]=np.concatenate((harray, harray[::-1]))
 
-#     deltaqx=np.pi/pitch # per m.
-#     sigma=0.033*deltaqx # 3*sigma=0.1*deltaqx.
+    indexarray=np.array([0,Ntemp-2,Ntemp-1,2*Ntemp-3])
+    indexarray2=np.array([1, 1+Narcsamp*1+Ntr+1, 1+Narcsamp*2+Ntr+1, Ntotal-Narcsamp-1])
+    
+    vecmat=coordmat[1:]-coordmat[:-1] # vectors of each boundary.
+    norms=np.linalg.norm(vecmat, axis=1).reshape(-1, 1)
+    uvecmat=vecmat/norms # unit vectors of each boundary.
+    
+    coordmat2=np.zeros((Ntotal,2))
+    coordmat2[0,:]=coordmat[0,:]
+    coordmat2[-1,:]=coordmat[-1,:]
+    coordmat2[indexarray2[0]+Narcsamp:indexarray2[1],:]=coordmat[indexarray[0]+1+1:indexarray[0]+1+1+Ntr+1,:]
+    coordmat2[indexarray2[2]+Narcsamp:indexarray2[3],:]=coordmat[indexarray[2]+1+1:indexarray[2]+1+1+Ntr+1,:]
 
-#     ninc=config.refindexi
-#     ntrm=config.refindext
-
-#     # Angle-dependent factor introduced by Masa:
-#     thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note.
-#     psiradarray=np.array(psiradarray) # this is the EXACT psi angle in Masa's note. LHS kf is cooresponding to a positive psi angle.
-#     anglefac=np.cos(psiradarray)*np.cos(psiradarray)/(np.cos(thetaradarray)*np.cos(psiradarray-thetaradarray))
-
-#     c0=anglefac*k0**2/(4*pitch**2)
-
-#     # compute the kernel integral.
-#     c1=1-np.real(epsilonr1)
-#     c2=1-np.real(epsilonr2)
-#     # contribution from the grating strucutre.
-#     mu1=round(qxvalue/deltaqx)*deltaqx
-#     c3=c1*line*height*sincfun(qxvalue*line/2)*sincfun(qzarray*height/2)*np.exp(1j*qzarray*height/2)*delta_approx(qxvalue,mu1,sigma)
-#     # contribution from the substrate in [-H,0].
-#     mu2=0
-#     c4=c2*2*np.pi*H*sincfun(qzarray*H/2)*np.exp(1j*qzarray*H/2)*delta_approx(qxvalue,mu2,sigma)
-#     inttemp=np.abs(c3+c4)
-#     intensity=c0*inttemp**2
-
-#     return intensity
-
+    for i in range(4): # always generate 4 circles.
+        index=indexarray[i]
+        dotproduct=np.dot(uvecmat[index,:], uvecmat[index+1,:])
+        arcangle=np.arccos(dotproduct) # arc angle.
+        if i==0:
+            r=rbl
+            theta1=-np.pi/2
+            theta2=-np.pi/2+arcangle
+        elif i==1:
+            r=rtl 
+            theta1=np.pi/2+arcangle
+            theta2=np.pi/2 
+        elif i==2:
+            r=rtr 
+            theta1=np.pi/2 
+            theta2=np.pi/2-arcangle
+        else:
+            r=rbr 
+            theta1=-np.pi/2-arcangle 
+            theta2=-np.pi/2 
+        # compute center of the incircle or excircle.
+        anglearray=np.linspace(theta1,theta2,Narcsamp)
+        normvec=uvecmat[index+1,:]-uvecmat[index,:] # center of the incircle/excircle is located on this line. NOT a unit vector here!
+        tempangle=np.arccos(np.dot(normvec,uvecmat[index+1,:])/(np.linalg.norm(normvec))) # corrected version.
+        deltax=r/np.tan(tempangle) # x-coordinate of center shifted.
+        
+        if i==0:
+            center=np.array([coordmat[index+1,0]-deltax,0+r])
+        elif i==1:
+            center=np.array([coordmat[index+1,0]+deltax,h-r])
+        elif i==2:
+            center=np.array([coordmat[index+1,0]-deltax,h-r]) 
+        else:
+            center=np.array([coordmat[index+1,0]+deltax,0+r]) 
+        centermat[i,:]=center
+    
+        # coordinates of the sampling points on the arc.
+        xarray=center[0]+r*np.cos(anglearray)
+        yarray=center[1]+r*np.sin(anglearray)
+        index2=indexarray2[i]
+        coordmat2[index2:index2+Narcsamp,0]=xarray
+        coordmat2[index2:index2+Narcsamp,1]=yarray
+    return coordmat, centermat, coordmat2    

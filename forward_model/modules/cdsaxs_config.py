@@ -21,6 +21,14 @@ class CDSAXSConfig:
     dimqxbranch: int
     qxpeakarray: np.ndarray
     obindexmask: np.ndarray # indeices of those peaks (which will be included in the output intmat) in the default qxrefarray.
+    flipswitch: int=0 # 1 means geometry is flipped downward (X-ray hitting the substrate first).
+    geometrymode: int=0 
+    # Remark of geometry model:
+    # 0: direct polygon model defined in config.
+    # 1: symmetric single trapezoid model with rounding.
+    # 2: asymmetric single trapezoid model with rounding.
+    # 3: asymmetric stacked trapezoids model with rounding.
+
 
     @property
     def deltaqx(self) -> float:
