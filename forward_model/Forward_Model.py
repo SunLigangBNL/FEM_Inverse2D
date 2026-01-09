@@ -202,32 +202,34 @@ class ForwardModel:
             Qzgridmat[:,i]=Qzarray2
             intmatFEM[:,i]=intarray2
 
-
         # DW decay modification and scaling modification.
-        dwfacx2=keys['dwfacx']
-        dwfacz2=keys['dwfacz']
-        
-        for index in config.obindexmask:
-            Qxvalue=qxrefarray[index]
-            Qzarray=Qzgridmat[:,index]
-            DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
-            DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
-            if np.min(DWfacarray) < 1e-300:
-                print("min of DWfacarray (clipped):", np.min(DWfacarray))
-            intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
+        if config.decayswitch==1:
+            print("DW factors applied.")
+            dwfacx2=keys['dwfacx']
+            dwfacz2=keys['dwfacz']
+            for index in config.obindexmask:
+                Qxvalue=qxrefarray[index]
+                Qzarray=Qzgridmat[:,index]
+                DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+                DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+                if np.min(DWfacarray) < 1e-300:
+                    print("min of DWfacarray (clipped):", np.min(DWfacarray))
+                intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
             
         # normalization.
-        Qzarraytemp=Qzgridmat[:,config.centerindex+1]
-        Intarraytemp=intmatFEM[:,config.centerindex+1]
-        mask2=~(Qzarraytemp==0)
-        QzBAarray=Qzarraytemp[mask2]
-        IntBAarray=Intarraytemp[mask2]
-        normfacFEM=np.interp(0.0, Qzarray, Intarray)
-        intmatFEM2=intmatFEM/normfacFEM
+        if config.NLswitch==1:
+            print("Intensity normalized.")
+            Qzarraytemp=Qzgridmat[:,config.centerindex+1]
+            Intarraytemp=intmatFEM[:,config.centerindex+1]
+            mask2=~(Qzarraytemp==0)
+            QzBAarray=Qzarraytemp[mask2]
+            IntBAarray=Intarraytemp[mask2]
+            normfacFEM=np.interp(0.0, Qzarray, Intarray)
+            intmatFEM=intmatFEM/normfacFEM
 
-        print("************************** Forward Model FEM Evaluated and Normalized *******************************")
+        print("************************** Forward Model FEM Evaluated *******************************")
         
-        return intmatFEM2
+        return intmatFEM
 
     # Main forward model of BA.
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
@@ -237,32 +239,35 @@ class ForwardModel:
         
         #thetaarray=config.source.thetaarray
         qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
-        intmatBA=IntensityBA(keys, config, Qzgridmat)
+        intmatBA=IntensityBA(keys, config, Qzgridmat)     
 
         # DW decay modification and scaling modification.
-        dwfacx2=keys['dwfacx']
-        dwfacz2=keys['dwfacz']
-
-        for index in config.obindexmask:
-            Qxvalue=qxrefarray[index]
-            Qzarray=Qzgridmat[:,index]
-            DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
-            DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
-            if np.min(DWfacarray) < 1e-300:
-                print("min of DWfacarray (clipped):", np.min(DWfacarray))
-            intmatBA[:,index]=DWfacarray*intmatBA[:,index]
+        if config.decayswitch==1:
+            print("DW factors applied.")
+            dwfacx2=keys['dwfacx']
+            dwfacz2=keys['dwfacz']
+            for index in config.obindexmask:
+                Qxvalue=qxrefarray[index]
+                Qzarray=Qzgridmat[:,index]
+                DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
+                DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
+                if np.min(DWfacarray) < 1e-300:
+                    print("min of DWfacarray (clipped):", np.min(DWfacarray))
+                intmatBA[:,index]=DWfacarray*intmatBA[:,index]
         
         # normalization.
+        if config.NLswitch==1:
+            print("Intensity normalized.")
         Qzarraytemp=Qzgridmat[:,config.centerindex+1]
         Intarraytemp=intmatBA[:,config.centerindex+1]
         mask2=~(Qzarraytemp==0)
         QzBAarray=Qzarraytemp[mask2]
         IntBAarray=Intarraytemp[mask2]
         normfacBA=np.interp(0.0, QzBAarray, IntBAarray)
-        intmatBA2=intmatBA/normfacBA
+        intmatBA=intmatBA/normfacBA
         
-        print("*************************** Forward Model BA Evaluated and Normalized **********************************")
-        return intmatBA2
+        print("*************************** Forward Model BA Evaluated **********************************")
+        return intmatBA
 
 
     # Function from JCM results into matmeta directly, without exporting.

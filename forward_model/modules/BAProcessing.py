@@ -134,13 +134,15 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
     Qlength=np.sqrt(qxvaluein**2+qzarrayin**2)
     tempfac1=(Qlength/(2*k0))**2
     anglefac2=(1-2*tempfac1)**2/((qxvaluein/Qlength)**2-tempfac1)
+
+    # # temporarily turn off the angle-dependent factor.
+    # anglefac2=1.0
     
     c0=anglefac2*k0**2/(4*pitch**2)
 
     inttotal=0    
     scatterlayer=config.geometry.scatterlayer # indices of layers containing scatterers. e.g., [1, 5].
 
-    #for m1 in range(len(scatterlayer)):
     for m1 in range(len(config.geometry.scattercoordmat)):
         # contribution from the scatterers.
         intpart1=0
@@ -193,9 +195,13 @@ def IntensityBA(keys, config, Qzgridmat):
     thetaarray=config.source.thetaarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
     Intensitymatnew=np.zeros((len(thetaarray),len(qxrefarray)))
-
-    # compute profile coordinates for different models.
-    if config.geometrymode==1:
+    
+    # rewrite profile coordinates for different rounding models.
+    if config.geometrymode==0:
+        scattercoordmatnew=config.geometry.scattercoordmat # default polygon model with JCM coordinates. already flipped if needed.
+    elif config.geometrymode==1:
+        print("Rounding model detected: Type 1.")
+        scattercoordmatnew=[]
         orgmat, centermat, surfmat=SurfaceCoordinates1(keys)
         if config.flipswitch==1:
             surfmat2=surfmat.copy()
@@ -205,8 +211,13 @@ def IntensityBA(keys, config, Qzgridmat):
             surfmat2=surfmat[::-1,:]
             surfmat3=surfmat2[1:-1]
             surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+        vertexmat1=surfmatsorted*1e-9    
+        vertexmatlist=[vertexmat1] # JCM frame.
+        scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
             
     elif config.geometrymode==2:
+        print("Rounding model detected: Type 2.")
+        scattercoordmatnew=[]
         orgmat, centermat, surfmat=SurfaceCoordinates2(keys)
         if config.flipswitch==1:
             surfmat2=surfmat.copy()
@@ -216,8 +227,13 @@ def IntensityBA(keys, config, Qzgridmat):
             surfmat2=surfmat[::-1,:]
             surfmat3=surfmat2[1:-1]
             surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+        vertexmat1=surfmatsorted*1e-9    
+        vertexmatlist=[vertexmat1] # JCM frame.
+        scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
         
     elif config.geometrymode==3:
+        print("Rounding model detected: Type 3.")
+        scattercoordmatnew=[]
         orgmat, centermat, surfmat=SurfaceCoordinates3(keys)
         if config.flipswitch==1:
             surfmat2=surfmat.copy()
@@ -226,14 +242,13 @@ def IntensityBA(keys, config, Qzgridmat):
         else:
             surfmat2=surfmat[::-1,:]
             surfmat3=surfmat2[1:-1]
-            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])        
+            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+        vertexmat1=surfmatsorted*1e-9    
+        vertexmatlist=[vertexmat1] # JCM frame.
+        scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     else:
         raise ValueError("Parameter config.geometrymode is NOT set correctly.")
     
-    scattercoordmatnew=[]
-    vertexmat1=surfmatsorted*1e-9    
-    vertexmatlist=[vertexmat1] # JCM frame.
-    scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     geometrynew=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
                                scatterlayer=config.geometry.scatterlayer)
     confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
