@@ -135,8 +135,8 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
     tempfac1=(Qlength/(2*k0))**2
     anglefac2=(1-2*tempfac1)**2/((qxvaluein/Qlength)**2-tempfac1)
 
-    # # temporarily turn off the angle-dependent factor.
-    # anglefac2=1.0
+    # temporarily turn off the angle-dependent factor.
+    anglefac2=1.0
     
     c0=anglefac2*k0**2/(4*pitch**2)
 
@@ -513,15 +513,14 @@ def SurfaceCoordinates2(keys):
 # Input: keys.
 # Output: trapezoid coordinates, centers of all circle of curvature, curved surface coordinates.
 # example keys:
-# keys={'h': 100, 'hratio': 0.6, 'Ntr': 3, 'basecd': 40, 'swabl': 88, 'swabr': 88, 'swatl': 88, 'swatr': 88, 'rbl': 5.0, 'rbr': 5.0, 'rtl': 5.0, 'rtr': 5.0, 'Narcsamp': 5, 'pitch': 100, 'epsilonr_scat_re': 0.999975466265392, 'epsilonr_scat_im': 2.596920443337538e-06, 'dwfacx': 30, 'dwfacz': 30, 'xl1': -20.0, 'xr1': 20.0, 'xl2': -20.0, 'xr2': 20.0, 'xl3': -20.0, 'xr3': 20.0}
 
 def SurfaceCoordinates3(keys):
     pitch=keys['pitch']
     Narcsamp=int(round(keys['Narcsamp']))
     Ntr=int(round(keys['Ntr']))
-    h=keys['h']
-    basecd=keys['basecd']
-    hratio=keys['hratio']
+    h=keys['htot']
+    heightb=keys['hbot']
+    heightt=keys['htop']
     swabl=keys['swabl']
     swatl=keys['swatl']
     swabr=keys['swabr']
@@ -530,6 +529,8 @@ def SurfaceCoordinates3(keys):
     rtl=keys['rtl']
     rbr=keys['rbr']
     rtr=keys['rtr']
+    xl0=keys['xl0']
+    xr0=keys['xr0']
 
     Ntemp=Ntr+4 # number of total vertices without rounding. 
     Ntotal=2*(Ntr+1)+4*Narcsamp+2 # number of total vertices with rounding.
@@ -539,9 +540,6 @@ def SurfaceCoordinates3(keys):
     coordmat2=np.zeros((Ntotal,2))
     
     harray=np.zeros(Ntr+4)
-    heightb=h*(1-hratio)/2
-    heightt=h*(1-hratio)/2
-    
     harray[2]=heightb
     harray[Ntr+3]=h
     harray[2:Ntr+3]=np.linspace(heightb, h-heightt, Ntr+1)
@@ -550,14 +548,20 @@ def SurfaceCoordinates3(keys):
     xarrayr=np.zeros(Ntr+4)
     
     xarrayl[0]=-pitch/2
-    xarrayl[2]=-0.5*basecd
+    xarrayl[2]=xl0
     shiftbl=heightb/(np.tan(np.radians(swabl)))
     xarrayl[1]=xarrayl[2]-shiftbl
+
+    if abs(xarrayl[1])>=pitch/2:    
+        raise ValueError("shiftbl exceeds the unit cell!!")
     
     xarrayr[0]=pitch/2
-    xarrayr[2]=0.5*basecd
+    xarrayr[2]=xr0
     shiftbr=heightb/(np.tan(np.radians(swabr)))
     xarrayr[1]=xarrayr[2]+shiftbr
+
+    if abs(xarrayr[1])>=pitch/2:    
+        raise ValueError("shiftbr exceeds the unit cell!!")
     
     for i in range(1, Ntr+1):
         xarrayl[i+2]=keys[f'xl{i}']
@@ -585,6 +589,28 @@ def SurfaceCoordinates3(keys):
     coordmat2[indexarray2[0]+Narcsamp:indexarray2[1],:]=coordmat[indexarray[0]+1+1:indexarray[0]+1+1+Ntr+1,:]
     coordmat2[indexarray2[2]+Narcsamp:indexarray2[3],:]=coordmat[indexarray[2]+1+1:indexarray[2]+1+1+Ntr+1,:]
 
+    # check the 4 radiuses.
+    thresholdbl=heightb/np.sin(np.radians(swabl))*np.tan(np.radians((180-swabl)/2))
+    thresholdbr=heightb/np.sin(np.radians(swabr))*np.tan(np.radians((180-swabr)/2))
+    thresholdtl=heightt/np.sin(np.radians(swatl))*np.tan(np.radians((180-swatl)/2))
+    thresholdtr=heightt/np.sin(np.radians(swatr))*np.tan(np.radians((180-swatr)/2))
+
+    if rbl>thresholdbl:
+        #print("Parameter rbl is too large !!")
+        raise ValueError("Parameter rbl is too large.")
+    
+    if rbr>thresholdbr:
+        #print("Parameter rbr is too large !!")
+        raise ValueError("Parameter rbr is too large.")
+
+    if rtl>thresholdtl:
+        #print("Parameter rtl is too large !!")
+        raise ValueError("Parameter rtl is too large.")
+
+    if rtr>thresholdtr:
+        #print("Parameter rtr is too large !!")
+        raise ValueError("Parameter rtr is too large.")
+    
     for i in range(4): # always generate 4 circles.
         index=indexarray[i]
         dotproduct=np.dot(uvecmat[index,:], uvecmat[index+1,:])
@@ -604,7 +630,7 @@ def SurfaceCoordinates3(keys):
         else:
             r=rbr 
             theta1=-np.pi/2-arcangle 
-            theta2=-np.pi/2 
+            theta2=-np.pi/2
         # compute center of the incircle or excircle.
         anglearray=np.linspace(theta1,theta2,Narcsamp)
         normvec=uvecmat[index+1,:]-uvecmat[index,:] # center of the incircle/excircle is located on this line. NOT a unit vector here!
@@ -624,7 +650,12 @@ def SurfaceCoordinates3(keys):
         # coordinates of the sampling points on the arc.
         xarray=center[0]+r*np.cos(anglearray)
         yarray=center[1]+r*np.sin(anglearray)
+
+        if max(abs(xarray))>=pitch/2:
+            #print("Some arc exceeds the unit cell!!")
+            raise ValueError("Some arc exceeds the unit cell!!")
+        
         index2=indexarray2[i]
         coordmat2[index2:index2+Narcsamp,0]=xarray
         coordmat2[index2:index2+Narcsamp,1]=yarray
-    return coordmat, centermat, coordmat2    
+    return coordmat, centermat, coordmat2  
