@@ -10,6 +10,7 @@ from forward_model.modules.FEMProcessing import IntensityFEM, GetMatmeta
 from forward_model.modules.BAProcessing import IntensityBA
 from forward_model.modules.InterfaceTransform import karraytrans, FresnelFun
 from forward_model.modules.keys import keys as default_keys
+from forward_model.modules.utils import sortfunFEM
 
 from pathlib import Path
 
@@ -202,6 +203,18 @@ class ForwardModel:
             Qzgridmat[:,i]=Qzarray2
             intmatFEM[:,i]=intarray2
 
+        # Trun off the Angle-dependent factor.
+        print("ADF turned off.")
+        for i in range(len(qxrefarray)):
+            if i==config.centerindex:
+                continue
+            Qxvalue=qxrefarray[i]
+            Qzarray=Qzgridmat[:,i]
+            Qlength=np.sqrt(Qxvalue**2+Qzarray**2)
+            tempfac1=(Qlength/(2*config.source.k0))**2
+            anglefac2=(1-2*tempfac1)**2/((Qxvalue/Qlength)**2-tempfac1)
+            intmatFEM[:,i]=intmatFEM[:,i]/anglefac2
+
         # DW decay modification and scaling modification.
         if config.decayswitch==1:
             print("DW factors applied.")
@@ -222,9 +235,9 @@ class ForwardModel:
             Qzarraytemp=Qzgridmat[:,config.centerindex+1]
             Intarraytemp=intmatFEM[:,config.centerindex+1]
             mask2=~(Qzarraytemp==0)
-            QzBAarray=Qzarraytemp[mask2]
-            IntBAarray=Intarraytemp[mask2]
-            normfacFEM=np.interp(0.0, Qzarray, Intarray)
+            QzFEMarray=Qzarraytemp[mask2]
+            IntFEMarray=Intarraytemp[mask2]
+            normfacFEM=np.interp(0.0, QzFEMarray, IntFEMarray)
             intmatFEM=intmatFEM/normfacFEM
 
         print("************************** Forward Model FEM Evaluated *******************************")
@@ -319,7 +332,8 @@ class ForwardModel:
             # compute intensity array based on diffraction efficiency and conservation of energy.
             temparray1=np.real(exspec2*np.conjugate(exspec2)+eyspec2*np.conjugate(eyspec2)+ezspec2*np.conjugate(ezspec2))
             temparray2=np.abs(kzarray3) # here we should use free-space wave vector.
-            intarray=temparray1*temparray2/(config.source.E0**2*config.source.k0*np.abs(np.cos(thetarad)))
+            #intarray=temparray1*temparray2/(config.source.E0**2*config.source.k0*np.abs(np.cos(thetarad)))
+            intarray=temparray1*temparray2/(config.source.k0*np.abs(np.cos(thetarad)))
     
             # coordinate transformation: from JCM 3D frame to CDSAXS sample frame.
             kxarray4=kxarray3

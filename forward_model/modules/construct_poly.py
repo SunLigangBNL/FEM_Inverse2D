@@ -11,12 +11,12 @@ def polygons(keys):
     pitch=keys["pitch"]
     cd = keys["cd"]
     h = keys["h"]
-    swaleft = keys["swaleft"]
-    swaright = keys["swaright"]
-    r_topleft = keys["r_topleft"]
-    r_topright = keys["r_topright"]
-    r_botleft = keys["r_botleft"]
-    r_botright = keys["r_botright"]
+    swal = keys["swal"]
+    swar = keys["swar"]
+    rtl = keys["rtl"]
+    rtr = keys["rtr"]
+    rbl = keys["rbl"]
+    rbr = keys["rbr"]
 
     # offsets
     o1 = keys["height_offset_bot"]
@@ -40,8 +40,8 @@ def polygons(keys):
     y_ox_h = h
 
     # coordinates of the primary trapezoid.
-    shift1=h/(2*np.tan(np.radians(swaleft)))
-    shift2=h/(2*np.tan(np.radians(swaright)))
+    shift1=h/(2*np.tan(np.radians(swal)))
+    shift2=h/(2*np.tan(np.radians(swar)))
 
     x1=-pitch/2   
     x2=-cd/2-shift1

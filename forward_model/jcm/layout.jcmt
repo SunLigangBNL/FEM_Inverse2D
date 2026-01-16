@@ -1,73 +1,37 @@
-<?
-import sys
-import os
-
-MODULES_DIR = os.environ.get("MODULES_DIR")
-if MODULES_DIR not in sys.path:
-    sys.path.insert(0, MODULES_DIR)
-
-import construct_poly
-
-cdp, scatp, subp = construct_poly.polygons(keys)
-keys["compdomain_points"] = cdp
-keys["scatterer_points"] = scatp
-keys["substrate_points"] = subp
-?>
-
 Layout2D {
-  Name = "RoundedGrating"
+  Name = "WGratingNIST"
   UnitOfLength = 1e-9
   MeshOptions {
     MaximumSideLength = %(msl)e
   }
-  BoundaryConditions {
-    Boundary {
-      Class = Periodic
-      Direction = [X, -X]
-    }
-    Boundary {
-      Class = Transparent
-      Direction = [Y, -Y]
-    }
-  }
   Objects {
     Polygon {
-      Name = "ComputationalDomain"
-      Points = %(compdomain_points)e
-      Priority = -1
+      Name = "ComputationalDomain_Air"
       DomainId = 1
+      Priority = -1
+      Points = [-50 -120, 50 -120, 50 105, -50 105]
+      Boundary {
+        Number = [1 3]
+        Class = Transparent
+      }
+      Boundary {
+        Number = [2 4]
+        Class = Periodic
+      }
     }
+
     Polygon {
-      Name = "ScattererDomain"
-      Points = %(scatterer_points)e
-      Priority = 1
+      Name = "Si3N4"
       DomainId = 2
-      CornerRounding {
-        Point = 4
-        Radius = %(r_bot)e
-        NPoints = %(rad_lower_n)d
-      }
-      CornerRounding {
-        Point = 5
-        Radius = %(r_top)e
-        NPoints = %(rad_upper_n)d
-      }
-      CornerRounding {
-        Point = 6
-        Radius = %(r_top)e
-        NPoints = %(rad_upper_n)d
-      }
-      CornerRounding {
-        Point = 7
-        Radius = %(r_bot)e
-        NPoints = %(rad_lower_n)d
-      }
-    }
-    Polygon {
-      Name = "SubstrateDomain"
-      Points = %(substrate_points)e
       Priority = 2
-      DomainId = 3
+      Points = [-50 0, 50 0, 50 100, -50 100]
     }
+
+    Polygon {
+      Name = "W"
+      DomainId = 3
+      Priority = 3
+      Points = [-20.525110 -0.00, -18.710810 -0.26, -17.038551 -1.01, -15.639255 -2.19, -14.622473 -3.71, -13.728274 -5.57, -14.561229 -15.09, -12.015187 -24.61, -11.327063 -34.13, -10.302757 -43.66, -9.128531 -53.18, -8.804456 -62.70, -9.250265 -72.22, -8.794549 -81.74, -8.883731 -91.26, -10.790633 -100.78, -10.712980 -103.54, -10.087078 -106.33, -8.458662 -108.68, -6.066974 -110.24, -3.263393 -110.79, 5.360299 -110.79, 7.146634 -110.55, 8.812905 -109.87, 10.247116 -108.78, 11.352870 -107.36, 15.215075 -100.78, 11.043604 -91.26, 12.323775 -81.74, 12.577225 -72.22, 11.983339 -62.70, 12.526097 -53.18, 13.835175 -43.66, 14.609368 -34.13, 15.996118 -24.61, 16.938536 -15.09, 18.353179 -5.57, 18.144566 -4.36, 18.220273 -2.75, 18.967612 -1.33, 20.247151 -0.35, 21.820167 -0.00]
+    }   
   }
 }

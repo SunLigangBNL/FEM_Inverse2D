@@ -5,15 +5,15 @@ Material{
   RelPermeability = 1
 }
 Material {
-  Name = "Scatterer"
+  Name = "Si3N4"
   DomainId = 2
-  RelPermittivity = (%(epsilonr_scat_re)e, %(epsilonr_scat_im)e)
+  RelPermittivity = %(epsilonr_sub)e
   RelPermeability = 1
 }
 Material{
-  Name = "Substrate"
+  Name = "W"
   DomainId = 3
-  RelPermittivity = %(epsilonr_sub)e
+  RelPermittivity = (%(epsilonr_scat_re)e, %(epsilonr_scat_im)e)
   RelPermeability = 1
 }
 
