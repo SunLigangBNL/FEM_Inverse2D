@@ -203,31 +203,33 @@ class ForwardModel:
             Qzgridmat[:,i]=Qzarray2
             intmatFEM[:,i]=intarray2
 
-        # Trun off the Angle-dependent factor.
-        print("ADF turned off.")
-        for i in range(len(qxrefarray)):
-            if i==config.centerindex:
-                continue
-            Qxvalue=qxrefarray[i]
-            Qzarray=Qzgridmat[:,i]
-            Qlength=np.sqrt(Qxvalue**2+Qzarray**2)
-            tempfac1=(Qlength/(2*config.source.k0))**2
-            anglefac2=(1-2*tempfac1)**2/((Qxvalue/Qlength)**2-tempfac1)
-            intmatFEM[:,i]=intmatFEM[:,i]/anglefac2
+        # # Trun off the Angle-dependent factor.
+        # print("ADF turned off.")
+        # for i in range(len(qxrefarray)):
+        #     if i==config.centerindex:
+        #         continue
+        #     Qxvalue=qxrefarray[i]
+        #     Qzarray=Qzgridmat[:,i]
+        #     Qlength=np.sqrt(Qxvalue**2+Qzarray**2)
+        #     tempfac1=(Qlength/(2*config.source.k0))**2
+        #     anglefac2=(1-2*tempfac1)**2/((Qxvalue/Qlength)**2-tempfac1)
+        #     intmatFEM[:,i]=intmatFEM[:,i]/anglefac2
 
         # DW decay modification and scaling modification.
         if config.decayswitch==1:
             print("DW factors applied.")
             dwfacx2=keys['dwfacx']
             dwfacz2=keys['dwfacz']
-            for index in config.obindexmask:
-                Qxvalue=qxrefarray[index]
-                Qzarray=Qzgridmat[:,index]
+            for i in range(len(qxrefarray)):
+                if i==config.centerindex:
+                    continue
+                Qxvalue=qxrefarray[i]
+                Qzarray=Qzgridmat[:,i]
                 DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
                 DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
                 if np.min(DWfacarray) < 1e-300:
                     print("min of DWfacarray (clipped):", np.min(DWfacarray))
-                intmatFEM[:,index]=DWfacarray*intmatFEM[:,index]
+                intmatFEM[:,i]=DWfacarray*intmatFEM[:,i]
             
         # normalization.
         if config.NLswitch==1:
@@ -259,14 +261,18 @@ class ForwardModel:
             print("DW factors applied.")
             dwfacx2=keys['dwfacx']
             dwfacz2=keys['dwfacz']
-            for index in config.obindexmask:
-                Qxvalue=qxrefarray[index]
-                Qzarray=Qzgridmat[:,index]
+            for i in range(len(qxrefarray)):
+                if i==config.centerindex:
+                    continue
+            #for index in config.obindexmask:
+                Qxvalue=qxrefarray[i]
+                Qzarray=Qzgridmat[:,i]
                 DWfacarray=np.exp(-((Qxvalue*1e-10*dwfacx2)**2+(Qzarray*1e-10*dwfacz2)**2))
                 DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
                 if np.min(DWfacarray) < 1e-300:
                     print("min of DWfacarray (clipped):", np.min(DWfacarray))
-                intmatBA[:,index]=DWfacarray*intmatBA[:,index]
+                intmatBA[:,i]=DWfacarray*intmatBA[:,i]
+                
         
         # normalization.
         if config.NLswitch==1:
