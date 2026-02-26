@@ -310,11 +310,17 @@ def IntensityBA(keys, config, Qzgridmat):
     else:
         raise ValueError("Parameter config.geometrymode is NOT set correctly.")
     
-    geometrynew=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
+    geometryupdated=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
                                scatterlayer=config.geometry.scatterlayer)
+
+    scatterepsrmatupdated=config.material.scatterepsrmat
+    scatterepsrmatupdated[0][2]=keys['epsr_CrX_re']+keys['epsr_CrX_im']*1j
+    #scatterepsrmatupdated[0][2]=3.14+999.85j
+    materialupdated=MaterialConfig(layerepsrarray=config.material.layerepsrarray,scatterepsrmat=scatterepsrmatupdated)
+
     confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
                            obindexmask=config.obindexmask, flipswitch=config.flipswitch, geometrymode=config.geometrymode,
-                           source=config.source, geometry=geometrynew, material=config.material)
+                           source=config.source, geometry=geometryupdated, material=materialupdated)
 
     for i in range(len(qxrefarray)): # for all standard dimensions.
         Qxvalue=qxrefarray[i]
