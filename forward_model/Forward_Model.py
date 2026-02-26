@@ -277,8 +277,8 @@ class ForwardModel:
         # normalization.
         if config.NLswitch==1:
             print("Intensity normalized.")
-        Qzarraytemp=Qzgridmat[:,config.centerindex+1]
-        Intarraytemp=intmatBA[:,config.centerindex+1]
+        Qzarraytemp=Qzgridmat[:,config.centerindex-1] # based on the -1 peak.
+        Intarraytemp=intmatBA[:,config.centerindex-1]
         mask2=~(Qzarraytemp==0)
         QzBAarray=Qzarraytemp[mask2]
         IntBAarray=Intarraytemp[mask2]

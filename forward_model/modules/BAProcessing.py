@@ -123,7 +123,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
     # Angle-dependent factor based on Masa's report:
     # thetaradarray=np.radians(thetaarray) # this is the EXACT phi angle in Masa's note. Check again on 07/20.
     # psi=2theta: Masa's Fig 2 is EXACTLY same with our own angle definition (negative sign to JCM [theta, phi]).
-    #anglefac=np.cos(psiradarray)*np.cos(psiradarray)/(np.cos(thetaradarray)*np.cos(psiradarray-thetaradarray))
+    # anglefac=np.cos(psiradarray)*np.cos(psiradarray)/(np.cos(thetaradarray)*np.cos(psiradarray-thetaradarray))
 
     # # alternative method: compute anglefac by using Qx, Qz directly.
     # Qlength=2*k0*np.sin(np.abs(psiradarray/2))
@@ -136,7 +136,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
     anglefac2=(1-2*tempfac1)**2/((qxvaluein/Qlength)**2-tempfac1)
 
     # temporarily turn off the angle-dependent factor.
-    anglefac2=1.0
+    # anglefac2=1.0
     
     c0=anglefac2*k0**2/(4*pitch**2)
 
@@ -245,6 +245,67 @@ def IntensityBA(keys, config, Qzgridmat):
             surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
         vertexmat1=surfmatsorted*1e-9    
         vertexmatlist=[vertexmat1] # JCM frame.
+        scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
+    
+    elif config.geometrymode==4:
+        print("Rounding model detected: Type 4.")
+        scattercoordmatnew=[]
+        orgmat, centermat, surfmat=SurfaceCoordinates3(keys)
+        
+        if config.flipswitch==1:
+            surfmat2=surfmat.copy()
+            surfmat2[:, 1]=-surfmat[:,1]
+            surfmatsorted=surfmat2[1:-1]
+            
+            #index1=keys['Narcsamp']
+            #index2=index1+keys['Ntr']
+
+            index1 = int(np.array(keys['Narcsamp']).item())
+            index2 = index1 + int(np.array(keys['Ntr']).item())
+
+            N = surfmatsorted.shape[0]
+            j1 = (N - 1) - index1   # mirror of index1
+            j2 = (N - 1) - index2   # mirror of index2
+            
+            mat1 = np.vstack([surfmatsorted[:index1+1], surfmatsorted[j1:]])
+            mat2 = np.vstack([surfmatsorted[index1:index2+1], surfmatsorted[j2:j1+1]])
+            mat3 = surfmatsorted[index2:j2+1].copy()
+            
+            vertexmat1=mat1*1e-9
+            vertexmat2=mat2*1e-9
+            vertexmat3=mat3*1e-9
+            
+        else:
+            surfmat2=surfmat[::-1,:]
+            surfmat3=surfmat2[1:-1]
+            surfmatsorted=np.vstack([surfmat3[-1:], surfmat3[:-1]])
+            
+            # index1=keys['Narcsamp']+1
+            # index2=index1+keys['Ntr']
+            
+            index1 = int(np.array(keys['Narcsamp']).item())+1
+            index2 = index1 + int(np.array(keys['Ntr']).item())
+            
+            N = surfmatsorted.shape[0]
+            y1 = surfmatsorted[index1, 1]
+            y2 = surfmatsorted[index2, 1]
+            idx1_pair = [i for i in np.where(np.isclose(surfmatsorted[:, 1], y1))[0] if i != index1][0]
+            idx2_pair = [i for i in np.where(np.isclose(surfmatsorted[:, 1], y2))[0] if i != index2][0]
+            if idx1_pair < index1:
+                idx1_pair = [i for i in np.where(np.isclose(surfmatsorted[:, 1], y1))[0] if i != index1][-1]
+            if idx2_pair < index2:
+                idx2_pair = [i for i in np.where(np.isclose(surfmatsorted[:, 1], y2))[0] if i != index2][-1]
+            mat4 = np.vstack([surfmatsorted[:index1+1], surfmatsorted[idx1_pair:]])
+            mat5 = np.vstack([surfmatsorted[index1:index2+1], surfmatsorted[idx2_pair:idx1_pair+1]])
+            mat5 = np.vstack([mat5[-1:], mat5[:-1]])
+            mat6 = surfmatsorted[index2:idx2_pair+1].copy()
+            mat6 = np.vstack([mat6[-1:], mat6[:-1]])
+
+            vertexmat1=mat4*1e-9
+            vertexmat2=mat5*1e-9
+            vertexmat3=mat6*1e-9
+        
+        vertexmatlist=[vertexmat1, vertexmat2, vertexmat3] # JCM frame.***************************************** new model here!
         scattercoordmatnew.append(coordinate_transform(vertexmatlist)) # sample frame.
     else:
         raise ValueError("Parameter config.geometrymode is NOT set correctly.")
