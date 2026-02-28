@@ -6,7 +6,7 @@ import numpy as np
 from .utils import coordinate_transform, selectsortfun, sortfunBA
 #from .source_config import SourceConfig
 from .geometry_config import GeometryConfig, Scatterer
-#from .material_config import MaterialConfig
+from .material_config import MaterialConfig
 from .cdsaxs_config import CDSAXSConfig
 
 def sincfun(x):
@@ -313,11 +313,11 @@ def IntensityBA(keys, config, Qzgridmat):
     geometryupdated=GeometryConfig(scattercoordmat=scattercoordmatnew, layerzarray=config.geometry.layerzarray,
                                scatterlayer=config.geometry.scatterlayer)
 
+    # also fit the material property of the top Cr Oxide layer.
     scatterepsrmatupdated=config.material.scatterepsrmat
-    scatterepsrmatupdated[0][2]=keys['epsr_CrX_re']+keys['epsr_CrX_im']*1j
-    #scatterepsrmatupdated[0][2]=3.14+999.85j
+    scatterepsrmatupdated[0][2]=(1-keys['epsr_CrX_rez']*1e-6)+keys['epsr_CrX_im']*1e-7*1j
     materialupdated=MaterialConfig(layerepsrarray=config.material.layerepsrarray,scatterepsrmat=scatterepsrmatupdated)
-
+    
     confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
                            obindexmask=config.obindexmask, flipswitch=config.flipswitch, geometrymode=config.geometrymode,
                            source=config.source, geometry=geometryupdated, material=materialupdated)
