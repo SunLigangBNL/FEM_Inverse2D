@@ -297,11 +297,12 @@ class ForwardModel:
         Intensitymat=[]
         Psiradmat=[]
         thetaarray=config.source.thetaarray
+        
         for i in range(len(thetaarray)):
             theta=thetaarray[i]
             thetarad=np.radians(theta)
             # fill in karray and earray from results directly.
-            farresult=results[i][3] #************************** careful!!
+            farresult=results[i][3] # Careful!!
             karray=farresult["K"]
             earray=farresult["ElectricFieldStrength"][0]
     
