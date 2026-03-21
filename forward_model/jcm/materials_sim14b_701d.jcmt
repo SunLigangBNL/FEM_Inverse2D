@@ -32,6 +32,6 @@ Material{
 Material {
   Name = "CrOX"
   DomainId = 6
-  RelPermittivity = (9.99504046966353e-1, 5.27156823026276e-5)
+  RelPermittivity = (9.99415378815396e-1, 5.464129078565794e-5)
   RelPermeability = 1
 }

@@ -234,7 +234,7 @@ class ForwardModel:
         # normalization.
         if config.NLswitch==1:
             print("Intensity normalized.")
-            Qzarraytemp=Qzgridmat[:,config.centerindex+1]
+            Qzarraytemp=Qzgridmat[:,config.centerindex+1] # use -2 if based on the -2 peak.
             Intarraytemp=intmatFEM[:,config.centerindex+1]
             mask2=~(Qzarraytemp==0)
             QzFEMarray=Qzarraytemp[mask2]
@@ -277,8 +277,8 @@ class ForwardModel:
         # normalization.
         if config.NLswitch==1:
             print("Intensity normalized.")
-            Qzarraytemp=Qzgridmat[:,config.centerindex-2] # based on the -2 peak.
-            Intarraytemp=intmatBA[:,config.centerindex-2]
+            Qzarraytemp=Qzgridmat[:,config.centerindex+1] # based on the -2 peak.
+            Intarraytemp=intmatBA[:,config.centerindex+1]
             mask2=~(Qzarraytemp==0)
             QzBAarray=Qzarraytemp[mask2]
             IntBAarray=Intarraytemp[mask2]
@@ -303,6 +303,7 @@ class ForwardModel:
             thetarad=np.radians(theta)
             # fill in karray and earray from results directly.
             farresult=results[i][3] # Careful!!
+            #farresult=results[i][2] # changed on 03/18/2026.
             karray=farresult["K"]
             earray=farresult["ElectricFieldStrength"][0]
     
