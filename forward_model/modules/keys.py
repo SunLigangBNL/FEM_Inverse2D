@@ -8,11 +8,11 @@ layout_geometry_keys = {
     "swal": 88,
     "swar": 89,
     "rtl": 2.0,
-    "rtl": 2.0,
+    "rtr": 2.0,
     "rbl": 2.0,
     "rbr": 2.0,
     "t": 1.0,
-    "thickness_Cr":2.0,
+    "thickness_Cr":1.0,
 }
 
 layout_keys = {
@@ -38,9 +38,10 @@ materials_keys = {
 }
 
 project_keys = {
-    "numerical_aperture": 1
+    "numerical_aperture": 1,
+    "dwfacx": 0,
+    "dwfacz": 0,
 }
-
 
 keys = dict()
 
