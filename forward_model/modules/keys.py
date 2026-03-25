@@ -12,6 +12,7 @@ layout_geometry_keys = {
     "rbl": 2.0,
     "rbr": 2.0,
     "t": 1.0,
+    "thickness_Cr":2.0,
 }
 
 layout_keys = {
