@@ -186,7 +186,7 @@ class ForwardModel:
             these_calc_keys["theta"]=theta
             work_dir = os.path.join(self.tempworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
-            print("current key under calculation 2:",these_calc_keys)
+            #print("current key under calculation 2:",these_calc_keys)
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             job_ids.append(job_id)
         

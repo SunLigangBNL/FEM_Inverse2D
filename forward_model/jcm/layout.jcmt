@@ -2,6 +2,8 @@
 import sys
 import os
 keys["heighttemp"] = keys["thickness_Cr"]+100
+keys["xcoord1"] = (-1)*keys["pitch"]/2
+keys["xcoord2"] = keys["pitch"]/2
 ?>
 
 Layout2D {
@@ -15,7 +17,7 @@ Layout2D {
       Name = "ComputationalDomain_Air"
       DomainId = 1
       Priority = -1
-      Points = [-50 -131, 50 -131, 50 111, -50 111]
+      Points = [%(xcoord1)e -131, %(xcoord2)e -131, %(xcoord2)e 111, %(xcoord1)e 111]
       Boundary {
         Number = [1 3]
         Class = Transparent
@@ -30,14 +32,14 @@ Layout2D {
       Name = "Si3N4"
       DomainId = 2
       Priority = 2
-      Points = [-50 2, 50 2, 50 %(heighttemp)e, -50 %(heighttemp)e]
+      Points = [%(xcoord1)e 2, %(xcoord2)e 2, %(xcoord2)e %(heighttemp)e, %(xcoord1)e %(heighttemp)e]
     }
 
     Polygon {
       Name = "Crlayer"
       DomainId = 3
       Priority = 3
-      Points = [-50 0, 50 0, 50 %(thickness_Cr)e, -50 %(thickness_Cr)e]
+      Points = [%(xcoord1)e 0, %(xcoord2)e 0, %(xcoord2)e %(thickness_Cr)e, %(xcoord1)e %(thickness_Cr)e]
     }
 
     Polygon {
