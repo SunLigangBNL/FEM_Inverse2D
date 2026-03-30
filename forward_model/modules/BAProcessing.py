@@ -194,7 +194,7 @@ def IntBornPolygon(config, qxvaluein, qzarrayin):
 def IntensityBA(keys, config, Qzgridmat):
     thetaarray=config.source.thetaarray
     qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
-    Intensitymatnew=np.zeros((len(thetaarray),len(qxrefarray)))
+    Intensitymatnew=np.zeros((len(thetaarray),len(config.qxpeakarray)))
     
     # rewrite profile coordinates for different rounding models.
     if config.geometrymode==0:
@@ -317,8 +317,9 @@ def IntensityBA(keys, config, Qzgridmat):
     scatterepsrmatupdated=config.material.scatterepsrmat
     scatterepsrmatupdated[0][2]=(1-keys['epsr_CrX_rez']*1e-6)+keys['epsr_CrX_im']*1e-7*1j
     materialupdated=MaterialConfig(layerepsrarray=config.material.layerepsrarray,scatterepsrmat=scatterepsrmatupdated)
-    
-    confignew=CDSAXSConfig(pitch=config.pitch, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
+
+    # also fit the pitch.
+    confignew=CDSAXSConfig(pitch=keys['pitch']*1e-9, dimqxbranch=config.dimqxbranch, qxpeakarray=config.qxpeakarray,
                            obindexmask=config.obindexmask, flipswitch=config.flipswitch, geometrymode=config.geometrymode,
                            source=config.source, geometry=geometryupdated, material=materialupdated)
 

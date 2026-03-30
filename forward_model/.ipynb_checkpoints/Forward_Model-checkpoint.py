@@ -255,15 +255,17 @@ class ForwardModel:
     # Input: single key, config, externally computed Qzmat (independent from FEM solver).
     # Output: intensity matrix with standard dimension, after single point normalization.
     # Remark: DW decay was only applied to the observation peaks.
+    # Remark2: config should be updated based on keys.
     def ModelEvaluateBA(self, keys, config, Qzgridmat):
         
-        #thetaarray=config.source.thetaarray
-        qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
-        intmatBA=IntensityBA(keys, config, Qzgridmat)     
-
+        intmatBA=IntensityBA(keys, config, Qzgridmat)
+        
         # DW decay modification and scaling modification.
+        qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         if config.decayswitch==1:
             print("DW factors applied.")
+            # dwfacx2=10.0**keys['log10_dwfacx']
+            # dwfacz2=10.0**keys['log10_dwfacz']
             dwfacx2=keys['dwfacx']
             dwfacz2=keys['dwfacz']
             for i in range(len(qxrefarray)):
@@ -275,8 +277,7 @@ class ForwardModel:
                 DWfacarray = np.clip(DWfacarray, 1e-300, None)  # avoid exact zeros
                 if np.min(DWfacarray) < 1e-300:
                     print("min of DWfacarray (clipped):", np.min(DWfacarray))
-                intmatBA[:,i]=DWfacarray*intmatBA[:,i]
-                
+                intmatBA[:,i]=DWfacarray*intmatBA[:,i]        
         
         # normalization.
         if config.NLswitch==1:
