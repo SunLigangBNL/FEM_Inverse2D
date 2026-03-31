@@ -176,7 +176,7 @@ class ForwardModel:
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
-        print("current key under calculation 1:",calc_keys)
+        print("current key under calculation flag 1:",calc_keys)
         
         job_ids=[]
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
@@ -186,7 +186,7 @@ class ForwardModel:
             these_calc_keys["theta"]=theta
             work_dir = os.path.join(self.tempworkdir, f"theta_{theta:.2f}")
             os.makedirs(work_dir, exist_ok=True)
-            #print("current key under calculation 2:",these_calc_keys)
+            #print("current key under calculation flag 2:",these_calc_keys)
             job_id=jcmwave.solve(dir_project_file, keys=these_calc_keys, temporary=False, working_dir=work_dir)
             job_ids.append(job_id)
         
@@ -194,9 +194,6 @@ class ForwardModel:
         print("All status",job_statuses)
         
         results, logs = jcmwave.daemon.wait(job_ids = job_ids)
-
-        #print("results=",results)
-
         Qxmat, Qzmat, Intensitymat, Psiradmat = self.IntensityFEM2(config, results)
         matmetaFEM = GetMatmeta(config, Qxmat, Qzmat, Intensitymat, Psiradmat)
 
@@ -224,8 +221,10 @@ class ForwardModel:
         # DW decay modification and scaling modification.
         if config.decayswitch==1:
             print("DW factors applied.")
-            dwfacx2=keys['dwfacx']
-            dwfacz2=keys['dwfacz']
+            # dwfacx2=keys['dwfacx']
+            # dwfacz2=keys['dwfacz']
+            dwfacx2=10.0**keys['log10_dwfacx']
+            dwfacz2=10.0**keys['log10_dwfacz']
             for i in range(len(qxrefarray)):
                 if i==config.centerindex:
                     continue
@@ -264,10 +263,10 @@ class ForwardModel:
         qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         if config.decayswitch==1:
             print("DW factors applied.")
-            # dwfacx2=10.0**keys['log10_dwfacx']
-            # dwfacz2=10.0**keys['log10_dwfacz']
-            dwfacx2=keys['dwfacx']
-            dwfacz2=keys['dwfacz']
+            dwfacx2=10.0**keys['log10_dwfacx']
+            dwfacz2=10.0**keys['log10_dwfacz']
+            # dwfacx2=keys['dwfacx']
+            # dwfacz2=keys['dwfacz']
             for i in range(len(qxrefarray)):
                 if i==config.centerindex:
                     continue
