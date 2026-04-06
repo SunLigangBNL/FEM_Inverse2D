@@ -5,11 +5,12 @@ Project {
       Scattering {
         FieldComponents = Electric
         Accuracy {
-          Precision = 0.1
-          PrecisionFarField = 0.1
+          Precision = 1e-1
+          PrecisionFarField = 1e-1
           FiniteElementDegree = 5
           Refinement {
-            MaxNumberSteps = 3
+            Strategy = PAdaptive
+            MaxNumberSteps = 5
           }
         }
       }

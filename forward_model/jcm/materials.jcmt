@@ -4,6 +4,7 @@ Material{
   RelPermittivity = 1.0
   RelPermeability = 1
 }
+
 Material {
   Name = "Si3N4"
   DomainId = 2
@@ -28,10 +29,9 @@ Material{
   RelPermittivity = (9.99975466265392e-1, 2.596920443337538e-6)
   RelPermeability = 1
 }
-
 Material {
   Name = "CrOX"
   DomainId = 6
-  RelPermittivity = (9999901158189037e-1, 2.586302330760399e-7)
+  RelPermittivity = (9.99989598545224e-1, 2.0223279256515747e-7)
   RelPermeability = 1
 }

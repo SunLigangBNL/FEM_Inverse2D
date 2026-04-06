@@ -221,10 +221,10 @@ class ForwardModel:
         # DW decay modification and scaling modification.
         if config.decayswitch==1:
             print("DW factors applied.")
-            # dwfacx2=keys['dwfacx']
-            # dwfacz2=keys['dwfacz']
-            dwfacx2=10.0**keys['log10_dwfacx']
-            dwfacz2=10.0**keys['log10_dwfacz']
+            dwfacx2=keys['dwfacx']
+            dwfacz2=keys['dwfacz']
+            # dwfacx2=10.0**keys['log10_dwfacx']
+            # dwfacz2=10.0**keys['log10_dwfacz']
             for i in range(len(qxrefarray)):
                 if i==config.centerindex:
                     continue
@@ -238,8 +238,8 @@ class ForwardModel:
         
         if config.NLswitch==1:
             print("Intensity normalized.")
-            Qzarraytemp=Qzgridmat[:,config.centerindex+1]
-            Intarraytemp=intmatFEM[:,config.centerindex+1]
+            Qzarraytemp=Qzgridmat[:,config.centerindex+2] # based on the +2 peak.
+            Intarraytemp=intmatFEM[:,config.centerindex+2]
             mask2=~(Qzarraytemp==0)
             QzFEMarray=Qzarraytemp[mask2]
             IntFEMarray=Intarraytemp[mask2]
@@ -263,10 +263,10 @@ class ForwardModel:
         qxrefarray=np.linspace(-config.dimqxbranch*config.deltaqx,config.dimqxbranch*config.deltaqx,2*config.dimqxbranch+1)
         if config.decayswitch==1:
             print("DW factors applied.")
-            dwfacx2=10.0**keys['log10_dwfacx']
-            dwfacz2=10.0**keys['log10_dwfacz']
-            # dwfacx2=keys['dwfacx']
-            # dwfacz2=keys['dwfacz']
+            # dwfacx2=10.0**keys['log10_dwfacx']
+            # dwfacz2=10.0**keys['log10_dwfacz']
+            dwfacx2=keys['dwfacx']
+            dwfacz2=keys['dwfacz']
             for i in range(len(qxrefarray)):
                 if i==config.centerindex:
                     continue
@@ -281,8 +281,8 @@ class ForwardModel:
         # normalization.
         if config.NLswitch==1:
             print("Intensity normalized.")
-            Qzarraytemp=Qzgridmat[:,config.centerindex-2] # based on the -2 peak.
-            Intarraytemp=intmatBA[:,config.centerindex-2]
+            Qzarraytemp=Qzgridmat[:,config.centerindex+2] # based on the +1 peak.
+            Intarraytemp=intmatBA[:,config.centerindex+2]
             mask2=~(Qzarraytemp==0)
             QzBAarray=Qzarraytemp[mask2]
             IntBAarray=Intarraytemp[mask2]
