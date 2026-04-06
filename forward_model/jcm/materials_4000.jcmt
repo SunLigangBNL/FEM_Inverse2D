@@ -1,0 +1,36 @@
+Material{
+  Name = "Air"
+  DomainId = 1
+  RelPermittivity = 1.0
+  RelPermeability = 1
+}
+Material {
+  Name = "Si3N4"
+  DomainId = 2
+  RelPermittivity = (9.99908858230462e-1, 4.954850027679729e-6)
+  RelPermeability = 1
+}
+Material {
+  Name = "Crlayer"
+  DomainId = 3
+  RelPermittivity = (9.99834841072035e-1, 6.721155541855467e-6)
+  RelPermeability = 1
+}
+Material {
+  Name = "Cr"
+  DomainId = 4
+  RelPermittivity = (9.99834841072035e-1, 6.721155541855467e-6)
+  RelPermeability = 1
+}
+Material{
+  Name = "W"
+  DomainId = 5
+  RelPermittivity = (9.99619768343617e-1, 9.17405865836216e-5)
+  RelPermeability = 1
+}
+Material {
+  Name = "CrOX"
+  DomainId = 6
+  RelPermittivity = (9.99836285875408e-1, 5.260434583417656e-6)
+  RelPermeability = 1
+}
