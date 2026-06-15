@@ -33,7 +33,11 @@ materials_keys = {
     "epsilonr_scat_re": 9.99435131564694e-1,  # real part of epsr for scatterer.
     "epsilonr_scat_im": 3.278431066866658e-5,  # imaginary part of epsr for scatterer.
     "epsilonr_thinlayer_re": 9.99435131564694e-1,  # real part of epsr for thin layer.
-    "epsilonr_thinlayer_im": 3.278431066866658e-5  # imaginary part of epsr for thin layer.
+    "epsilonr_thinlayer_im": 3.278431066866658e-5,  # imaginary part of epsr for thin layer.
+    "epsilonr_target1_re": 9.99435131564694e-1,
+    "epsilonr_target1_im": 3.278431066866658e-5,
+    "epsilonr_target2_re": 9.99435131564694e-1,
+    "epsilonr_target2_im": 3.278431066866658e-5,
 }
 
 project_keys = {
