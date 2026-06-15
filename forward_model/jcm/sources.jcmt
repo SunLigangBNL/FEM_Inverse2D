@@ -1,3 +1,6 @@
+<?
+keys['thetaphi']=np.array([keys["theta"], keys["phi"]])
+?>
 SourceBag {
   Source {
     ElectricFieldStrength {
