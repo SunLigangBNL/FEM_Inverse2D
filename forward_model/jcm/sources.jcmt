@@ -1,16 +1,13 @@
-<?
-keys['thetaphi']=np.array([keys["theta"], keys["phi"]])
-?>
 SourceBag {
   Source {
     ElectricFieldStrength {
       PlaneWave {
-        Lambda0 = %(lambda0)e
+        Lambda0 = 5.766706902581565e-10
         ThetaPhi = %(thetaphi)e
-	Incidence = FromAbove
+    	Incidence = FromAbove
         SP = [0 1]
-	PowerFluxScaling=Off
-	3DTo2D = yes
+    	PowerFluxScaling=Off
+    	3DTo2D = yes
       }
     }
   }
