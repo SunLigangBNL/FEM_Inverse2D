@@ -8,20 +8,20 @@ Material {
 Material {  
   Name = "Target1" 
   DomainId = 2 
-  RelPermittivity = (0.9999702425, 4.887734606e-6)
+  RelPermittivity = (%(epsilonr_target1_re)e, %(epsilonr_target1_im)e)
   RelPermeability = 1.0
 }
 
 Material {  
   Name = "Target2" 
   DomainId = 3
-  RelPermittivity = (0.9997024252, 4.887734606e-5)
+  RelPermittivity = (%(epsilonr_target2_re)e, %(epsilonr_target2_im)e)
   RelPermeability = 1.0
 }
 
 Material {  
   Name = "Substrate" 
   DomainId = 4 
-  RelPermittivity = 9.99702425185472e-1
+  RelPermittivity = %(epsilonr_sub)e
   RelPermeability = 1.0
 }

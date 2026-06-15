@@ -2,7 +2,7 @@ Layout2D {
   Name = "LineGrating"
   UnitOfLength = 1e-09
   MeshOptions {
-    MaximumSideLength = 1
+    MaximumSideLength = %(msl)e
   }
   Objects {
     Polygon {

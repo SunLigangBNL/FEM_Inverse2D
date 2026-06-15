@@ -5,7 +5,7 @@ SourceBag {
   Source {
     ElectricFieldStrength {
       PlaneWave {
-        Lambda0 = 5.766706902581565e-10
+        Lambda0 = %(lambda0)e
         ThetaPhi = %(thetaphi)e
     	Incidence = FromAbove
         SP = [0 1]
