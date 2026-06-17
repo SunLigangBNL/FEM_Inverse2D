@@ -12,6 +12,10 @@ layout_geometry_keys = {
     "rbl": 2.0,
     "rbr": 2.0,
     "t": 1.0,
+    "xA": -99,
+    "xB": -59,
+    "xC": -59,
+    "xD": -99
 }
 
 layout_keys = {

@@ -9,7 +9,7 @@ Layout2D {
       Name = "ComputationalDomain_Air"
       DomainId = 1
       Priority = -1
-      Points = [-50 -1, 50 -1, 50 101, -50 101]
+      Points = [-100 -1, 100 -1, 100 91, -100 91]
       Boundary {
         Number = [1 3]
         Class = Transparent
@@ -23,19 +23,19 @@ Layout2D {
       Name = "Target1"
       DomainId = 2
       Priority = 1
-      Points = [-30 0, 30 0, 30 50, -30 50]
+      Points = [-99 0, -59 0, %(xB)e 20, %(xA)e 20]
     }
     Polygon {
       Name = "Target2"
       DomainId = 3
       Priority = 2
-      Points = [-30 50, 30 50, 30 100, -30 100]
+      Points = [%(xA)e 20, %(xB)e 20, %(xC)e 90, %(xD)e 90]
     }
     Polygon {
       Name = "Substrate"
       DomainId = 4
       Priority = 3
-      Points = [-50 -1, 50 -1, 50 0, -50 0]
+      Points = [-100 -1, 100 -1, 100 0, -100 0]
     }
   }
 }
