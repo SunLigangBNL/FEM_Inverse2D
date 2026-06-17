@@ -176,7 +176,7 @@ class ForwardModel:
         # preparation.
         calc_keys=default_keys.copy()
         calc_keys.update(keys)
-        #print("current key under calculation:",calc_keys)
+        print("current keys under calculation:", calc_keys)
         
         job_ids=[]
         dir_project_file=os.path.join(self.dir_jcm, "project.jcmpt")
