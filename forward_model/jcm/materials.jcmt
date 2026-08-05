@@ -4,33 +4,15 @@ Material{
   RelPermittivity = 1.0
   RelPermeability = 1
 }
-Material {
+Material{
   Name = "Si3N4"
   DomainId = 2
-  RelPermittivity = (9.99702425185472e-1, 4.88773460575629e-5)
-  RelPermeability = 1
-}
-Material {
-  Name = "Crlayer"
-  DomainId = 3
-  RelPermittivity = (9.9940573715942e-1, 6.831875933794549e-5)
-  RelPermeability = 1
-}
-Material {
-  Name = "Cr"
-  DomainId = 4
-  RelPermittivity = (9.9940573715942e-1, 6.831875933794549e-5)
+  RelPermittivity = (9.99977441487994e-1, 3.382571306466819e-7)
   RelPermeability = 1
 }
 Material{
   Name = "W"
-  DomainId = 5
-  RelPermittivity = (9.99047800402589e-1, 6.077314664985202e-4)
-  RelPermeability = 1
-}
-Material {
-  Name = "CrOX"
-  DomainId = 6
-  RelPermittivity = (9.99415378815396e-1, 5.464129078565794e-5)
+  DomainId = 3
+  RelPermittivity = (9.99905985900426e-1, 7.934448958724472e-6)
   RelPermeability = 1
 }
